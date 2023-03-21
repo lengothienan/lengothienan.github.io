@@ -1,0 +1,71 @@
+<div bsModal #createOrEditModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createOrEditModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #hardDatasourceGroupForm="ngForm" novalidate (ngSubmit)="save()" autocomplete="off">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        Danh sách {{hardName}}/{{hardDescription}}
+                    </h4>
+                    <button type="button" class="close" (click)="close()" aria-label="Close" [disabled]="saving">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                 
+
+
+					<dx-data-grid 
+                                #gridContainer id="gridContainer"
+                                [dataSource]="dataSource"
+                                keyExpr="id"
+                                (onRowUpdating)="onRowUpdating($event)"
+                                (onRowRemoving)="onRowRemoving($event)"
+                                (onInitNewRow)="onInitNewRow($event)"
+                                (onRowInserting)="onRowInserting($event)"
+                                [allowColumnReordering]="true"
+                                [showBorders]="true"
+                                >
+                                    <dxo-editing
+                                        [allowUpdating]="true"
+                                        [allowDeleting]="true"
+                                        [allowAdding]="true"
+                                        mode="row">
+                                    </dxo-editing>
+                                    <dxo-export [enabled]="true" fileName="HardDatasource" [allowExportSelectedData]="true"></dxo-export>
+                                    <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[10, 25, 50, 100]"
+                                        [showInfo]="true"></dxo-pager>
+                                    <dxo-search-panel [visible]="true" placeholder="Nhập nội dung..." width="350">
+                                    </dxo-search-panel>
+                                    <dxo-paging [enabled]="true" [pageSize]="10"></dxo-paging>
+                                    <dxi-column dataField='id' caption='Id' [visible]="false"></dxi-column>
+                                    <dxi-column dataField='key' caption='Khóa' [allowEditing]="editing"></dxi-column>
+                                    <dxi-column dataField='value' caption='Giá trị'></dxi-column>
+                                    <dxi-column dataField='isActive' caption='Hoạt động'></dxi-column>
+                                    <div *dxTemplate="let info of 'dropdown'">
+                                        <div #actionInline id="actionInline" class="row">
+                                            <!-- <div class="col-4">
+                                                <span (click)="createOrEditHardDatasourceGroupModal.show(info.data.id)"> 
+                                                    <i class="fas fa-pencil-alt"></i></span>
+                                            </div>
+                                            <div class="col-4">
+                                                <span (click)="deleteHardDatasourceGroup(info)"> 
+                                                    <i class="fas fa-trash"></i></span>
+                                            </div>
+                                            <div class="col-4">
+                                                <span (click)="createHardDatasource(info.data.id)"> 
+                                                    <i class="fas fa-plus"></i></span>
+                                            </div> -->
+                                        </div>
+                                    </div>
+                                </dx-data-grid>
+					
+
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-default" (click)="close()">{{l("Đóng")}}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,33 @@
+<div class="row" style="background-color: white;">
+    <div class="col-md-12 col-lg-12">
+        <div class="card-body card-outline-info">
+            <div class="row">
+                <div class="col-sm-6">
+                    <h4 class="card-title">Danh sách tiêu chí</h4>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <dx-button text="Trở về" icon="fa fa-arrow-left" type="primary" (onClick)="back()"></dx-button>
+                </div>
+            </div>
+        </div>
+        <form style="margin-bottom:20px">
+            <dx-data-grid #sectionDg [dataSource]="sectionDataSource" [showRowLines]="true" [showBorders]="true" [rowAlternationEnabled]="true" [wordWrapEnabled]="true">
+                <dxi-column caption="STT" width="50" dataType="number" alignment="center" cellTemplate="sttTemplate"></dxi-column>
+                <dxi-column dataField="sectionName" caption="Tên tiêu chí" dataType="string"></dxi-column>
+                <dxi-column dataField="sectionId" caption="Chọn" width="100" alignment="center" cellTemplate="chooseTemplate"></dxi-column>
+
+                <div *dxTemplate="let cell of 'chooseTemplate'">
+                    <i class='fa fa-check' style="color:#1876d3; cursor: pointer;" (click)="choose(cell.value)"></i>
+                </div>
+
+                <div *dxTemplate="let cell of 'sttTemplate'">
+                    <span>{{ cell.rowIndex + 1 }}</span>
+                </div>
+                
+                <dxo-paging [pageSize]="20" [pageIndex]="0"></dxo-paging>
+                <dxo-pager visible="true" infoText="Trang {0} trên {1} ({2} dòng)" [allowedPageSizes]="[20, 50, 100]" [showPageSizeSelector]="true"
+                    [showInfo]="true"></dxo-pager>
+            </dx-data-grid>
+        </form>
+    </div>
+</div>

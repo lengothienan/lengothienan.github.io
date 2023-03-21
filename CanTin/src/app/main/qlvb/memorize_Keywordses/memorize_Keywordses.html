@@ -1,0 +1,130 @@
+﻿<div [@routerTransition]>
+        <div class="kt-content  kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor">
+            <div class="kt-subheader kt-grid__item">
+              <div [class]="containerClass">
+                <div class="kt-subheader__main">
+                        <h3 class="kt-subheader__title">
+                                <span>{{l("Danh sách gợi nhớ")}}</span>
+                             </h3>
+                    <span class="kt-subheader__separator kt-subheader__separator--v"></span>
+                    <!-- <span class="kt-subheader__desc">
+                        {{l("SchedulesHeaderInfo")}}
+                    </span> -->
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Danh sách gợi nhớ</li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="kt-subheader__toolbar">
+                    <div class="kt-subheader__wrapper">
+                        <button class="btn btn-outline-success"><i class="fa fa-file-excel"></i> {{l("ExportToExcel")}}</button>
+                        <!-- <button *ngIf="isGranted('Pages.Schedules.Create')"  class="btn btn-primary blue"><i class="fa fa-plus"></i> {{l("CreateNewSchedule")}}</button> -->
+
+                    </div>
+                </div>
+              </div>
+            </div>
+            <div [class]="containerClass + ' kt-grid__item kt-grid__item--fluid'">
+                <div class="kt-portlet kt-portlet--mobile">
+                    <div class="modal-body">
+
+                            <div class="col-xl-12" style = "padding-bottom: 17px;padding-left:0;">
+                                    <dx-button text="Trở về" type="success" icon="fa fa-arrow-left" onclick="window.history.go(-1); return false;"></dx-button>
+                                    &nbsp;
+                                    <dx-button text="Chọn" type="success" icon="check" (onClick)="addMove()" > </dx-button>
+                                    &nbsp;
+                                    <dx-button text="Thêm mới" type="success" icon="fa fa-plus" (onClick)="addNew()"  > </dx-button>
+                                    &nbsp;
+                                    <dx-button text="Xóa" type="success" icon="clear" (onClick)="delete()"  > </dx-button>
+
+
+
+                                </div>
+                                <div class="row align-items-center">
+
+                                        <div class="col-xl-12" style = "padding-left: 250px;">
+                                            <div class="form-group m-form__group align-items-center">
+                                              <div class="row">
+                                                    <div class="col-md-9 col-sm-12" >
+                                                        <div class="input-group" style = "line-height: 40px;">
+                                                              <input class="form-control" type="text"   autocomplete="off" placeholder="Nhập nội dung cần tìm">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3 col-sm-12">
+                                                            <dx-button text="Tìm kiếm" type="success" icon="find" (onClick)="delete()"  > </dx-button>
+                                                          &nbsp;
+                                                  </div>
+
+                                                </div>
+
+
+                                        </div>
+
+                                       </div>
+                                     </div>
+                                     <div class="row align-items-center">
+                                            <!--<Primeng-Datatable-Start>-->
+                                            <div class="primeng-datatable-container col-12"
+                                                 [busyIf]="primengTableHelper.isLoading">
+                                                <dx-data-grid #gridContainer
+                                                    id="gridContainer"
+                                                    [height]="500"
+                                                    [(selectedRowKeys)]="selectedRows"
+                                                    (onSelectionChanged)="selectionChangedHandler()"
+
+                                                    [remoteOperations]="false"
+                                                    [allowColumnReordering]="true"
+                                                    [rowAlternationEnabled]="true"
+                                                    [showBorders]="true">
+                                                    <dxo-selection
+                                                        mode="multiple">
+                                                    </dxo-selection>
+                                                    <dxo-paging [pageSize]="10"></dxo-paging>
+                                                    <dxo-pager
+                                                        [showPageSizeSelector]="true"
+                                                        [allowedPageSizes]="[10, 25, 50, 100]"
+
+                                                    ></dxo-pager>
+
+                                                    <dxi-item [label]="{text: 'STT'}" [editorOptions]="{value: ++stt}">
+
+                                                    </dxi-item>
+
+                                                    <div *dxTemplate="let d of 'CustomTemplate'">
+                                                        <div class="btn-group dropdown" dropdown container="body">
+                                                            <button class="dropdown-toggle btn btn-sm btn-primary" dropdownToggle>
+                                                                <i class="fa fa-cog"></i><span class="caret"></span>
+                                                            </button>
+                                                                <ul class="dropdown-menu"  *dropdownMenu>
+                                                                    <!-- <li>
+                                                                        <a href="javascript:;"
+                                                                        (click)="showView(d.key.Id)">{{l('View')}}</a>
+                                                                    </li> -->
+                                                                    <li>
+                                                                        <a href="javascript:;"
+                                                                            (click)="showCreateOrEdit(d.key.Id)">{{l('Edit')}}</a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="javascript:;"
+                                                                            (click)="deleteMemorize_Keywords(d.key.Id)">{{l('Delete')}}</a>
+                                                                    </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+
+                                                </dx-data-grid>
+
+                                                <hr>
+
+                                            </div>
+
+                                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+

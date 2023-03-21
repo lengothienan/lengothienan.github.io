@@ -1,0 +1,83 @@
+<div class="row">
+    <div class="col-12">
+        <div class="card card-outline-info">
+            <div class="card-body">
+                <h3 style="margin: 20px">{{Name}}</h3>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="modal-body">
+                            <dx-form #detailForm [formData]="labelActionData" colCount="12"
+                                [showValidationSummary]="true" validationGroup="formValidateGroup">
+                                <dxi-item dataField="widgetItemId" [colSpan]="6" editorType="dxSelectBox"
+                                    [editorOptions]="{  dataSource: dataActionName,  
+                                    displayExpr: 'name',  
+                                    valueExpr: 'id',
+                                    readOnly: ReadOnly,
+                                    searchEnabled:'true' }">
+                                    <dxo-label text="Widget Item"></dxo-label>
+                                    <!-- <dxi-validation-rule type="required" message = "Nhập mã label"></dxi-validation-rule> -->
+                                </dxi-item>
+                                <dxi-item dataField="actionId" [colSpan]="6" editorType="dxSelectBox" [editorOptions]="{ dataSource: dataAction,  
+                                    displayExpr: 'name',  
+                                    valueExpr: 'id',
+                                    readOnly: ReadOnly,
+                                    searchEnabled:'true' }">
+                                    <dxo-label text="Action"></dxo-label>
+                                    <dxi-validation-rule type="required" message="Chọn action"></dxi-validation-rule>
+                                </dxi-item>
+                                <dxi-item dataField="type" [colSpan]="6" editorType="dxSelectBox"
+                                    [editorOptions]="actionTypeOption">
+                                    <dxo-label text="Loại Action"></dxo-label>
+                                    <dxi-validation-rule type="required" message="Chọn loại action">
+                                    </dxi-validation-rule>
+                                </dxi-item>
+                                <dxi-item dataField="value" [colSpan]="6" [editorOptions]="valueOption">
+                                    <dxo-label text="Giá trị"></dxo-label>
+                                    <dxi-validation-rule type="required" message="Nhập giá trị"></dxi-validation-rule>
+                                </dxi-item>
+                                <dxi-item dataField="" [colSpan]="6" editorType="dxTextBox" [visible]="isLink"
+                                    [editorOptions]="{ readOnly: ReadOnly }">
+                                    <dxo-label text="Đường dẫn trở về"></dxo-label>
+                                    <!-- <dxi-validation-rule type="required" message = "Nhập đường dẫn trở về"></dxi-validation-rule> -->
+                                </dxi-item>
+
+                                <dxi-item dataField="dataSourceID" [colSpan]="6" editorType="dxSelectBox"
+                                    [visible]="isStore" [editorOptions]="{ readOnly: ReadOnly ,
+                                    dataSource: DBdataSrc,  
+                                    displayExpr: 'name',  
+                                    valueExpr: 'id',
+                                    showClearButton: true}">
+                                    <dxo-label text="Data Source"></dxo-label>
+                                    <!-- <dxi-validation-rule type="required" message = "Nhập đường dẫn trở về"></dxi-validation-rule> -->
+                                </dxi-item>
+
+                                <dxi-item dataField="index" [colSpan]="6" editorType="dxTextBox"
+                                    [editorOptions]="{ readOnly: ReadOnly }">
+                                    <dxo-label text="Số thứ tự"></dxo-label>
+                                </dxi-item>
+                                <dxi-item dataField="isActive" [colSpan]="6" editorType="dxCheckBox"
+                                    [editorOptions]="{ readOnly: ReadOnly }">
+                                    <dxo-label text="Hoạt động"></dxo-label>
+                                </dxi-item>
+                                <dxi-item dataField="height" [colSpan]="6" editorType="dxTextBox"
+                                    [visible]="isComponent" [editorOptions]="{ readOnly: ReadOnly }">
+                                    <dxo-label text="Chiều dài màn hình"></dxo-label>
+                                </dxi-item>
+                                <dxi-item dataField="width" [colSpan]="6" editorType="dxTextBox" [visible]="isComponent"
+                                    [editorOptions]="{ readOnly: ReadOnly }">
+                                    <dxo-label text="Chiều rộng màn hình"></dxo-label>
+                                </dxi-item>
+                            </dx-form>
+                        </div>
+                        <div class="modal-footer" style="justify-content: center">
+                            <dx-button
+                                class="dx-button dx-button-success dx-button-mode-contained dx-widget dx-button-has-icon dx-button-has-text"
+                                icon="fa fa-save" text="Lưu" (onClick)="save()" [visible]="saveBtnVisible"></dx-button>
+                            <dx-button icon="fa fa-arrow-left" text="Trở về" (onClick)="back()"></dx-button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

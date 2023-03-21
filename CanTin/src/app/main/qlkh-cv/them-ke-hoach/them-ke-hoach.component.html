@@ -1,0 +1,213 @@
+<div [@routerTransition]>
+    <div class="kt-content  kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor">
+        <div class="kt-subheader kt-grid__item">
+            <div [class]="containerClass">
+                <div class="kt-subheader__main">
+                    <h3 class="kt-subheader__title">
+                        <span>{{action}} KẾ HOẠCH {{org}} </span>
+                    </h3>
+                </div>
+            </div>
+        </div>
+        <div [class]="containerClass + ' kt-grid__item kt-grid__item--fluid'">
+            <div class="kt-portlet kt-portlet--mobile">
+                <div class="modal-body">
+                    <div class="col-xl-12" style="padding-bottom: 1rem;">
+                        <dx-button text="Lưu" type="success" [visible]="showButtonAction" icon="save" (onClick)="save()">
+                        </dx-button>
+                        &nbsp;
+
+                        <dx-button text="Trở về" (onClick)="back()" type="success" icon="fa fa-arrow-left"></dx-button>
+                    </div>
+                    <!-- form data -->
+                    <dx-form #documentForm [formData]="planData" [showValidationSummary]="true"
+                        [showColonAfterLabel]="false" validationGroup="formValidateGroup">
+                        <dxi-item itemType="group" caption="NỘI DUNG BẢN KẾ HOẠCH" [colCount]="2" [disabled] ="disableEdit">
+
+                            <dxi-item dataField="numberPlan" editorType="dxTextBox" [colSpan]="1">
+                                <dxo-label text="Số"></dxo-label>
+                                <dxi-validation-rule type="required" message="Chưa nhập số"></dxi-validation-rule>
+                            </dxi-item>
+                            <dxi-item dataField="datePlan" [colSpan]="1" editorType="dxDateBox" [editorOptions]="{displayFormat:'dd/MM/yyyy'}" >
+                                <dxo-label text="Ngày tháng năm"></dxo-label>
+                                <dxi-validation-rule type="required" message="Chưa chọn ngày tháng năm">
+                                </dxi-validation-rule>
+                            </dxi-item>
+                            <dxi-item dataField="signUser" editorType="dxTextBox" [colSpan]="1">
+                                <dxo-label text="Người ký"></dxo-label>
+                                <dxi-validation-rule type="required" message="Chưa nhập người ký"></dxi-validation-rule>
+                            </dxi-item>
+                            <dxi-item dataField="secretId" editorType="dxSelectBox" [colSpan]="1"
+                                [editorOptions]="sercretOption">
+                                <dxo-label text="Độ mật"></dxo-label>
+                                <!-- <dxi-validation-rule type="required" message="Chưa chọn độ mật"></dxi-validation-rule> -->
+                            </dxi-item>
+                            <dxi-item dataField="legalContent" editorType="dxTextArea" [colSpan]="1">
+                                <dxo-label text="Căn cứ pháp lý"></dxo-label>
+                            </dxi-item>
+                            <dxi-item dataField="targetContent" editorType="dxTextArea" [colSpan]="1">
+                                <dxo-label text="Mục đích yêu cầu"></dxo-label>
+                            </dxi-item>
+                            <dxi-item dataField="mainContent" editorType="dxTextArea" [colSpan]="2">
+                                <dxo-label text="Nội dung công tác trọng tâm"></dxo-label>
+                                <dxi-validation-rule type="required" message="Chưa nhập nội dung công tác trọng tâm">
+                                </dxi-validation-rule>
+                            </dxi-item>
+                        </dxi-item>
+                        <dxi-item itemType="group" caption="PHÂN CÔNG KẾ HOẠCH" colCount="12" [disabled] ="disableEdit">
+                            <div class = "row">
+                                <dx-button text="Thêm"style= "margin-left: auto;" [visible]="showButtonAction" type="success" icon="add" (onClick)="add()">
+                                </dx-button>
+
+                                <dx-data-grid #assignGrid [dataSource]="assigneeDataSource" [allowColumnReordering]="true"
+                                    [allowColumnResizing]="true" [columnAutoWidth]="true" [showBorders]="true">
+                                    <dxo-editing mode="row" [allowUpdating]="true" [allowDeleting]="true" [useIcons]="true">
+                                    </dxo-editing>
+                                    <dxo-paging [pageSize]="10"></dxo-paging>
+                                    <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 20]"
+                                        [showInfo]="true">
+                                    </dxo-pager>
+                                    <dxi-column columnIndex="1" caption="STT" [allowEditing]="false" alignment="center"
+                                        width="7%" cellTemplate='sttCellTemplate'></dxi-column>
+                                    <dxi-column [allowFiltering]="true" [allowEditing]="false"
+                                        headerCellTemplate="actionHeaderTemplate" cellTemplate="actionTemplate" width="15%">
+                                    </dxi-column>
+                                    <dxi-column dataField="assignContent" caption="Nội dung"></dxi-column>
+                                    <dxi-column dataField="deadline" [width]="16+'%'" caption="Hạn xử lý"
+                                        format="dd/MM/yyyy" dataType="date" alignment="center" [customizeText]="nullDateTime">
+                                    </dxi-column>
+                                    <div *dxTemplate="let info of 'actionHeaderTemplate'">
+                                        <div class="current-value" style="text-align: center;">{{captionGrid}}</div>
+                                        <div class="diff" style="text-align: center;">{{captionGrid1}}</div>
+                                    </div>
+                                    <div *dxTemplate="let d of 'actionTemplate'" style="text-align: left">
+                                        <div class="current-value" *ngIf="d.data.userFullName">{{ d.data.userFullName }}
+                                        </div>
+                                        <div class="current-value" *ngIf="d.data.orgName">{{ d.data.orgName }}</div>
+                                    </div>
+                                    <div *dxTemplate="let info of 'sttCellTemplate'">
+                                        <div> {{info.rowIndex + 1}}</div>
+                                    </div>
+                                </dx-data-grid>
+                            </div>
+
+                        </dxi-item>
+                        <dxi-item itemType="group" caption="TỔ CHỨC THỰC HIỆN" colCount="12" [disabled] ="disableEdit">
+                            <dxi-item dataField="organizeContent" editorType="dxTextBox" [colSpan]="12">
+                                <dxo-label text="Nội dung"></dxo-label>
+                                <!-- <dxi-validation-rule type="required" message="Chưa nhập người ký"></dxi-validation-rule> -->
+                            </dxi-item>
+                            <dxi-item dataField="deadline" [colSpan]="4" editorType="dxDateBox" [editorOptions]="{displayFormat:'dd/MM/yyyy'}"  >
+                                <dxo-label text="Hạn xử lý"></dxo-label>
+                                <!-- <dxi-validation-rule type="required" message="Chưa chọn ngày tháng năm">
+                                </dxi-validation-rule> -->
+                            </dxi-item>
+                            <dxi-item [colSpan]="8" itemtype="empty"></dxi-item>
+                            <dxi-item dataField="workplace" editorType="dxTextBox" [colSpan]="12">
+                                <dxo-label text="Địa điểm"></dxo-label>
+                                <!-- <dxi-validation-rule type="required" message="Chưa nhập người ký"></dxi-validation-rule> -->
+                            </dxi-item>
+                        </dxi-item>
+                        <dxi-item itemType="group" caption="TÀI LIỆU KẾ HOẠCH" colCount="12">
+                            <!-- <dxi-item dataField="attachment" itemType="dxTextBox" [disabled]="true" [colSpan]="6">
+                                <dxo-label text="Tập tin"></dxo-label>
+                            </dxi-item> -->
+                            <dxi-item [colSpan]="4" [disabled] ="disableEdit">
+                                <dxi-validation-rule type="required"></dxi-validation-rule>
+                                <dx-file-uploader   [multiple]="false"
+                                    selectButtonText="Chọn file đính kèm" accept="*" icon="upload" [(value)]="value"
+                                     uploadMode="useForm" (onValueChanged)="setFullNameFile($event)" [showFileList]="false">
+                                </dx-file-uploader>
+
+                            </dxi-item>
+                            <dxi-item [colSpan]="8">
+                                <dx-data-grid id="gridContainer" [dataSource]="selectedRows"
+                                    [allowColumnReordering]="true" [allowColumnResizing]="true" [columnAutoWidth]="true"
+                                    [showBorders]="true">
+                                    <dxo-paging [pageSize]="10"></dxo-paging>
+                                    <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 20]"
+                                        [showInfo]="true">
+                                    </dxo-pager>
+                                    <dxi-column dataField="tepDinhKem" caption="Tệp đính kèm"></dxi-column>
+                                    <dxi-column caption="Xem chi tiết" cellTemplate="detailTemplate" [width]="100">
+                                    </dxi-column>
+                                    <dxi-item caption="Xóa" cellTemplate="deleteTemplate">
+                                    </dxi-item>
+
+                                    <div *dxTemplate="let d of 'detailTemplate'">
+                                        <div class="row">
+                                            <div class="col-6" style="text-align: center;" (click)="showDetail(d)">
+                                                <span><i class="fab fa-buffer"></i></span>
+                                            </div>
+                                            <div class="col-6" style="text-align: center;" (click)="deleteFile(d)" *ngIf="!disableEdit">
+                                                <span><i class="fas fa-trash-alt"></i> </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div *dxTemplate="let d of 'deleteTemplate'">
+
+                                    </div>
+                            </dx-data-grid>
+                            </dxi-item>
+
+                        </dxi-item>
+
+                    </dx-form>
+
+                    <div class="col-xl-12" style="padding-bottom: 1rem; text-align: center;">
+                        <dx-button text="Lưu" [visible]="showButtonAction" type="success" icon="save" (onClick)="save()">
+                        </dx-button>
+                        &nbsp;
+
+                        <dx-button text="Trở về" (onClick)="back()" type="success" icon="fa fa-arrow-left"></dx-button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<dx-popup [width]="800" [height]="600" [showTitle]="true" title="Phân công nhiệm vụ" [dragEnabled]="false"
+    [closeOnOutsideClick]="false" [(visible)]="assignPopupVisible" colCount="12">
+    <!-- <dxi-toolbar-item widget="dxButton" location="after" [options]="{
+        text: 'Lưu',
+        onClick: addAssign ,
+        icon: 'save'
+    }" toolbar='bottom'>
+    </dxi-toolbar-item>
+    <dxi-toolbar-item widget="dxButton" location="after" [options]="{
+        text: 'Quay lại',
+        onClick: close ,
+        icon: 'back',
+        validationGroup: 'formValidateGroup'
+    }" toolbar='bottom'>
+    </dxi-toolbar-item> -->
+    <div *dxTemplate="let data of 'content'">
+        <form (submit)="addAssign()">
+            <dx-form #assignForm [formData]="assignData" [showValidationSummary]="true" [showColonAfterLabel]="false"
+                validationGroup="assignValidateGroup" [colCount]="12">
+                <dxi-item dataField="assignUser" editorType="dxTagBox" [colSpan]="6" [editorOptions]="leaderOption">
+                    <dxo-label text={{captionAssign}}></dxo-label>
+                </dxi-item>
+                <dxi-item dataField="assignTeam" editorType="dxTagBox" [colSpan]="6" [editorOptions]="teamOption">
+                    <dxo-label text={{captionAssign1}}></dxo-label>
+                </dxi-item>
+                <dxi-item dataField="deadline" [colSpan]="6" editorType="dxDateBox" [editorOptions]="{displayFormat:'dd/MM/yyyy'}" >
+                    <dxo-label text="Hạn thực hiện"></dxo-label>
+                    <!-- <dxi-validation-rule type="required" message="Chưa chọn hạn thực hiện">
+                    </dxi-validation-rule> -->
+                </dxi-item>
+                <dxi-item itemType="empty" [colSpan]="6"></dxi-item>
+                <dxi-item dataField="assignContent" editorType="dxTextBox" [colSpan]="12">
+                    <dxo-label text="Nhiệm vụ phân công"></dxo-label>
+                </dxi-item>
+            </dx-form>
+            <div style="position: fixed; bottom:10px;right:10px">
+                <dx-button text="Lưu" type="success" [useSubmitBehavior]="true" validationGroup="assignValidateGroup">
+                </dx-button>
+                &nbsp;
+                <dx-button text="Đóng" (onClick)="close()"></dx-button>
+            </div>
+        </form>
+    </div>
+
+</dx-popup>

@@ -1,0 +1,36 @@
+<div class="row">
+    <div class="col-12">
+        <div class="card card-outline-info">
+            <div class="card-body">
+                <h3 style="margin: 20px">{{Name}}</h3>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="modal-body">
+                            <dx-form #detailForm [formData]="labelActionData" colCount="12" [showValidationSummary]="true"  validationGroup="formValidateGroup">
+                                <dxi-item dataField="name" [colSpan]="6">
+                                    <dxo-label text="Tên"></dxo-label>
+                                    <dxi-validation-rule type="required" message="Tên không được để trống"></dxi-validation-rule>
+                                </dxi-item>
+                                <dxi-item dataField="code" [colSpan]="6">
+                                    <dxo-label text="Mã"></dxo-label>
+                                    <dxi-validation-rule type="required" message="Mã không được để trống"></dxi-validation-rule>
+                                </dxi-item>
+                                <dxi-item dataField="sqlType" [colSpan]="6" editorType="dxSelectBox" [editorOptions]="sqlTypeOptions">
+                                    <dxo-label text="Loại cơ sỏ dữ liệu"></dxo-label>
+                                    <dxi-validation-rule type="required" message="Loại cơ sở dữ liệu không được để trống"></dxi-validation-rule>
+                                </dxi-item>
+                                <dxi-item dataField="isActive" editorType="dxCheckBox" [colSpan]="2">
+                                    <dxo-label text="Hoạt động"></dxo-label>
+                                </dxi-item>
+                            </dx-form>
+                        </div>  
+                        <div class="modal-footer" style="justify-content: center">
+                            <dx-button class="dx-button dx-button-success dx-button-mode-contained dx-widget dx-button-has-icon dx-button-has-text" icon="fa fa-save" text="Lưu" (onClick)="save()" [visible]="saveBtnVisible"></dx-button>
+                            <dx-button icon="fa fa-arrow-left" text="Trở về" (onClick)="back()"></dx-button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

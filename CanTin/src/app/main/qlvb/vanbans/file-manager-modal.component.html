@@ -1,0 +1,51 @@
+<div bsModal #fileManagerModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createOrEditModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span>{{l("Quản lý file")}}</span>
+                    </h4>
+                    <button type="button" class="close" (click)="close()" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+    
+                    <dx-file-manager id="fileManager"
+                    [fileSystemProvider]="remoteProvider"
+                    currentPath="Widescreen"
+                    (onSelectedFileOpened)="displayImagePopup($event)">
+                
+                    <dxo-permissions 
+                        create="true"
+                        copy="true"
+                        move="true"
+                        remove="true"
+                        rename="true"
+                        upload="true"
+                        download="true">
+                    </dxo-permissions>
+                </dx-file-manager>
+                
+                <dx-popup id="photo-popup"
+                    maxHeight="600"
+                    closeOnOutsideClick="true"
+                    [(title)]="imageItemToDisplay.name"
+                    [(visible)]="popupVisible">
+                    <div *dxTemplate="let data of 'content'" class="photo-popup-content">
+                        <img src="{{imageItemToDisplay.dataItem.url}}" class="photo-popup-image" />
+                    </div>
+                </dx-popup>
+
+
+    
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-primary blue" (click)="close()">{{l("Close")}}</button>
+                  
+                </div>
+            </div>
+        </div>
+    
+    </div>
+    

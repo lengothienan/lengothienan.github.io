@@ -1,0 +1,250 @@
+<!-- <div [@routerTransition] (window:resize)="onResize($event)"> -->
+    <div [@routerTransition]>
+        <div class="kt-content  kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor">
+            <div class="kt-subheader kt-grid__item">
+                <div [class]="containerClass">
+                    <div class="kt-subheader__main">
+                        <h3 class="kt-subheader__title">
+                            <span>{{"Danh sách VB đã phê duyệt"}}</span>
+                        </h3>
+                    </div>
+                </div>
+            </div>
+            <div [class]="containerClass + ' kt-grid__item kt-grid__item--fluid'">
+                <div class="kt-portlet kt-portlet--mobile">
+                    <div class="modal-body">
+                        <div style="position: absolute; z-index: 1;">
+                            <dx-button text="Chuyển phát hành" type="success"></dx-button>
+                        </div>
+                        <div class="row align-items-center">
+                            <!--<Primeng-TurboTable-Start>-->
+                            <div class="col primeng-datatable-container">
+                                <dx-data-grid #gridContainer id="gridContainer" [height]="500" [showColumnLines]="true"
+                                    [(selectedRowKeys)]="selectedRowsData"
+                                    [remoteOperations]="false" [allowColumnReordering]="true" [rowAlternationEnabled]="true"
+                                    [showBorders]="true" [allowColumnResizing]="true" [columnAutoWidth]="true"
+                                    [(dataSource)]="initialData" [cellHintEnabled]="true">
+                                    <dxo-selection mode="multiple"> </dxo-selection>
+                                    <dxo-export [enabled]="true" fileName="Documents" [allowExportSelectedData]="true"></dxo-export>
+                                    <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[10, 25, 50, 100]"
+                                        [showInfo]="true"></dxo-pager>
+                                    <dxo-search-panel [visible]="true" placeholder="Nhập nội dung..." width="250">
+                                    </dxo-search-panel>
+                                    <!-- <dxo-header-filter [visible]="true"></dxo-header-filter> -->
+                                    <dxo-filter-row [visible]="false"></dxo-filter-row>
+                                    <!-- <dxo- <dxo-filter-panel [visible]="true"></dxo-filter-panel>column-chooser [enabled]="true"></dxo-column-chooser> -->
+                                    <dxo-paging [pageSize]="10"></dxo-paging>
+                                    <dxi-column type="selection" [width]="4+'%'"></dxi-column>
+                                    <dxi-column dataField="stt" columnIndex="1" caption="STT" alignment="center"
+                                        [width]="5+'%'"></dxi-column>
+                                    <dxi-column columnIndex="9" alignment="center" [width]="6+'%'"
+                                        cellTemplate="customTemplate" caption="Xử lý"></dxi-column>
+                                    <dxi-column dataField="action_button " columnIndex="2" cellTemplate="actionTemplate"
+                                        caption="#" [width]="8+'%'" alignment="center"></dxi-column>
+                                    <dxi-column columnIndex="2" cellTemplate="diffCellTemplate4" headerCellTemplate="titleHeaderTemplate4"
+                                        dataType="date" format="d/M/yyyy"
+                                        alignment="center"></dxi-column>
+                                    <dxi-column cellTemplate="diffCellTemplate" [allowSearch]="true"
+                                        headerCellTemplate="titleHeaderTemplate" columnIndex="3"
+                                        dataType="date" format="d/M/yyyy"
+                                        alignment="center">
+                                    </dxi-column>
+                                    <dxi-column dataField="documentTypeName" alignment="center" caption="Loại Văn Bản">
+
+                                    </dxi-column>
+                                    <dxi-column dataField="PublisherName" columnIndex="7"
+                                        headerCellTemplate="titleHeaderTemplate2"
+                                    >
+                                    </dxi-column>
+                                    <!-- <dxi-column columnIndex="4" cellTemplate="diffCellTemplate1"
+                                        headerCellTemplate="titleHeaderTemplate1" alignment="center" [width]="11+'%'"></dxi-column> -->
+                                    <!-- <dxi-column dataField="Deadline"  columnIndex="5"
+                                        headerCellTemplate="titleHeaderTemplate3" alignment="center" [width]="10+'%'"
+                                        dataType="date" format="d/M/yyyy" >
+
+                                    </dxi-column> -->
+                                    <dxi-column dataField="Summary" columnIndex="8"
+                                        caption="Trích yếu"></dxi-column>
+                                    <!-- <dxi-column dataField="ProcessingRecommended" headerCellTemplate="titleHeaderTemplate4"
+                                        columnIndex="6" [width]="12+'%'" >
+                                    </dxi-column> -->
+                                    <!-- <dxi-column dataField="DirectorName" columnIndex="6" alignment="center" [width]="10+'%'"
+                                        caption="BGĐ"></dxi-column> -->
+
+                                    <div *dxTemplate="let info of 'titleHeaderTemplate4'">
+                                        <div class="current-value" style="text-align: center;">Ý kiến đề</div>
+                                        <div class="diff" style="text-align: center;">xuất PV01</div>
+                                    </div>
+                                    <div *dxTemplate="let info of 'titleHeaderTemplate'">
+                                        <div class="current-value">Mã dự thảo</div>
+                                        <div class="diff">Ngày soạn</div>
+                                    </div>
+                                    <div *dxTemplate="let info of 'titleHeaderTemplate3'">
+                                        <div class="current-value">Hạn </div>
+                                        <div class="diff"> giải quyết</div>
+                                    </div>
+                                    <div *dxTemplate="let info of 'titleHeaderTemplate2'" style="text-align: center !important">
+                                        <div class="current-value">Nơi nhận</div>
+                                    </div>
+                                    <div *dxTemplate="let info of 'titleHeaderTemplate1'">
+                                        <div class="current-value">Số đến phòng</div>
+                                        <div class="diff">Ngày đến phòng</div>
+                                    </div>
+
+                                    <div *dxTemplate="let info of 'titleHeaderTemplate4'">
+                                        <div class="current-value">Số kí hiệu</div>
+                                        <div class="diff">ngày VB</div>
+                                    </div>
+
+                                    <div *dxTemplate="let d of 'customTemplate'">
+                                        <div class="btn-group dropdown btn-smaller-padding" dropdown container="body">
+                                            <button class="dropdown-toggle btn btn-sm btn-primary" dropdownToggle>
+                                                <i class="fa fa-cog"></i>
+                                            </button>
+                                            <ul class="dropdown-menu" *dropdownMenu>
+                                                <!-- <li *ngIf="num.includes(2)">
+                                                    <a href="javascript:;" (click)="saveToBook(d)"><i class="fas fa-atlas"
+                                                            style="color: rgb(7, 88, 44);"></i>{{l('Vào sổ')}}</a>
+
+                                                </li> -->
+                                                <li>
+                                                    <a href="javascript:;" (click)="view(d)"><i class="fas fa-edit"
+                                                            style="color: rgb(7, 88, 44);"></i>{{l('Xem')}}</a>
+                                                </li>
+                                                <li>
+                                                    <a href="javascript:;" (click)="viewProcess(d)"><i
+                                                            class="fa fa-cog"
+                                                            style="color: rgb(7, 88, 44);"></i>{{l('Quy trình xử lý')}}</a>
+                                                </li>
+                                                <li>
+                                                    <a href="javascript:;" (click)="showListHistory(d)"><i
+                                                            class="fa fa-file"
+                                                            style="color: rgb(7, 88, 44);"></i>{{l('Tệp đính kèm')}}</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div *dxTemplate="let d of 'actionTemplate'">
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <span (click)="viewProcess(d)" style="position: absolute; top: 10px"> <i
+                                                        class="fas fa-share-alt"></i></span>
+                                            </div>
+                                            <div class="col-6">
+                                                <span (click)="showListHistory(d)"><i class="fas fa-file-pdf"></i></span>
+                                                <br>
+                                                <span (click)="instaff(d)"><i
+                                                        [ngStyle]="{'color' : d.data.star == true ? '#d41022e8': 'black'}"
+                                                        class="fas fa-star" id=d.data.id></i></span>
+                                            </div>
+                                            <!-- <div class="col-4"    >
+                                        </div> -->
+                                        </div>
+                                    </div>
+                                    <div *dxTemplate="let d of 'diffCellTemplate'">
+                                        <div class="current-value" style="font-weight: bold;">{{d.data.Number}}</div>
+                                        <div class="diff">{{d.data.PublishDate | date: "dd/MM/yyyy " }}</div>
+                                    </div>
+                                    <div *dxTemplate="let d of 'diffCellTemplate1'">
+                                        <div class="current-value" style="font-weight: bold;">{{d.data.IncommingNumber}}</div>
+                                        <div class="diff">{{d.data.IncommingDate | date: "dd/MM/yyyy "}}</div>
+                                    </div>
+                                    <div *dxTemplate="let d of 'diffCellTemplate4'">
+                                        <div class="current-value" style="font-weight: bold;">{{d.data.Number}}</div>
+                                        <div class="diff">{{d.data.PublishDate | date: "dd/MM/yyyy "}}</div>
+                                    </div>
+                                </dx-data-grid>
+                                <!-- Xem lịch sử upload chi tiết -->
+                                <dx-popup [width]="800" [height]="600" [showTitle]="true" title="Lịch sử upload file"
+                                    [dragEnabled]="false" [closeOnOutsideClick]="false" [(visible)]="historyPopupVisible">
+                                    <dx-data-grid id="gridContainer" [dataSource]="history_Upload"
+                                        [allowColumnReordering]="true" [allowColumnResizing]="true" [columnAutoWidth]="true"
+                                        [showBorders]="true">
+                                        <dxo-paging [pageSize]="10"></dxo-paging>
+                                        <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 20]"
+                                            [showInfo]="true">
+                                        </dxo-pager>
+
+                                        <dxi-column dataField="file"></dxi-column>
+                                        <dxi-column dataField="version"></dxi-column>
+                                        <dxi-column type="buttons" dataField="Xem chi tiết">
+                                            <dxi-button [onClick]="showDetail" icon="fab fa-buffer"></dxi-button>
+                                        </dxi-column>
+
+                                    </dx-data-grid>
+                                </dx-popup>
+
+                                <dx-popup [width]="800" [height]="600" [showTitle]="true" title="Phát hành văn bản"
+                                    [dragEnabled]="false" [closeOnOutsideClick]="false" [(visible)]="publishPopupVisible">
+
+                                    <div class="col-xl-12 col-md-12 col-xs-12" style="padding-bottom: 17px;padding-left:0;">
+                                        <dx-button text="Trở về" type="success" icon="fa fa-arrow-left"
+                                            (onClick)="back()"></dx-button>
+                                        &nbsp;
+                                        <dx-button [disabled]="saving" text="Chọn" type="success" icon="save"> </dx-button>
+                                        &nbsp;
+                                        <dx-button [disabled]="saving" text="Xóa" type="success" icon="fa fa-trash"></dx-button>
+                                    </div>
+                                    <div class="col-xl-12 col-md-12 col-xs-12">
+                                        <dx-form #documentForm [showValidationSummary]="true"
+                                            [showColonAfterLabel]="false" validationGroup="formValidateGroup">
+                                            <dxi-item itemType="group" colCount="12">
+                                                <dxi-item [colSpan]="11" editorType="dxTextBox">
+                                                    <dxo-label text="Tìm kiếm gợi nhớ"></dxo-label>
+                                                </dxi-item>
+                                                <dxi-item [colSpan]="1">
+                                                    <dx-button icon="plus" alignment="right" [elementAttr]="{class: 'btnAddPublisher'}"></dx-button>
+                                                </dxi-item>
+                                                <dxi-item [colSpan]="12" editorType="dxTextBox">
+                                                    <dxo-label text="Tên gợi nhớ"></dxo-label>
+                                                </dxi-item>
+                                            </dxi-item>
+                                            <dxi-item [colSpan]="12">
+                                                <dx-data-grid #gridContainerOrg id="gridContainerOrg"
+                                                [remoteOperations]="false" [allowColumnReordering]="true"
+                                                [rowAlternationEnabled]="true" [allowColumnResizing]="true"
+                                                columnResizingMode="widget" [showBorders]="true" [height]="250"
+                                                [width]="750"
+
+                                                [dataSource]="data_receiver">
+                                                <dxo-paging [enabled]="false"></dxo-paging>
+                                                <!-- <dxo-editing [allowUpdating]="!isReadOnly" [allowAdding]="false" [allowDeleting]="false">
+                                                </dxo-editing> -->
+                                                <dxo-filter-row [visible]="true" placeholder="Nhập để tìm kiếm..." >
+                                                </dxo-filter-row>
+                                                <dxi-column [allowFiltering]="true" [allowEditing]="false" [allowEditing]="false"
+                                                    caption="Danh sách đơn vị" dataField="displayName" width="80%">
+                                                </dxi-column>
+                                                <dxi-column dataField="mainHandling" caption="Chủ trì" width="20%" [allowEditing]="false"
+                                                    cellTemplate="selectTemplate" alignment="center" [allowFiltering]="false">
+                                                </dxi-column>
+                                                <div *dxTemplate="let cell of 'selectTemplate'">
+                                                    <dx-check-box [value]="cell.value"></dx-check-box>
+                                                </div>
+
+                                            </dx-data-grid>
+                                            </dxi-item>
+                                            <dxi-item [colSpan]="4">
+                                                <dx-check-box text="Lưu gợi nhớ"></dx-check-box>
+                                            </dxi-item>
+                                        </dx-form>
+                                    </div>
+                                </dx-popup>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <style>
+        ::ng-deep .dx-row {
+            font-size: 16px;
+            height: px;
+            white-space: normal;
+        }
+    </style>
+
+

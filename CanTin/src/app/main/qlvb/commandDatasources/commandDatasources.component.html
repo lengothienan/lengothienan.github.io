@@ -1,0 +1,77 @@
+<div [@routerTransition]>
+  <div class="kt-content  kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor">
+    <div class="kt-subheader kt-grid__item">
+      <div [class]="containerClass">
+        <div class="kt-subheader__main">
+            <h3 class="kt-subheader__title">
+                <span>{{l("CommandDatasources")}}</span>
+            </h3>
+            <span class="kt-subheader__separator kt-subheader__separator--v"></span>
+            <span class="kt-subheader__desc">
+                {{l("CommandDatasourcesHeaderInfo")}}
+            </span>
+        </div>
+        <div class="kt-subheader__toolbar">
+            <div class="kt-subheader__wrapper">
+				<!-- <button (click)="exportToExcel()" class="btn btn-outline-success"><i class="fa fa-file-excel"></i> {{l("ExportToExcel")}}</button> -->
+                <button *ngIf="isGranted('Pages.CommandDatasources.Create')" (click)="createCommandDatasource()"
+			class="btn btn-primary blue"><i class="fa fa-plus"></i> {{l("CreateNewCommandDatasource")}}</button>
+            </div>
+        </div>
+      </div>
+    </div>
+    <div [class]="containerClass + ' kt-grid__item kt-grid__item--fluid'">
+        <div class="kt-portlet kt-portlet--mobile">
+            <div class="kt-portlet__body">
+
+
+                <div class="row align-items-center">
+                    <!--<Primeng-Datatable-Start>-->
+                    <div class="primeng-datatable-container col-12"
+                        [busyIf]="primengTableHelper.isLoading">
+                        <dx-data-grid
+                        #gridContainer id="gridContainer"
+                        [dataSource]="tableResult"
+                        keyExpr="id"
+                        [showRowLines]="true"
+                        [allowColumnReordering]="true"
+                        [showBorders]="true"
+                        >
+                            <dxo-export [enabled]="true" fileName="CommandDatasource" [allowExportSelectedData]="true"></dxo-export>
+                            <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[10, 25, 50, 100]"
+                                [showInfo]="true"></dxo-pager>
+                            <dxo-search-panel [visible]="true" placeholder="Nhập nội dung..." width="350">
+                            </dxo-search-panel>
+                            <dxo-paging [enabled]="true" [pageSize]="10"></dxo-paging>
+                            <dxi-column caption='#' cellTemplate='dropdown' [width]="8+'%'" alignment="center"></dxi-column>
+                            <dxi-column dataField='id' caption='Id' [visible]="false"></dxi-column>
+                            <dxi-column dataField='command' caption='Câu lệnh' [width]="95+'%'"></dxi-column>
+                            <div *dxTemplate="let info of 'dropdown'">
+                                <div class="btn-group dropdown" dropdown container="body">
+                                    <button class="dropdown-toggle btn btn-sm btn-primary" dropdownToggle>
+                                        <i class="fa fa-cog"></i><span class="caret"></span>
+                                    </button>
+                                        <ul class="dropdown-menu"  *dropdownMenu>
+                                        <li>
+                                            <a href="javascript:;" *ngIf="permission.isGranted('Pages.CommandDatasources.Edit')"
+                                            (click)="createOrEditCommandDatasourceModal.show(info.data.id)">{{l('Edit')}}</a>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:;" *ngIf="permission.isGranted('Pages.CommandDatasources.Delete')"
+                                            (click)="deleteCommandDatasource(info.data)">{{l('Delete')}}</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </dx-data-grid>
+                    </div>
+                    <!--<Primeng-Datatable-End>-->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <createOrEditCommandDatasourceModal #createOrEditCommandDatasourceModal (modalSave)="loadData()"></createOrEditCommandDatasourceModal>
+
+  </div>
+</div>

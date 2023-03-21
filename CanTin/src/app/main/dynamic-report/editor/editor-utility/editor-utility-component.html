@@ -1,0 +1,300 @@
+<div class="col-lg-12">
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-outline-info">
+                <div class="card-body">
+                    <div style="background-color: #c9ddf7 !important;margin: 10px">
+                        <h3 class="kt-container"
+                            style="padding-top: 10px;padding-bottom: 10px;font-size: 1.2rem;font-weight: 500;color: #434349;text-transform: uppercase;">
+                            <i class="kt-menu__link-icon flaticon-graphic-1"> </i>
+                            {{reportName}}
+                        </h3>
+                    </div>
+                    <div class="row" style="margin: 10px">
+                        <div class="col-md-12">
+                            <form style="margin:10px" (submit)="viewreport()">
+                                <dx-form [(formData)]="formData" #form [items]="listItem"
+                                    validationGroup="formValidateGroup" [colCount]="formCol"
+                                    style="margin-bottom: 20px">
+                                </dx-form>
+                                <div class="row justify-content-center" *ngIf="show_search"
+                                    style="margin-top: 20px; text-align: center;margin-bottom: 50px;">
+                                    <dx-button text="Xem" [icon]="iconClass" type="success" [useSubmitBehavior]="true"
+                                        validationGroup="formValidateGroup" class="mr-2 pointer" [disabled]="disabled_btn_search"></dx-button>
+                                    <dx-button text="Hủy" icon="fa fa-arrow-left" class="pointer" (onClick)="back()">
+                                    </dx-button>
+                                </div>
+                            </form>
+                            <div id="dx-form" style="display: none"></div>
+                        </div>
+
+                        <!-- <div class="col-md-10" style="z-index: 1;">
+                            <div class="row" style="text-align: center; margin-left: -5px;">
+                                <dx-button stylingMode="contained" icon="fas fa-plus" text="Thêm mới" type="success" class="pointer" style="margin-right: 5px;"
+                                    [width]="150" [visible]="action_button.create" (onClick)="create($event)">
+                                </dx-button>
+                            </div>
+                        </div> -->
+                        
+
+
+                        <div class="btn-group dropdown btn-smaller-padding" dropdown container="body"
+                            style="margin-left: 10px; margin-bottom: 5px;">
+                            <!-- <dx-button icon="fas fa-file-export" stylingMode="contained" type="success"
+                                class="pointer"
+                                text="Xuất file template" style="margin-right: 5px;"  [width]="200"
+                                (onClick)="downloadTemplate()"></dx-button> -->
+                            <dx-button icon="fas fa-file-import" stylingMode="contained" type="success"
+                                class="pointer"
+                                text="Import" style="margin-right: 5px;"  [width]="150"
+                                (onClick)="openFileUtiity.click()"></dx-button>
+                            <dx-button stylingMode="contained" icon="save" text="Lưu" type="success" class="pointer"
+                                style="margin-right: 5px;" [width]="150" (onClick)="saveGridData()">
+                            </dx-button>
+                            <div *ngFor="let action of actions2">
+                                <dx-button *ngIf="action.Type == 'LINK'" stylingMode="contained" icon="{{action.Icon}}"
+                                    text="{{action.ActionName}}" type="success" class="pointer"
+                                    style="margin-right: 5px;" [width]="150" [visible]="action_button.create"
+                                    (onClick)="create($event)">
+                                </dx-button>
+                                <dx-button *ngIf="action.Type == 'STORE'" stylingMode="contained" icon="{{action.Icon}}"
+                                    text="{{action.ActionName}}" type="success" class="pointer"
+                                    style="margin-right: 5px;" [visible]="action_button.create"
+                                    (onClick)="clickBtnStore($event, action.Value, action.DataSourceID)">
+                                </dx-button>
+                                <dx-button *ngIf="action.Type == 'SHOWCOMPONENT'" stylingMode="contained"
+                                    icon="{{action.Icon}}" text="{{action.ActionName}}" type="success" class="pointer"
+                                    style="margin-right: 5px;" [visible]="action_button.create"
+                                    (onClick)="clickBtnPopup($event, action)">
+                                </dx-button>
+                                <dx-button *ngIf="action.Type == 'API'" stylingMode="contained" icon="{{action.Icon}}"
+                                    text="{{action.ActionName}}" type="success" class="pointer"
+                                    style="margin-right: 5px;" [visible]="action_button.create"
+                                    (onClick)="action_call_api($event,action.Code)">
+                                </dx-button>
+                                <dx-button *ngIf="action.Type == 'API_EXPORT'" stylingMode="contained" icon="{{action.Icon}}"
+                                    text="{{action.ActionName}}" type="success" class="pointer"
+                                    style="margin-right: 5px;" [visible]="action_button.create"
+                                    (onClick)="action_call_api_export($event,action.Code)">
+                                </dx-button>
+                                <!-- <dx-button *ngIf="action.Type == 'HYPERLINK'" stylingMode="contained" icon="{{action.Icon}}" text="{{action.ActionName}}" type="success" class="pointer" style="margin-right: 5px;"
+                                     [visible]="action_button.create" (onClick)="action_hyperlink($event, action.Code)">
+                                    </dx-button> -->
+
+                                <!-- <a *ngIf="action.Type == 'STORE'" href="javascript:;"
+                                        (click)="action_store(d, action.Code)"><i class="{{action.Icon}} pointer" style="color: rgb(7, 88, 44);"></i>{{action.ActionName}}</a> -->
+                                <!-- <a *ngIf="action.Type == 'SHOWCOMPONENT'" href="javascript:;"
+                                        (click)="action_show_component(d, action)"><i class="{{action.Icon}} pointer" style="color: rgb(7, 88, 44);"></i>{{action.ActionName}}</a>
+                                    <a *ngIf="action.Type == 'HYPERLINK'" href="javascript:;"
+                                        (click)="action_hyperlink(d, action.Code)"><i class="{{action.Icon}} pointer" style="color: rgb(7, 88, 44);"></i>{{action.ActionName}}</a> -->
+                            </div>
+                            <input #openFileUtiity id="openFile" type="file" (change)="importFile($event)" style="display:none;"/>
+                        </div>
+
+                        <div class="col-md-12" [style.visibility]="tableVisibility" [style.display]="tableDisplay"
+                            id="table">
+                            <dx-data-grid #data [columns]='column' [dataSource]="dataSourceTest3" [showRowLines]="true"
+                                [showBorders]="true" [allowColumnResizing]="true" [columnAutoWidth]="true"
+                                [allowColumnReordering]="true" [summary]='sumary' [wordWrapEnabled]="true"
+                                (onExporting)="onExporting($event)" [export]="{enabled: true}"
+                                (onToolbarPreparing)="onToolbarPreparing($event)"
+                                (onContentReady)="onContentReady($event)"
+                                (onCellPrepared)="onCellPrepared($event)"
+                                (onRowValidating)="onRowValidating($event)">
+                                <dxo-editing
+                                    [allowUpdating]="true"
+                                    mode="batch">
+                                </dxo-editing>
+                                <!-- <dxo-export [enabled]="true" [fileName]="reportName" [allowExportSelectedData]="false">
+                                </dxo-export> -->
+                                <dxo-search-panel [visible]="true" placeholder="Nhập nội dung..." width="250">
+                                </dxo-search-panel>
+                                <dxo-group-panel [visible]="true"></dxo-group-panel>
+                                <dxo-grouping #expand [autoExpandAll]="true"></dxo-grouping>
+                                <dxo-paging [pageSize]="pageSize" [pageIndex]="pageIndex"></dxo-paging>
+                                <dxo-pager visible="true" infoText="Trang {0} trên {1} ({2} dòng)"
+                                    [allowedPageSizes]="[20, 50, 100]" [showPageSizeSelector]="true" [showInfo]="true">
+                                </dxo-pager>
+                                <dxo-selection mode="multiple">
+                                </dxo-selection>
+                                <div *dxTemplate="let d of 'customTemplate'">
+                                    <div class="btn-group dropdown btn-smaller-padding" dropdown container="body">
+                                        <button class="dropdown-toggle btn btn-sm btn-primary pointer" dropdownToggle>
+                                            <i class="fa fa-cog"></i>
+                                        </button>
+                                        <ul class="dropdown-menu" *dropdownMenu>
+                                            <li *ngFor="let action of actions">
+                                                <a *ngIf="action.Type == 'LINK'" href="javascript:;"
+                                                    (click)="action_link(d, action.Code)"><i
+                                                        class="{{action.Icon}} pointer"
+                                                        style="color: rgb(7, 88, 44);"></i>{{action.ActionName}}</a>
+                                                <a *ngIf="action.Type == 'STORE'" href="javascript:;"
+                                                    (click)="action_store(d, action.Code, action.DataSourceID)"><i
+                                                        class="{{action.Icon}} pointer"
+                                                        style="color: rgb(7, 88, 44);"></i>{{action.ActionName}}</a>
+                                                <a *ngIf="action.Type == 'SHOWCOMPONENT'" href="javascript:;"
+                                                    (click)="action_show_component(d, action)"><i
+                                                        class="{{action.Icon}} pointer"
+                                                        style="color: rgb(7, 88, 44);"></i>{{action.ActionName}}</a>
+                                                <a *ngIf="action.Type == 'HYPERLINK'" href="javascript:;"
+                                                    (click)="action_hyperlink(d, action.Code)"><i
+                                                        class="{{action.Icon}} pointer"
+                                                        style="color: rgb(7, 88, 44);"></i>{{action.ActionName}}</a>
+                                                <a *ngIf="action.Type == 'STORE_FILECOPY_DOC'" href="javascript:;"
+                                                    (click)="action_store_filecopy(d, action.Code, action.DataSourceID, 1)"><i
+                                                        class="{{action.Icon}} pointer"
+                                                        style="color: rgb(7, 88, 44);"></i>{{action.ActionName}}</a>
+                                                <a *ngIf="action.Type == 'STORE_FILECOPY_ODOC'" href="javascript:;"
+                                                    (click)="action_store_filecopy(d, action.Code, action.DataSourceID, 2)"><i
+                                                        class="{{action.Icon}} pointer"
+                                                        style="color: rgb(7, 88, 44);"></i>{{action.ActionName}}</a>
+                                                <a *ngIf="action.Type == 'API'" href="javascript:;"
+                                                    (click)="action_call_api(d,action.Code)"><i
+                                                        class="{{action.Icon}} pointer"
+                                                        style="color: rgb(7, 88, 44);"></i>{{action.ActionName}}</a>
+                                                <a *ngIf="action.Type == 'API_EXPORT'" href="javascript:;"
+                                                    (click)="action_call_api_export(d,action.Code)"><i
+                                                        class="{{action.Icon}} pointer"
+                                                        style="color: rgb(7, 88, 44);"></i>{{action.ActionName}}</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div *dxTemplate="let data of 'totalGroupCount'">
+                                    <div style="font-style: italic;">
+                                        <span>Có <b>{{totalCount}}</b> kết quả tìm kiếm</span>
+                                    </div>
+                                </div>
+
+                                <div *dxTemplate="let cell of 'attachmentCellTemplate'">
+                                    <i *ngIf="cell.value != undefined && cell.value != ''" class="fas fa-paperclip"
+                                        (click)="attachment(cell.value)" style="color:#1876d3; cursor: pointer;"></i>
+                                </div>
+                            </dx-data-grid>
+                        </div>
+
+                        <div id="dx-grid" style="display: none"></div>
+
+                        <div class="col-md-12" [style.visibility]="barChartVisibility" [style.display]="barChartDisplay"
+                            id="barChart">
+                            <div>
+                                <dx-chart [dataSource]="barChartDataSource">
+                                    <dxo-series-template [nameField]="seriesField"></dxo-series-template>
+                                    <dxo-argument-axis>
+                                        <dxo-label [displayMode]="displayMode" [rotationAngle]="rotationAngle">
+                                        </dxo-label>
+                                    </dxo-argument-axis>
+                                    <dxo-common-series-settings [argumentField]="ArgumentField" type="bar"
+                                        [valueField]="ValueField">
+                                        <dxo-label [visible]="true" [format]="{ formatter: formatService.formatNumber }"
+                                            backgroundColor="transparent">
+                                            <dxo-font [size]="11" [weight]="900" color="green"></dxo-font>
+                                        </dxo-label>
+                                    </dxo-common-series-settings>
+                                    <dxo-legend verticalAlignment="right" horizontalAlignment="top">
+                                    </dxo-legend>
+                                    <dxo-export [enabled]="true"></dxo-export>
+                                </dx-chart>
+                            </div>
+
+                        </div>
+                        <div class="col-md-12" [style.visibility]="pieChartVisibility" [style.display]="pieChartDisplay"
+                            id="pieChart">
+                            <dx-pie-chart id="pie" [size]="size" palette="bright" [dataSource]="pieChartDataSource">
+                                <dxi-series [argumentField]="ArgumentField" [valueField]="ValueField">
+                                    <dxo-label [visible]="true">
+                                        <dxo-connector [visible]="true" [width]="1"></dxo-connector>
+                                    </dxo-label>
+                                </dxi-series>
+                                <dxo-size [width]="500"></dxo-size>
+                                <dxo-export [enabled]="true"></dxo-export>
+                                <dxo-legend verticalAlignment="bottom" horizontalAlignment="center"
+                                    itemTextPosition="right">
+                                </dxo-legend>
+                            </dx-pie-chart>
+                        </div>
+                        <!-- <div class="dx-field" [style.visibility]="hinChartVisibility">
+                            <div class="dx-field-label">Chọn biểu đồ</div>
+                            <div class="dx-field-value">
+                                <dx-select-box #selectBox
+                                    [dataSource]="charts"
+                                    displayExpr="name"
+                                    valueExpr="code"
+                                    [value]="charts[0].code"
+                                ></dx-select-box>
+                            </div>
+                        </div> -->
+                        <app-hin-chart style="width: 100%" [style.visibility]="hinChartVisibility"
+                            [style.display]="hinChartDisplay" [chartData]="chartData" [chartLabels]="chartLabels"
+                            [chartType]="chartType">
+                        </app-hin-chart>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <dx-popup [width]="popupWidth" [height]="popupHeight" [showTitle]="false" title="Information"
+            [dragEnabled]="true" [closeOnOutsideClick]="true" [(visible)]="popupVisible">
+            <div *dxTemplate="let data of 'content'">
+                <ng-container *ngComponentOutlet="componentPopup.component;
+                    ndcDynamicInputs: componentPopup.inputs;
+                    ndcDynamicOutputs: componentPopup.outputs"></ng-container>
+            </div>
+        </dx-popup>
+        <dx-popup [width]="popupImgWidth" [height]="popupImgHeight" [showTitle]="false" title="Information"
+            [dragEnabled]="true" [closeOnOutsideClick]="true" [(visible)]="popupImgVisible">
+            <div *dxTemplate="let data of 'content'">
+                <ng-container *ngComponentOutlet="componentPopup.component;
+                    ndcDynamicInputs: componentPopup.inputs;
+                    ndcDynamicOutputs: componentPopup.outputs"></ng-container>
+            </div>
+        </dx-popup>
+        <dx-popup [width]="popupListWidth" [height]="popupListHeight" [showTitle]="false" title="Information"
+            [dragEnabled]="true" [closeOnOutsideClick]="true" [(visible)]="popupListVisible">
+            <div *dxTemplate="let data of 'content'">
+                <ng-container *ngComponentOutlet="componentPopup.component;
+                    ndcDynamicInputs: componentPopup.inputs;
+                    ndcDynamicOutputs: componentPopup.outputs"></ng-container>
+            </div>
+        </dx-popup>
+    </div>
+</div>
+<!-- POPUP Attachment -->
+<div class="row">
+    <dx-popup [width]="800" [height]="600" [showTitle]="false" title="Information" [dragEnabled]="true"
+        [closeOnOutsideClick]="true" [(visible)]="popupVisibleAttachment">
+        <dx-scroll-view width="100%" height="100%">
+            <div>
+                <div style="background-color: #c9ddf7 !important;margin: 10px">
+                    <h3 class="kt-container"
+                        style="padding-top: 10px;padding-bottom: 10px;font-size: 1.2rem;font-weight: 500;color: #434349;text-transform: uppercase;">
+                        <i class="kt-menu__link-icon flaticon-graphic-1"> </i>
+                        File đính kèm
+                    </h3>
+                </div>
+                <div class="row" style="margin: 10px; padding-top: 20px;">
+                    <div class="col-md-12" id="table">
+                        <dx-data-grid id="gridContainer" [dataSource]="attachmentList" [allowColumnReordering]="true"
+                            [allowColumnResizing]="true" [columnAutoWidth]="true" [showBorders]="true">
+                            <dxo-paging [pageSize]="10"></dxo-paging>
+                            <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 20]" [showInfo]="true">
+                            </dxo-pager>
+                            <dxi-column dataField="tepDinhKem" caption="Tệp đính kèm"></dxi-column>
+                            <dxi-column dataField="link" caption="Tải về" cellTemplate="detailTemplate"
+                                alignment="center" [width]="100">
+                            </dxi-column>
+                            <div *dxTemplate="let d of 'detailTemplate'">
+                                <div (click)="showDetail(d.value)">
+                                    <span><i class="fas fa-download"></i></span>
+                                </div>
+                            </div>
+                        </dx-data-grid>
+                    </div>
+                </div>
+            </div>
+        </dx-scroll-view>
+
+    </dx-popup>
+</div>

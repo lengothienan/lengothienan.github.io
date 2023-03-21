@@ -1,0 +1,273 @@
+<div [@routerTransition]>
+  <div class="kt-content  kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor">
+    <div class="kt-subheader kt-grid__item" style = "background-color: #648fb5;" >
+      <div [class]="containerClass">
+        <div class="kt-subheader__main">
+            <h3 class="kt-subheader__title">
+                <span>{{l("Danh sách giao việc")}}</span>
+            </h3>
+
+        </div>
+           <!-- <div class="kt-subheader__toolbar">
+            <div class="kt-subheader__wrapper">
+				<button (click)="exportToExcel()" class="btn btn-outline-success"><i class="fa fa-file-excel"></i> {{l("ExportToExcel")}}</button>
+
+
+            </div>
+        </div> -->
+      </div>
+    </div>
+
+    <div [class]="containerClass + ' kt-grid__item kt-grid__item--fluid'">
+        <div class="kt-portlet kt-portlet--mobile">
+            <div class="kt-portlet__body">
+                <form class="kt-form" autocomplete="off">
+                    <div>
+                            <div class="col-xl-12" style = "padding-bottom: 17px;padding-left:0;">
+                                    <dx-button text="Thêm mới" type="success" icon="fa fa-plus" (onClick)="showCreateOrEdit()" ></dx-button>
+                                    &nbsp;
+                                    <dx-button text="Kết thúc" type="success" icon="check" (onClick)= "return()" > </dx-button>
+                                    &nbsp;
+                                    <dx-button text="Giao việc" type="success" icon="email" (onClick)="addMoveGiaoViec()"> </dx-button>
+                                    &nbsp;
+                                    <dx-button text="Xóa" type="success" icon="remove"  ></dx-button>
+                                    &nbsp;
+                                    <dx-button text="Scan document" type="success" icon="upload" (onClick)="scanDocument()" ></dx-button>
+                            </div>
+
+                        <!-- <div class="row align-items-center">
+                            <div class="col-xl-12">
+                                <div class="form-group m-form__group align-items-center">
+                                    <div class="input-group">
+                                        <input [(ngModel)]="filterText" name="filterText" autoFocus class="form-control m-input" [placeholder]="l('SearchWithThreeDot')" type="text">
+                                        <span class="input-group-btn">
+                                            <button (click)="getVanbans()" class="btn btn-primary" type="submit"><i class="flaticon-search-1"></i></button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> -->
+                        <div class="row align-items-center">
+
+                                <div class="col-xl-12" style = "padding-left: 250px;">
+                                    <div class="form-group m-form__group align-items-center">
+                                      <div class="row">
+                                            <div class="col-md-9 col-sm-12" >
+                                                <div class="input-group" style = "line-height: 40px;">
+                                                      <input class="form-control" type="text"   autocomplete="off" placeholder="Nhập nội dung cần tìm">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3 col-sm-12">
+                                                    <dx-button text="Tìm kiếm" type="success" icon="find" (onClick)="getVanbans()"  > </dx-button>
+                                                    &nbsp;
+
+                                          </div>
+
+                                        </div>
+
+
+                                </div>
+
+                               </div>
+                             </div>
+						 <div class="row" [hidden]="!advancedFiltersAreShown">
+						 	<div class="col-md-12">
+						         <div class="kt-separator kt-separator--border-dashed"></div>
+						     </div>
+
+
+							<div class="col-md-3">
+								<div class="form-group">
+									<label for="TenCongViecFilter">{{l("TenCongViec")}}</label>
+									<input type="text" class="form-control" id="TenCongViecFilter" name="tenCongViecFilter" [(ngModel)]="tenCongViecFilter">
+								</div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+									<label  for="MinNgayGiaoViecFilter">{{l("NgayGiaoViecRange")}}</label>
+									<div class="input-group">
+                                        <input class="form-control m-input" id="MinNgayGiaoViecFilter" name="MinNgayGiaoViecFilter" type="datetime" bsDatepicker  placeholder="{{l('MinValue')}}" [(ngModel)]="minNgayGiaoViecFilter">
+			                            <span style="line-height: 40px;padding: 0 15px 0 15px;"> &mdash; </span>
+                                        <input class="form-control m-input" id="MaxNgayGiaoViecFilter" name="MaxNgayGiaoViecFilter" type="datetime" bsDatepicker  placeholder="{{l('MaxValue')}}" [(ngModel)]="maxNgayGiaoViecFilter">
+									</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+									<label  for="MinHanKetThucFilter">{{l("HanKetThucRange")}}</label>
+									<div class="input-group">
+                                        <input class="form-control m-input" id="MinHanKetThucFilter" name="MinHanKetThucFilter" type="datetime" bsDatepicker  placeholder="{{l('MinValue')}}" [(ngModel)]="minHanKetThucFilter">
+			                            <span style="line-height: 40px;padding: 0 15px 0 15px;"> &mdash; </span>
+                                        <input class="form-control m-input" id="MaxHanKetThucFilter" name="MaxHanKetThucFilter" type="datetime" bsDatepicker  placeholder="{{l('MaxValue')}}" [(ngModel)]="maxHanKetThucFilter">
+									</div>
+                                </div>
+                            </div>
+							<div class="col-md-3">
+								<div class="form-group">
+									<label for="NguoiXuLyFilter">{{l("NguoiXuLy")}}</label>
+									<input type="text" class="form-control" id="NguoiXuLyFilter" name="nguoiXuLyFilter" [(ngModel)]="nguoiXuLyFilter">
+								</div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+									<label for="MinTienDoChungFilter">{{l("MinMax")}} {{l("TienDoChung")}}</label>
+									<div class="input-group">
+                                        <input type="number" class="form-control" id="MinTienDoChungFilter" [(ngModel)]="minTienDoChungFilter" placeholder="{{l('MinValue')}}" name="minTienDoChungFilter" />
+                                        <input type="number" class="form-control" [(ngModel)]="maxTienDoChungFilter" placeholder="{{l('MaxValue')}}" name="maxTienDoChungFilter" />
+									</div>
+                                </div>
+                            </div>
+							<div class="col-md-3">
+								<div class="form-group">
+									<label for="TinhTrangFilter">{{l("TinhTrang")}}</label>
+									<input type="text" class="form-control" id="TinhTrangFilter" name="tinhTrangFilter" [(ngModel)]="tinhTrangFilter">
+								</div>
+                            </div>
+							<div class="col-md-3">
+								<div class="form-group">
+									<label for="NoiDungFilter">{{l("NoiDung")}}</label>
+									<input type="text" class="form-control" id="NoiDungFilter" name="noiDungFilter" [(ngModel)]="noiDungFilter">
+								</div>
+                            </div>
+
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-sm-12">
+                                <span class="clickable-item text-muted" *ngIf="!advancedFiltersAreShown" (click)="advancedFiltersAreShown=!advancedFiltersAreShown"><i class="fa fa-angle-down"></i> {{l("ShowAdvancedFilters")}}</span>
+                                <span class="clickable-item text-muted" *ngIf="advancedFiltersAreShown" (click)="advancedFiltersAreShown=!advancedFiltersAreShown"><i class="fa fa-angle-up"></i> {{l("HideAdvancedFilters")}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="row align-items-center">
+                    <!--<Primeng-Datatable-Start>-->
+                    <div class="primeng-datatable-container col-12"
+                         [busyIf]="primengTableHelper.isLoading">
+                        <dx-data-grid #gridContainer
+                            id="gridContainer"
+                            [height]="500"
+                            [(selectedRowKeys)]="selectedRows"
+                            (onSelectionChanged)="selectionChangedHandler()"
+                            [remoteOperations]="false"
+                            [allowColumnReordering]="true"
+                            [rowAlternationEnabled]="true"
+                            [showBorders]="true">
+                            <dxo-selection
+                                mode="multiple">
+                            </dxo-selection>
+                            <dxo-paging [pageSize]="10"></dxo-paging>
+                            <dxo-pager
+                                [showPageSizeSelector]="true"
+                                [allowedPageSizes]="[10, 25, 50, 100]"
+                            ></dxo-pager>
+                            <!-- <dxi-column type="buttons"  caption="Chi tiết">
+                                <dxi-button icon="fa fa-list-alt"></dxi-button>
+                            </dxi-column> -->
+
+                            <!-- <dxi-column dataField="id" ></dxi-column>
+                            <dxi-column dataField="tenCongViec" [minWidth]="120" ></dxi-column>
+                            <dxi-column dataField="ngayGiaoViec" dataType="date"[minWidth]="80" ></dxi-column>
+                            <dxi-column dataField="hanKetThuc" dataType="date"[minWidth]="80" ></dxi-column>
+                            <dxi-column dataField="nguoiXuLy" [minWidth]="120" ></dxi-column>cellTemplate="progressBarTemplate" [minWidth]="120"
+                            <dxi-column dataField="tienDoChung" cellTemplate="progressBarTemplate" [minWidth]="120" ></dxi-column>
+                            <dxi-column dataField="tinhTrang" [width]="150" ></dxi-column>
+                            <dxi-column type="buttons" dataField="Nội dung">
+                                <dxi-button icon="fa fa-list-alt"></dxi-button>
+                            </dxi-column>
+                            <dxi-column type="buttons" dataField="Chi tiết">
+                                <dxi-button icon="fa fa-list-alt"></dxi-button>
+
+                            </dxi-column>
+                            <dxi-column type="buttons" dataField="Xóa">
+                                <dxi-button (click)="deleteVanban()" icon="fas fa-trash-alt"></dxi-button>
+                            </dxi-column>
+                            <dxi-column type="buttons" dataField="Chọn">
+                                <div class="dx-field-value">
+                                    <dx-check-box [value]="false"></dx-check-box>
+                                </div>
+                            </dxi-column>
+                            <div *dxTemplate="let d of 'progressBarTemplate'">
+                                <dx-progress-bar #progressBar
+                                    id="progress-bar-status"
+                                    width="90%"
+                                    [statusFormat] = "formatStatusBar"
+                                    [min]="0"
+                                    [max]="100"
+
+                                    [value]="d.value">
+                                </dx-progress-bar>
+                            </div>         -->
+                            <!-- <div *dxTemplate="let d of 'progressBarTemplate'">
+                                <dx-progress-bar #progressBar
+                                    id="progress-bar-status"
+                                    width="90%"
+                                    [statusFormat] = "formatStatusBar"
+                                    [min]="0"
+                                    [max]="100"
+                                    [value]="d.value">
+                                </dx-progress-bar>
+                            </div> -->
+
+                            <div *dxTemplate="let d of 'CustomTemplate'">
+                                <div class="btn-group dropdown" dropdown container="body">
+                                    <button class="dropdown-toggle btn btn-sm btn-primary" dropdownToggle>
+                                        <i class="fa fa-cog"></i><span class="caret"></span>
+                                    </button>
+                                        <ul class="dropdown-menu"  *dropdownMenu>
+                                            <li>
+                                                <a href="javascript:;"
+                                                (click)="showView(d.key.Id)">{{l('View')}}</a>
+                                            </li>
+                                            <li>
+                                                <a href="javascript:;"
+                                                    (click)="showCreateOrEdit(d.key.Id)">{{l('Edit')}}</a>
+                                            </li>
+
+                                            <li>
+                                                <a href="javascript:;"
+                                                    (click)="deleteVanban(d.key.Id)">{{l('Delete')}}</a>
+                                            </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                        </dx-data-grid>
+                        <hr>
+                        <!-- <p-table #dataTable
+                                     (onLazyLoad)="getVanbans($event)"
+                                     [value]="primengTableHelper.records"
+                                     rows="{{primengTableHelper.defaultRecordsCountPerPage}}"
+                                     [paginator]="false"
+                                     [lazy]="true"
+                                     [scrollable]="true"
+                                     ScrollWidth="100%"
+                                     [responsive]="primengTableHelper.isResponsive"
+                                     [resizableColumns]="primengTableHelper.resizableColumns">
+
+
+                        </p-table>
+						<div class="primeng-no-data" *ngIf="primengTableHelper.totalRecordsCount == 0">
+                            {{l('NoData')}}
+                        </div>
+                        <div class="primeng-paging-container">
+                            <p-paginator [rows]="primengTableHelper.defaultRecordsCountPerPage"
+                                         #paginator
+                                         (onPageChange)="getVanbans($event)"
+                                         [totalRecords]="primengTableHelper.totalRecordsCount"
+                                         [rowsPerPageOptions]="primengTableHelper.predefinedRecordsCountPerPage">
+                            </p-paginator>
+                            <span class="total-records-count">
+                                {{l('TotalRecordsCount', primengTableHelper.totalRecordsCount)}}
+                            </span>
+                        </div> -->
+                    </div>
+                    <!--<Primeng-Datatable-End>-->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- <createOrEditVanban #createOrEditVanban (modalSave)="getVanbans()"></createOrEditVanban> -->
+    <!-- <createOrEditVanbanModal #createOrEditVanbanModal (modalSave)="getVanbans()"></createOrEditVanbanModal> -->
+  </div>
+</div>

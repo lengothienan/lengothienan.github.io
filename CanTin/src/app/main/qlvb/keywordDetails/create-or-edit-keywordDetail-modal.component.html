@@ -1,0 +1,83 @@
+﻿<div bsModal #createOrEditModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createOrEditModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #keywordDetailForm="ngForm" novalidate (ngSubmit)="save()" autocomplete="off">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span *ngIf="keywordDetail.id">{{l("EditKeywordDetail")}}</span>
+                        <span *ngIf="!keywordDetail.id">{{l("CreateNewKeywordDetail")}}</span>
+                    </h4>
+                    <button type="button" class="close" (click)="close()" aria-label="Close" [disabled]="saving">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                 
+
+
+								<div class="form-group">
+									<label for="KeywordDetail_KeywordId">{{l("KeywordId")}}</label>
+									<input type="number" id="KeywordDetail_KeywordId" class="form-control" [(ngModel)]="keywordDetail.keywordId" name="KeywordId"  />
+								</div>
+					
+								<br/><div class="m-checkbox-list">
+									<label for="KeywordDetail_IsLeader" class="kt-checkbox">
+										<input id="KeywordDetail_IsLeader" type="checkbox" name="IsLeader" [(ngModel)]="keywordDetail.isLeader"> 
+										{{l("IsLeader")}}
+										<span></span>
+									</label>
+								</div>
+					
+								<div class="form-group">
+									<label for="KeywordDetail_FullName">{{l("FullName")}}</label>
+									<input type="text" id="KeywordDetail_FullName" class="form-control" [(ngModel)]="keywordDetail.fullName" name="FullName"    />
+								</div>
+					
+								<br/><div class="m-checkbox-list">
+									<label for="KeywordDetail_MainHandling" class="kt-checkbox">
+										<input id="KeywordDetail_MainHandling" type="checkbox" name="MainHandling" [(ngModel)]="keywordDetail.mainHandling"> 
+										{{l("MainHandling")}}
+										<span></span>
+									</label>
+								</div>
+					
+								<br/><div class="m-checkbox-list">
+									<label for="KeywordDetail_CoHandling" class="kt-checkbox">
+										<input id="KeywordDetail_CoHandling" type="checkbox" name="CoHandling" [(ngModel)]="keywordDetail.coHandling"> 
+										{{l("CoHandling")}}
+										<span></span>
+									</label>
+								</div>
+					
+								<br/><div class="m-checkbox-list">
+									<label for="KeywordDetail_ToKnow" class="kt-checkbox">
+										<input id="KeywordDetail_ToKnow" type="checkbox" name="ToKnow" [(ngModel)]="keywordDetail.toKnow"> 
+										{{l("ToKnow")}}
+										<span></span>
+									</label>
+								</div>
+					
+								<br/><div class="m-checkbox-list">
+									<label for="KeywordDetail_IsActive" class="kt-checkbox">
+										<input id="KeywordDetail_IsActive" type="checkbox" name="IsActive" [(ngModel)]="keywordDetail.isActive"> 
+										{{l("IsActive")}}
+										<span></span>
+									</label>
+								</div>
+					
+								<div class="form-group">
+									<label for="KeywordDetail_Order">{{l("Order")}}</label>
+									<input type="number" id="KeywordDetail_Order" class="form-control" [(ngModel)]="keywordDetail.order" name="Order"  />
+								</div>
+					
+
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-default" (click)="close()">{{l("Cancel")}}</button>
+                    <button type="submit" class="btn btn-primary blue" [disabled]="!keywordDetailForm.form.valid" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,84 @@
+<div [@routerTransition]>
+        <div class="kt-content  kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor">
+            <div class="kt-subheader kt-grid__item">
+              <div [class]="containerClass">
+                <div class="kt-subheader__main">
+                        <h3 class="kt-subheader__title">
+                                <span>{{l("Thông tin gợi nhớ chi tiết")}}</span>
+                             </h3>
+                    <span class="kt-subheader__separator kt-subheader__separator--v"></span>
+                    <!-- <span class="kt-subheader__desc">
+                        {{l("SchedulesHeaderInfo")}}
+                    </span> -->
+                    <!-- <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Thêm mới văn bản</li>
+                        </ol>
+                    </nav> -->
+                </div>
+                <div class="kt-subheader__toolbar">
+                    <!-- <div class="kt-subheader__wrapper">
+                        <button class="btn btn-outline-success"><i class="fa fa-file-excel"></i> {{l("ExportToExcel")}}</button>
+                        <button *ngIf="isGranted('Pages.Schedules.Create')"  class="btn btn-primary blue"><i class="fa fa-plus"></i> {{l("CreateNewSchedule")}}</button>
+                    
+                    </div> -->
+                </div>
+              </div>
+            </div>
+            <div [class]="containerClass + ' kt-grid__item kt-grid__item--fluid'">
+                <div class="kt-portlet kt-portlet--mobile">
+                        <div class="modal-body">
+                                <div class="col-xl-12" style = "padding-bottom: 17px;padding-left:0;">
+                                       
+                                        <dx-button text="Trở về" type="success" icon="fa fa-arrow-left" onclick="window.history.go(-1); return false;"></dx-button> 
+                                        &nbsp;
+                                </div>
+                                <dx-form #detailForm [(formData)]="viewTextBook"   validationGroup="formValidateGroup" colCount="2">
+                                        <dxi-item dataField="soDen" [colSpan]="1">
+                                        <dxo-label text="Số đến">
+                                        </dxo-label>
+                                               
+                                        </dxi-item>
+                                    <dxi-item dataField="ngayDen" [colSpan]="1">
+                                        <dxo-label text="Ngày đến"></dxo-label>
+                                       
+                                    </dxi-item>
+                                    <dxi-item dataField="soHieuGoc" [colSpan]="1">
+                                        <dxo-label text="Số hiệu gốc "></dxo-label>
+                                      
+                                    </dxi-item>
+                                    <dxi-item dataField="coQuanBanHanh" [colSpan]="1">
+                                        <dxo-label text="Cơ quan ban hành"></dxo-label>
+                                       
+                                    </dxi-item>
+                                    <dxi-item dataField="trichYeu" [colSpan]="1" >
+                                        <dxo-label text="Trích yếu"></dxo-label>
+                                        
+                                      </dxi-item>
+                                    <dxi-item dataField="nguoiChiDao" [colSpan]="1">
+                                        <dxo-label text="Hạn kết thúc"></dxo-label>
+                                       
+                                      </dxi-item>
+                                     
+                                      <dxi-item dataField="nguoi_DonVi" [colSpan]="1">
+                                        <dxo-label text="Người/ Đơn vi XL"></dxo-label>
+                                       </dxi-item>
+                              
+                            
+                              <dxi-item dataField="fileDinhKem"  [editorOptions]="{ height: 90 }">
+                                  <dxo-label text="File đính kèm"></dxo-label>
+                                 
+                              </dxi-item>
+                          
+     
+                                </dx-form>
+    
+                        </div>
+                      
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    

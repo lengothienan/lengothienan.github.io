@@ -1,0 +1,83 @@
+<div bsModal #createOrEditModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createOrEditModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #dynamicDatasourceForm="ngForm" novalidate (ngSubmit)="save()" autocomplete="off">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span *ngIf="dynamicDatasource.id">Chỉnh sửa</span>
+                        <span *ngIf="!dynamicDatasource.id">Tạo mới</span>
+                    </h4>
+                    <button type="button" class="close" (click)="close()" aria-label="Close" [disabled]="saving">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+					<div class="form-group">
+						<label for="DynamicDatasource_DynamicFieldId">Cột(*)</label>
+						<!-- <input type="number" id="DynamicDatasource_DynamicFieldId" class="form-control" [(ngModel)]="dynamicDatasource.dynamicFieldId" name="DynamicFieldId"  /> -->
+						<select class="form-control" name="DynamicDatasource_DynamicFieldId_CBB" (change)="getSelectedRow($event)" [(ngModel)]="selectedRow" required>
+							<option *ngFor="let item of dynamicField" selected="selectedRow" [ngValue]="item">{{item.name}} - {{item.tableName}}</option>
+						</select>
+					</div>
+
+					<div class="form-group">
+						<label for="DynamicDatasource_Type">{{l("Type")}}(*)</label> 
+						<!-- <input type="number" id="DynamicDatasource_Type" class="form-control" [(ngModel)]="dynamicDatasource.type" name="Type"  /> -->
+						<select id="select" #select name="DynamicDatasource_Type" class="form-control" [(ngModel)]="dynamicDatasource.type" (change)="onTypeChange()" required>
+							<option *ngFor="let item of typeDatasource" [ngValue]="item.id">{{item.name}}</option>
+						</select>
+						<!-- <dx-select-box #typeSelect 
+                            id="typeSelect"
+                            [items]="dataSource" 
+                            valueExpr="id" 
+                            displayExpr="name" 
+                            [searchEnabled]="true" 
+							[searchExpr]="['name']"
+							[(value)]="typeVal"
+							(onSelectionChanged)="onTypeChange($event)"
+                            >
+                        </dx-select-box> -->
+					</div>
+		
+					<div class="form-group">
+						<label for="DynamicDatasource_Datasource">Datasource(*)</label>
+						<!-- <input type="number" id="DynamicDatasource_Datasource" class="form-control" [(ngModel)]="dynamicDatasource.dynamicId" name="DynamicDatasource_Datasource" /> -->
+						<select name="DynamicDatasource_Datasource" class="form-control" [(ngModel)]="dynamicDatasource.dynamicId" required>
+							<option *ngFor="let item of datasourceByType" [ngValue]="item.id">{{item.name}}</option>
+						</select>
+						<!-- <dx-select-box #datasourceSelect 
+                            id="datasourceSelect"
+                            [items]="datasourceByType" 
+                            valueExpr="id" 
+                            displayExpr="name" 
+                            [searchEnabled]="true" 
+							[searchExpr]="['name']"
+							[(value)]="datasourceVal"
+							(onSelectionChanged)="onTypeChange($event)"
+                            >
+                        </dx-select-box> -->
+					</div>
+		
+					
+		
+					<!-- <div class="form-group">
+						<label for="DynamicDatasource_Order">{{l("Order")}}</label>
+						<input type="number" id="DynamicDatasource_Order" class="form-control" [(ngModel)]="dynamicDatasource.order" name="Order"  />
+					</div> -->
+		
+					<br/><div class="m-checkbox-list">
+						<label for="DynamicDatasource_IsActive" class="kt-checkbox">
+							<input id="DynamicDatasource_IsActive" type="checkbox" name="IsActive" [(ngModel)]="dynamicDatasource.isActive"> 
+							{{l("IsActive")}}
+							<span></span>
+						</label>
+					</div>
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-default" (click)="close()">{{l("Cancel")}}</button>
+                    <button type="submit" class="btn btn-primary blue" [disabled]="!dynamicDatasourceForm.form.valid" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

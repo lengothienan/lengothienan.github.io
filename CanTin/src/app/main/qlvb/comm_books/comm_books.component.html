@@ -1,0 +1,437 @@
+﻿<div [@routerTransition]>
+  <div class="kt-content  kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor">
+    <div class="kt-subheader kt-grid__item">
+      <div [class]="containerClass">
+        <div class="kt-subheader__main">
+            <h3 class="kt-subheader__title">
+                <span>{{l("Comm_books")}}</span>
+            </h3>
+            <span class="kt-subheader__separator kt-subheader__separator--v"></span>
+            <span class="kt-subheader__desc">
+                {{l("Comm_booksHeaderInfo")}}
+            </span>
+        </div>
+        <div class="kt-subheader__toolbar">
+            <div class="kt-subheader__wrapper">
+                <!-- <button *ngIf="isGranted('Pages.comm_books.Create')" (click)="createComm_book()" -->
+                <button (click)="createComm_book()"
+			    class="btn btn-primary blue"><i class="fa fa-plus"></i> {{l("CreateNewComm_book")}}</button>
+            </div>
+        </div>
+      </div>
+    </div>
+    <div [class]="containerClass + ' kt-grid__item kt-grid__item--fluid'">
+        <div class="kt-portlet kt-portlet--mobile">
+            <div class="kt-portlet__body">
+                <!-- <form class="kt-form" autocomplete="off">
+                    <div>
+                        <div class="row align-items-center">
+                            <div class="col-xl-12">
+                                <div class="form-group m-form__group align-items-center">
+                                    <div class="input-group">
+                                        <input [(ngModel)]="filterText" name="filterText" autoFocus class="form-control m-input" [placeholder]="l('SearchWithThreeDot')" type="text">
+                                        <span class="input-group-btn">
+                                            <button (click)="getComm_books()" class="btn btn-primary" type="submit"><i class="flaticon-search-1"></i></button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+						 <div class="row" [hidden]="!advancedFiltersAreShown">
+						 	<div class="col-md-12">
+						         <div class="kt-separator kt-separator--border-dashed"></div>
+						     </div>
+
+
+							<div class="col-md-3">
+								<div class="form-group">
+									<label for="NameFilter">{{l("Name")}}</label>
+									<input type="text" class="form-control" id="NameFilter" name="nameFilter" [(ngModel)]="nameFilter">
+								</div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+									<label for="MinBookNumFilter">{{l("MinMax")}} {{l("BookNum")}}</label>
+									<div class="input-group">
+                                        <input type="number" class="form-control" id="MinBookNumFilter" [(ngModel)]="minBookNumFilter" placeholder="{{l('MinValue')}}" name="minBookNumFilter" />
+                                        <input type="number" class="form-control" [(ngModel)]="maxBookNumFilter" placeholder="{{l('MaxValue')}}" name="maxBookNumFilter" />
+									</div>
+                                </div>
+                            </div>
+							<div class="col-md-3">
+								<div class="form-group">
+									<label for="TypeFilter">{{l("Type")}}</label>
+									<input type="text" class="form-control" id="TypeFilter" name="typeFilter" [(ngModel)]="typeFilter">
+								</div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+									<label  for="MinFromDateFilter">{{l("FromDateRange")}}</label>
+									<div class="input-group">
+                                        <input class="form-control m-input" id="MinFromDateFilter" name="MinFromDateFilter" type="datetime" bsDatepicker  placeholder="{{l('MinValue')}}" [(ngModel)]="minFromDateFilter">
+			                            <span style="line-height: 40px;padding: 0 15px 0 15px;"> &mdash; </span>
+                                        <input class="form-control m-input" id="MaxFromDateFilter" name="MaxFromDateFilter" type="datetime" bsDatepicker  placeholder="{{l('MaxValue')}}" [(ngModel)]="maxFromDateFilter">
+									</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+									<label  for="MinToDateFilter">{{l("ToDateRange")}}</label>
+									<div class="input-group">
+                                        <input class="form-control m-input" id="MinToDateFilter" name="MinToDateFilter" type="datetime" bsDatepicker  placeholder="{{l('MinValue')}}" [(ngModel)]="minToDateFilter">
+			                            <span style="line-height: 40px;padding: 0 15px 0 15px;"> &mdash; </span>
+                                        <input class="form-control m-input" id="MaxToDateFilter" name="MaxToDateFilter" type="datetime" bsDatepicker  placeholder="{{l('MaxValue')}}" [(ngModel)]="maxToDateFilter">
+									</div>
+                                </div>
+                            </div>
+							<div class="col-md-3">
+								<div class="form-group">
+									<label for="FromValueFilter">{{l("FromValue")}}</label>
+									<input type="text" class="form-control" id="FromValueFilter" name="fromValueFilter" [(ngModel)]="fromValueFilter">
+								</div>
+                            </div>
+							<div class="col-md-3">
+								<div class="form-group">
+									<label for="ToValueFilter">{{l("ToValue")}}</label>
+									<input type="text" class="form-control" id="ToValueFilter" name="toValueFilter" [(ngModel)]="toValueFilter">
+								</div>
+                            </div>
+							<div class="col-md-3">
+								<div class="form-group">
+									<label for="CurrentValueFilter">{{l("CurrentValue")}}</label>
+									<input type="text" class="form-control" id="CurrentValueFilter" name="currentValueFilter" [(ngModel)]="currentValueFilter">
+								</div>
+                            </div>
+							<div class="col-md-3">
+								<div class="form-group">
+									<label for="ContentFilter">{{l("Content")}}</label>
+									<input type="text" class="form-control" id="ContentFilter" name="contentFilter" [(ngModel)]="contentFilter">
+								</div>
+                            </div>
+							<div class="col-md-3">
+								<label for="IsPrivateFilterSelect">{{l("IsPrivate")}}</label>
+								<select class="form-control" name="IsPrivateFilter" id="IsPrivateFilterSelect" [(ngModel)]="isPrivateFilter">
+								<option value="-1">{{l("All")}}</option>
+								<option value="0">{{l("False")}}</option>
+								<option value="1">{{l("True")}}</option>
+								</select>
+                            </div>
+							<div class="col-md-3">
+								<div class="form-group">
+									<label for="CodeFilter">{{l("Code")}}</label>
+									<input type="text" class="form-control" id="CodeFilter" name="codeFilter" [(ngModel)]="codeFilter">
+								</div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+									<label for="MinVersionFilter">{{l("MinMax")}} {{l("Version")}}</label>
+									<div class="input-group">
+                                        <input type="number" class="form-control" id="MinVersionFilter" [(ngModel)]="minVersionFilter" placeholder="{{l('MinValue')}}" name="minVersionFilter" />
+                                        <input type="number" class="form-control" [(ngModel)]="maxVersionFilter" placeholder="{{l('MaxValue')}}" name="maxVersionFilter" />
+									</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+									<label for="MinSyntaxIdFilter">{{l("MinMax")}} {{l("SyntaxId")}}</label>
+									<div class="input-group">
+                                        <input type="number" class="form-control" id="MinSyntaxIdFilter" [(ngModel)]="minSyntaxIdFilter" placeholder="{{l('MinValue')}}" name="minSyntaxIdFilter" />
+                                        <input type="number" class="form-control" [(ngModel)]="maxSyntaxIdFilter" placeholder="{{l('MaxValue')}}" name="maxSyntaxIdFilter" />
+									</div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+									<label for="MinOrgIdFilter">{{l("MinMax")}} {{l("OrgId")}}</label>
+									<div class="input-group">
+                                        <input type="number" class="form-control" id="MinOrgIdFilter" [(ngModel)]="minOrgIdFilter" placeholder="{{l('MinValue')}}" name="minOrgIdFilter" />
+                                        <input type="number" class="form-control" [(ngModel)]="maxOrgIdFilter" placeholder="{{l('MaxValue')}}" name="maxOrgIdFilter" />
+									</div>
+                                </div>
+                            </div>
+							<div class="col-md-3">
+								<label for="IsActiveFilterSelect">{{l("IsActive")}}</label>
+								<select class="form-control" name="IsActiveFilter" id="IsActiveFilterSelect" [(ngModel)]="isActiveFilter">
+								<option value="-1">{{l("All")}}</option>
+								<option value="0">{{l("False")}}</option>
+								<option value="1">{{l("True")}}</option>
+								</select>
+                            </div>
+
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-sm-12">
+                                <span class="clickable-item text-muted" *ngIf="!advancedFiltersAreShown" (click)="advancedFiltersAreShown=!advancedFiltersAreShown"><i class="fa fa-angle-down"></i> {{l("ShowAdvancedFilters")}}</span>
+                                <span class="clickable-item text-muted" *ngIf="advancedFiltersAreShown" (click)="advancedFiltersAreShown=!advancedFiltersAreShown"><i class="fa fa-angle-up"></i> {{l("HideAdvancedFilters")}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </form> -->
+
+                <div class="row align-items-center">
+                    <dx-data-grid #gridContainer id="gridContainer" [showColumnLines]="true"
+                        [remoteOperations]="false" [allowColumnReordering]="true" [rowAlternationEnabled]="true"
+                        [showBorders]="true" [allowColumnResizing]="true" [columnAutoWidth]="true"
+                        [(dataSource)]="initialData" [cellHintEnabled]="true" [showRowLines]="true">
+                        <!-- <dxo-export [enabled]="true" fileName="Documents" [allowExportSelectedData]="true"></dxo-export> -->
+                        <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[10, 25, 50, 100]"
+                            [showInfo]="true"></dxo-pager>
+                        <dxo-search-panel [visible]="true" placeholder="Nhập nội dung..." width="250">
+                        </dxo-search-panel>
+                        <!-- <dxo-header-filter [visible]="true"></dxo-header-filter> -->
+                        <dxo-filter-row [visible]="false"></dxo-filter-row>
+                        <!-- <dxo- <dxo-filter-panel [visible]="true"></dxo-filter-panel>column-chooser [enabled]="true"></dxo-column-chooser> -->
+                        <dxo-paging [pageSize]="10"></dxo-paging>
+                        <!-- <dxi-column type="selection" [width]="4+'%'"></dxi-column>
+                        <dxi-column dataField="stt" columnIndex="1" caption="STT" alignment="center"
+                            [width]="5+'%'"></dxi-column> -->
+                        <dxi-column columnIndex="1" alignment="center" [width]="8+'%'"
+                            cellTemplate="customTemplate" caption="Xử lý"></dxi-column>
+                            <dxi-column columnIndex="2" alignment="center" [width]="10+'%'"
+                            dataField="code" caption="Mã sổ"></dxi-column>
+                        <dxi-column columnIndex="3" alignment="center" [width]="12+'%'"
+                            dataField="name" caption="Tên sổ"></dxi-column>
+                        <dxi-column columnIndex="4" alignment="center" [width]="12+'%'"
+                            dataField="type" caption="Loại sổ"></dxi-column>
+                            <dxi-column columnIndex="5" alignment="center" [width]="15+'%'"
+                            dataField="orgName" caption="Phòng ban"></dxi-column>
+                        <dxi-column columnIndex="6" alignment="center" [width]="9+'%'"
+                            dataField="fromDate" dataType="date" format="dd/MM/yyyy" caption="Từ ngày"></dxi-column>
+                        <dxi-column columnIndex="7" alignment="center" [width]="8+'%'"
+                            dataField="toDate" dataType="date" format="dd/MM/yyyy" caption="Đến ngày"></dxi-column>
+                        <dxi-column columnIndex="8" alignment="center" [width]="8+'%'"
+                            dataField="fromValue" caption="Từ số"></dxi-column>
+                            <dxi-column columnIndex="9" alignment="center" [width]="8+'%'"
+                            dataField="currentValue" headerCellTemplate="currentValueTemplate" caption="Số hiện tại"></dxi-column>
+                        <dxi-column columnIndex="10" alignment="center" [width]="10+'%'"
+                            dataField="syntaxName" caption="Cú pháp"></dxi-column>
+                        <div *dxTemplate="let d of'currentValueTemplate'">
+                            <div class="current-value" style="text-align: center;">Số </div>
+                            <div class="diff" style="text-align: center;">hiện tại</div>
+                        </div>
+                        <div *dxTemplate="let d of 'customTemplate'">
+                            <div class="btn-group dropdown" dropdown container="body">
+                                <button class="dropdown-toggle btn btn-sm btn-primary btn-primary" dropdownToggle>
+                                    <i class="fa fa-cog"></i><span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu" *dropdownMenu>
+                                    <li>
+                                            <a href="javascript:;"
+                                            (click)="createOrEditComm_bookModal.show(d.data.id)">{{l('Edit')}}</a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:;"
+                                            (click)="deleteComm_book(d.data)">{{l('Delete')}}</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </dx-data-grid>
+                    <!--<Primeng-Datatable-Start>-->
+                         <!-- <dx-data-grid id="gridContainer" [dataSource]="primengTableHelper.records" [showRowLines]="true"
+                                [showBorders]="true" [showColumnLines]="true"
+                                >
+                                <dxo-editing mode="cell" refreshMode="reshape" [allowUpdating]="true"
+                                    [allowDeleting]="true" [useIcons]="true">
+                                </dxo-editing>
+
+                                <dxi-column [allowEditing]="false" dataField="tableName" caption="Table Name"></dxi-column>
+                                <dxi-column [allowEditing]="false" dataField="moduleId" caption="Module Id"></dxi-column>
+                                <dxi-column dataField="isActive" caption="Hoạt động" dataType="boolean"></dxi-column>
+                                <dxi-column cellTemplate="Custom">
+
+                                </dxi-column>
+                                <div *dxTemplate="let d of 'Custom'">
+                                    <a (click)="navigateToEdit(d)">Cập nhật</a>
+                                </div>
+                                <dxo-paging [pageSize]="10"></dxo-paging>
+                                <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[10, 25, 50, 100]">
+                                </dxo-pager>
+                            </dx-data-grid> -->
+                        <!-- <p-table #dataTable
+                                     (onLazyLoad)="getComm_books($event)"
+                                     [value]="primengTableHelper.records"
+                                     rows="{{primengTableHelper.defaultRecordsCountPerPage}}"
+                                     [paginator]="false"
+                                     [lazy]="true"
+                                     [scrollable]="true"
+                                     ScrollWidth="100%"
+                                     [responsive]="primengTableHelper.isResponsive"
+                                     [resizableColumns]="primengTableHelper.resizableColumns">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th style="width: 130px" [hidden]="!isGrantedAny('Pages.comm_books.Edit', 'Pages.comm_books.Delete')">{{l('Actions')}}</th>
+                                    <th style="width: 150px" pSortableColumn="name">
+                                        {{l('Name')}}
+                                        <p-sortIcon field="comm_book.name"></p-sortIcon>
+                                    </th>
+                                    <th style="width: 150px" pSortableColumn="bookNum">
+                                        {{l('BookNum')}}
+                                        <p-sortIcon field="comm_book.bookNum"></p-sortIcon>
+                                    </th>
+                                    <th style="width: 150px" pSortableColumn="type">
+                                        {{l('Type')}}
+                                        <p-sortIcon field="comm_book.type"></p-sortIcon>
+                                    </th>
+                                    <th style="width: 150px" pSortableColumn="fromDate">
+                                        {{l('FromDate')}}
+                                        <p-sortIcon field="comm_book.fromDate"></p-sortIcon>
+                                    </th>
+                                    <th style="width: 150px" pSortableColumn="toDate">
+                                        {{l('ToDate')}}
+                                        <p-sortIcon field="comm_book.toDate"></p-sortIcon>
+                                    </th>
+                                    <th style="width: 150px" pSortableColumn="fromValue">
+                                        {{l('FromValue')}}
+                                        <p-sortIcon field="comm_book.fromValue"></p-sortIcon>
+                                    </th>
+                                    <th style="width: 150px" pSortableColumn="currentValue">
+                                        {{l('CurrentValue')}}
+                                        <p-sortIcon field="comm_book.currentValue"></p-sortIcon>
+                                    </th>
+                                    <th style="width: 150px" pSortableColumn="content">
+                                        {{l('Content')}}
+                                        <p-sortIcon field="comm_book.content"></p-sortIcon>
+                                    </th>
+                                    <th style="width: 150px" pSortableColumn="isPrivate">
+                                        {{l('IsPrivate')}}
+                                        <p-sortIcon field="comm_book.isPrivate"></p-sortIcon>
+                                    </th>
+                                    <th style="width: 150px" pSortableColumn="code">
+                                        {{l('Code')}}
+                                        <p-sortIcon field="comm_book.code"></p-sortIcon>
+                                    </th>
+                                    <th style="width: 150px" pSortableColumn="syntaxId">
+                                        {{l('SyntaxId')}}
+                                        <p-sortIcon field="comm_book.syntaxId"></p-sortIcon>
+                                    </th>
+                                    <th style="width: 150px" pSortableColumn="orgId">
+                                        {{l('OrgId')}}
+                                        <p-sortIcon field="comm_book.orgId"></p-sortIcon>
+                                    </th>
+                                    <th style="width: 150px" pSortableColumn="isActive">
+                                        {{l('IsActive')}}
+                                        <p-sortIcon field="comm_book.isActive"></p-sortIcon>
+                                    </th>
+
+                                </tr>
+                            </ng-template>
+							<ng-template pTemplate="body" let-record="$implicit">
+                                <tr>
+                                    <td style="width: 130px"
+                                        [hidden]="!isGrantedAny('Pages.comm_books.Edit', 'Pages.comm_books.Delete')">
+                                       <div class="btn-group dropdown" dropdown container="body">
+                                            <button class="dropdown-toggle btn btn-sm btn-primary" dropdownToggle>
+                                                <i class="fa fa-cog"></i><span class="caret"></span>
+                                            </button>
+												<ul class="dropdown-menu"  *dropdownMenu>
+												<li>
+													<a href="javascript:;"
+														(click)="viewComm_bookModal.show(record)">{{l('View')}}</a>
+												</li>
+												<li>
+                                                        <a href="javascript:;"
+														(click)="createOrEditComm_bookModal.show(record.comm_book.id)">{{l('Edit')}}</a>
+												</li>
+												<li>
+                                                    <a href="javascript:;"
+														(click)="deleteComm_book(record.comm_book)">{{l('Delete')}}</a>
+												</li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                    <td style="width:150px">
+											<span class="ui-column-title"> {{l('Name')}}</span>
+											{{record.comm_book.name}}
+										</td>
+                                    <td style="width:150px">
+											<span class="ui-column-title"> {{l('BookNum')}}</span>
+											{{record.comm_book.bookNum}}
+										</td>
+                                    <td style="width:150px">
+											<span class="ui-column-title"> {{l('Type')}}</span>
+											{{record.comm_book.type}}
+										</td>
+                                    <td style="width:150px">
+										<span class="ui-column-title"> {{l('FromDate')}}</span>
+                                        <span *ngIf="record.comm_book.fromDate">
+											{{record.comm_book.fromDate | momentFormat:'L'}}
+                                        </span>
+                                        <span *ngIf="!record.comm_book.fromDate">-</span>
+                                    </td>
+                                    <td style="width:150px">
+										<span class="ui-column-title"> {{l('ToDate')}}</span>
+                                        <span *ngIf="record.comm_book.toDate">
+											{{record.comm_book.toDate | momentFormat:'L'}}
+                                        </span>
+                                        <span *ngIf="!record.comm_book.toDate">-</span>
+                                    </td>
+                                    <td style="width:150px">
+											<span class="ui-column-title"> {{l('FromValue')}}</span>
+											{{record.comm_book.fromValue}}
+										</td>
+
+                                    <td style="width:150px">
+											<span class="ui-column-title"> {{l('CurrentValue')}}</span>
+											{{record.comm_book.currentValue}}
+                                        </td>
+                                    <td style="width:150px">
+											<span class="ui-column-title"> {{l('ValueId')}}</span>
+											{{record.comm_book.valueId}}
+										</td>
+                                    <td style="width:150px">
+											<span class="ui-column-title"> {{l('Content')}}</span>
+											{{record.comm_book.content}}
+										</td>
+                                    <td style="width:150px">
+										<span class="ui-column-title"> {{l('IsPrivate')}}</span>
+                                        <div *ngIf="record.comm_book.isPrivate" class="text-center"><i class="fa fa-check-circle kt--font-success" title="True"></i></div>
+										<div *ngIf="!record.comm_book.isPrivate" class="text-center"><i class="fa fa-times-circle" title="False"></i></div>
+                                    </td>
+                                    <td style="width:150px">
+											<span class="ui-column-title"> {{l('Code')}}</span>
+											{{record.comm_book.code}}
+										</td>
+                                    <td style="width:150px">
+											<span class="ui-column-title"> {{l('SyntaxId')}}</span>
+											{{record.comm_book.syntaxId}}
+										</td>
+                                    <td style="width:150px">
+											<span class="ui-column-title"> {{l('OrgId')}}</span>
+											{{record.comm_book.orgName}}
+										</td>
+                                    <td style="width:150px">
+										<span class="ui-column-title"> {{l('IsActive')}}</span>
+                                        <div *ngIf="record.comm_book.isActive" class="text-center"><i class="fa fa-check-circle kt--font-success" title="True"></i></div>
+										<div *ngIf="!record.comm_book.isActive" class="text-center"><i class="fa fa-times-circle" title="False"></i></div>
+                                    </td>
+
+                                </tr>
+                            </ng-template>
+                        </p-table>
+						<div class="primeng-no-data" *ngIf="primengTableHelper.totalRecordsCount == 0">
+                            {{l('NoData')}}
+                        </div>
+                        <div class="primeng-paging-container">
+                            <p-paginator [rows]="primengTableHelper.defaultRecordsCountPerPage"
+                                         #paginator
+                                         (onPageChange)="getComm_books($event)"
+                                         [totalRecords]="primengTableHelper.totalRecordsCount"
+                                         [rowsPerPageOptions]="primengTableHelper.predefinedRecordsCountPerPage">
+                            </p-paginator>
+                            <span class="total-records-count">
+                                {{l('TotalRecordsCount', primengTableHelper.totalRecordsCount)}}
+                            </span>
+                        </div> -->
+                    <!--<Primeng-Datatable-End>-->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <createOrEditComm_bookModal #createOrEditComm_bookModal (modalSave)="getComm_books()"></createOrEditComm_bookModal>
+    <viewComm_bookModal #viewComm_bookModal></viewComm_bookModal>
+
+  </div>
+</div>

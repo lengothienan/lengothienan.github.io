@@ -1,0 +1,103 @@
+﻿<div bsModal #createOrEditModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createOrEditModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #oDocForm="ngForm" novalidate (ngSubmit)="save()" autocomplete="off">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span *ngIf="oDoc.id">{{l("EditODoc")}}</span>
+                        <span *ngIf="!oDoc.id">{{l("CreateNewODoc")}}</span>
+                    </h4>
+                    <button type="button" class="close" (click)="close()" aria-label="Close" [disabled]="saving">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                 
+
+
+								<div class="form-group">
+									<label for="ODoc_Number">{{l("Number")}}</label>
+									<input type="text" id="ODoc_Number" class="form-control" [(ngModel)]="oDoc.number" name="Number"    />
+								</div>
+					
+								<div class="form-group">
+									<label for="ODoc_Book">{{l("Book")}}</label>
+									<input type="number" id="ODoc_Book" class="form-control" [(ngModel)]="oDoc.book" name="Book"  />
+								</div>
+					
+								<div class="form-group">
+									<label for="ODoc_Summary">{{l("Summary")}}</label>
+									<input type="text" id="ODoc_Summary" class="form-control" [(ngModel)]="oDoc.summary" name="Summary"    />
+								</div>
+					
+								<div class="form-group">
+									<label for="ODoc_Priority">{{l("Priority")}}</label>
+									<input type="number" id="ODoc_Priority" class="form-control" [(ngModel)]="oDoc.priority" name="Priority"  />
+								</div>
+					
+								<div class="form-group">
+									<label for="ODoc_Attachment">{{l("Attachment")}}</label>
+									<input type="text" id="ODoc_Attachment" class="form-control" [(ngModel)]="oDoc.attachment" name="Attachment"    />
+								</div>
+					
+								<br/><div class="m-checkbox-list">
+									<label for="ODoc_Status" class="kt-checkbox">
+										<input id="ODoc_Status" type="checkbox" name="Status" [(ngModel)]="oDoc.status"> 
+										{{l("Status")}}
+										<span></span>
+									</label>
+								</div>
+					
+								<br/><div class="m-checkbox-list">
+									<label for="ODoc_IsActive" class="kt-checkbox">
+										<input id="ODoc_IsActive" type="checkbox" name="IsActive" [(ngModel)]="oDoc.isActive"> 
+										{{l("IsActive")}}
+										<span></span>
+									</label>
+								</div>
+					
+								<div class="form-group">
+									<label for="ODoc_Order">{{l("Order")}}</label>
+									<input type="number" id="ODoc_Order" class="form-control" [(ngModel)]="oDoc.order" name="Order"  />
+								</div>
+					
+								<div class="form-group">
+									<label for="ODoc_Range">{{l("Range")}}</label>
+									<input type="number" id="ODoc_Range" class="form-control" [(ngModel)]="oDoc.range" name="Range"  />
+								</div>
+					
+								<div class="form-group">
+									<label for="ODoc_SecretLevel">{{l("SecretLevel")}}</label>
+									<input type="number" id="ODoc_SecretLevel" class="form-control" [(ngModel)]="oDoc.secretLevel" name="SecretLevel"  />
+								</div>
+					
+								<div class="form-group">
+									<label for="ODoc_ProcessingRecommended">{{l("ProcessingRecommended")}}</label>
+									<input type="text" id="ODoc_ProcessingRecommended" class="form-control" [(ngModel)]="oDoc.processingRecommended" name="ProcessingRecommended"    />
+								</div>
+					
+								<div class="form-group">
+									<label for="ODoc_OrgEditor">{{l("OrgEditor")}}</label>
+									<input type="number" id="ODoc_OrgEditor" class="form-control" [(ngModel)]="oDoc.orgEditor" name="OrgEditor"  />
+								</div>
+					
+								<div class="form-group">
+									<label for="ODoc_ReceiverId">{{l("ReceiverId")}}</label>
+									<input type="number" id="ODoc_ReceiverId" class="form-control" [(ngModel)]="oDoc.receiverId" name="ReceiverId"  />
+								</div>
+					
+								<div class="form-group">
+									<label for="ODoc_LeaderId">{{l("LeaderId")}}</label>
+									<input type="number" id="ODoc_LeaderId" class="form-control" [(ngModel)]="oDoc.leaderId" name="LeaderId"  />
+								</div>
+								
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-default" (click)="close()">{{l("Cancel")}}</button>
+                    <button type="submit" class="btn btn-primary blue" [disabled]="!oDocForm.form.valid" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>

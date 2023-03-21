@@ -1,0 +1,147 @@
+<div bsModal #ketQuaCongTacPhongModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+    aria-labelledby="ketQuaCongTacPhongModal" aria-hidden="true" [config]="{ backdrop: 'static' }">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <form novalidate id="ketQuaCongTacPhongModal" autocomplete="off">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        Cập nhật kết quả công tác
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <h5>Kế hoạch</h5>
+                    <div class="row btm_spacing">
+                        <div class="col-md-2">
+                            <label class="dx-texteditor-input" style="color:black">Kế hoạch</label>
+                        </div>
+                        <div class="col-md-10">
+                            <dx-text-box [value]="formData.numberPlan" [readOnly]="true"></dx-text-box>
+                        </div>
+                    </div>
+                    <div class="row btm_spacing">
+                        <div class="col-md-2">
+                            <label class="dx-texteditor-input" style="color: black">Hạn thực hiện</label>
+                        </div>
+                        <div class="col-md-10">
+                            <dx-date-box [value]="formData.deadline" [displayFormat]="'dd/MM/yyyy'" [readOnly]="true"></dx-date-box>
+                        </div>
+                    </div>
+                    <div class="row btm_spacing">
+                        <div class="col-md-2">
+                            <label class="dx-texteditor-input" style="color: black">Nội dung trọng tâm</label>
+                        </div>
+                        <div class="col-md-10">
+                            <dx-text-area [value]="formData.mainContent" [readOnly]="true" [elementAttr]="{
+                                autoResizeEnabled: true
+                            }"></dx-text-area>
+                        </div>
+                    </div>
+                    <h5>Báo cáo kết quả công tác</h5>
+                    <div class="row btm_spacing">
+                        <div class="col-md-12">
+                            <dx-data-grid #gridContainerOrg id="gridContainerOrg"
+                                [remoteOperations]="false" [allowColumnReordering]="true"
+                                [rowAlternationEnabled]="true" [allowColumnResizing]="true"
+                                [dataSource]="planAssigns"
+                                columnResizingMode="widget" [showBorders]="true">
+                                <dxo-paging [enabled]="false"></dxo-paging>
+                                <dxi-column dataField="stt" columnIndex="1" caption="STT" alignment="right"
+                                [width]="5+'%'" cellTemplate="sttCellTemplate"></dxi-column>
+                                <dxi-column [allowFiltering]="true" [allowEditing]="false" headerCellTemplate="actionHeaderTemplate" alignment="left"
+                                    cellTemplate="actionTemplate" width="15%" >
+                                </dxi-column>
+                                <dxi-column [allowFiltering]="true" [allowEditing]="false"
+                                    caption="Nhiệm vụ phân công" dataField="assignContent" width="25%">
+                                </dxi-column>
+
+                                <dxi-column [allowFiltering]="true" [allowEditing]="false"
+                                    caption="Hạn thực hiện" cellTemplate="deadlineTemplate" width="12%">
+                                </dxi-column>
+                                <dxi-column [allowFiltering]="true" [allowEditing]="false"  headerCellTemplate="kqthHeaderTemplate"
+                                    caption="Kết quả thực hiện" cellTemplate="kqthTemplate"  width="20%">
+                                </dxi-column>
+                                <dxi-column [allowFiltering]="true" [allowEditing]="false" headerCellTemplate="dgkqHeaderTemplate"
+                                    dataField="evaluateLevelString" width="15%">
+                                </dxi-column>
+                                <dxi-column [allowFiltering]="true" [allowEditing]="false"
+                                    cellTemplate="editTemplate"  width="5%">
+                                </dxi-column>
+
+                                <div *dxTemplate="let info of 'actionHeaderTemplate'" >
+                                    <div class="current-value" style="text-align: center;">Chỉ huy/</div>
+                                    <div class="diff" style="text-align: center;">Đội thực hiện</div>
+                                </div>
+
+                                <div *dxTemplate="let info of 'kqthHeaderTemplate'">
+                                    <div class="current-value" style="text-align: center;">Kết quả</div>
+                                    <div class="diff" style="text-align: center;">thực hiện</div>
+                                </div>
+
+                                <div *dxTemplate="let info of 'dgkqHeaderTemplate'">
+                                    <div class="current-value" style="text-align: center;">Đánh giá</div>
+                                    <div class="diff" style="text-align: center;">kết quả</div>
+                                </div>
+
+                                <div *dxTemplate="let info of 'sttCellTemplate'">
+                                    <div> {{info.rowIndex + 1}}</div>
+                                </div>
+
+                                <div *dxTemplate="let d of 'actionTemplate'" style="text-align: left">
+                                    <div class="current-value" *ngIf="d.data.userFullName">{{ d.data.userFullName }}</div>
+                                    <div class="current-value" *ngIf="d.data.orgName">{{ d.data.orgName }}</div>
+                                </div>
+
+                                <div *dxTemplate="let d of 'deadlineTemplate'">
+                                    <div>{{ d.data.deadline | date: "dd/MM/yyyy" }} </div>
+                                </div>
+                                <div *dxTemplate="let d of 'kqthTemplate'">
+                                    <div *ngFor="let item of d.data.list_assign_report">
+                                        <span class="date">{{item.dateReport | date: "dd/MM/yyyy"}}</span>: <span>{{ item.contentReport }}</span>
+                                    </div>
+                                </div>
+                                <div *dxTemplate="let data of 'editTemplate'">
+                                    <div class="edit" (click)="edit(data)">
+                                        <i class="fa fa-pen"></i>
+                                    </div>  
+                                </div>
+                            </dx-data-grid>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label class="dx-texteditor-input" style="color: #646c9a">Trạng thái</label>
+                        </div>
+                        <div class="col-md-4">
+                            <dx-select-box #typeExport
+                                    text="In theo"
+                                    id="typeExport"
+                                    [items]="status_dataSource" 
+                                    valueExpr="type" 
+                                    displayExpr="name" 
+                                    [(value)]="formData.status">
+                                </dx-select-box>
+                        </div>
+                        <div class="col-md-6"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <dx-button icon="save" text="Lưu" type="success" (onClick)="save()" [disabled]="saving" style="margin-right: 0.5rem;"></dx-button>
+                    <dx-button icon="close" text="Quay lại" type="normal" (onClick)="close()"></dx-button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <ketQuaCongTacDoi #ketQuaCongTacDoi (saveSuccess)="show()"></ketQuaCongTacDoi>
+
+</div>
+
+<style>
+    ::ng-deep .dx-row {
+        font-size: 15px;
+        white-space: normal;
+    }
+
+    /* ::ng-deep td[role="columnheader"]{
+            text-align: center !important;
+        }   */
+</style>

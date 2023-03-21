@@ -1,0 +1,237 @@
+<div [@routerTransition]>
+    <div class="kt-content  kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor">
+        <div class="kt-subheader kt-grid__item">
+            <div [class]="containerClass">
+                <div class="kt-subheader__main">
+                    <h3 class="kt-subheader__title">
+                        <span>{{l("Labels")}} New</span>
+                    </h3>
+                    <span class="kt-subheader__separator kt-subheader__separator--v"></span>
+                    <span class="kt-subheader__desc">
+                        {{l("LabelsHeaderInfo")}}
+                    </span>
+                </div>
+                <div class="kt-subheader__toolbar">
+                    <div class="kt-subheader__wrapper">
+                        <button *ngIf="isGranted('Pages.Administration.Labels.Create')"
+                            (click)="createLabelFromHardDatasource()" class="btn btn-primary blue"><i
+                                class="fa fa-plus"></i> Tạo Label từ HardDatasource</button>
+                        <button *ngIf="isGranted('Pages.Administration.Labels.Create')" (click)="createDynamicLabel()"
+                            class="btn btn-primary blue"><i class="fa fa-plus"></i> Tạo danh mục động</button>
+                        <button *ngIf="isGranted('Pages.Administration.Labels.Create')" (click)="createLabel()"
+                            class="btn btn-primary blue"><i class="fa fa-plus"></i>Tạo Label</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div [class]="containerClass + ' kt-grid__item kt-grid__item--fluid'">
+            <div class="kt-portlet kt-portlet--mobile">
+                <div class="kt-portlet__body">
+                    <form class="kt-form" autocomplete="off">
+                        <div>
+                            <!-- <div class="row align-items-center">
+                                <div class="col-xl-12">
+                                    <div class="form-group m-form__group align-items-center">
+                                        <div class="input-group">
+                                            <input [(ngModel)]="filterText" name="filterText" autoFocus
+                                                class="form-control m-input" [placeholder]="l('SearchWithThreeDot')"
+                                                type="text">
+                                            <span class="input-group-btn">
+                                                <button (click)="getLabels()" class="btn btn-primary" type="submit"><i
+                                                        class="flaticon-search-1"></i></button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> -->
+                            <!-- trieuvnh - 090920 - search menu, parent -->
+                            <div class="row">
+                                <div class="col-md-1" style="margin-top: 10px">
+                                    <div class="form-group">
+                                        <label for="Label_Parent">{{l("Menu")}}</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <select name="MenuId" id="Label_MenuId" class="form-control" style="font-size: larger;"
+                                            [(ngModel)]="label.menuId" (change)="onMenuSelectChanged()">
+                                            <option value="-1">Tất cả</option>
+                                            <option *ngFor="let menu of menuOptions" [value]="menu.id">{{menu.title}}
+                                            </option>
+                                    </select>
+                                </div>
+                                    
+                                <!-- <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="Label_Parent">{{l("ParentLabel")}}</label>
+                                    <select name="Parent" id="Label_Parent" class="form-control" [(ngModel)]="label.parent">
+                                                    <option value="-1">Tất cả</option>
+                                                    <option *ngFor="let parent of parentOptions" [value]="parent.id">{{parent.title}}</option>
+                                                </select>
+                                </div>
+                            </div> -->
+                            </div>
+                            <div class="row" style="margin-bottom : 10px">
+                                <div class="col-md-2">
+                                    <button type="button" class="btn btn-primary blue" (click)="search()"><i
+                                            class="fa fa-search"></i> <span>Tìm kiếm</span></button>
+                                </div>
+                            </div>
+                            <!-- trieuvnh -->
+
+                           
+                        </div>
+                    </form>
+                    <div class="row">
+                        <div class="ui-treetable">
+                            <p-treeTable [value]="dataTemp" styleClass="ui-treetable" [resizableColumns]="true"
+                                [scrollable]="true" scrollHeight="600px" [paginator]="false" [autoLayout]="true"> 
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th style="width: 100px"
+                                            [hidden]="!isGrantedAny('Pages.Administration.Labels.Edit', 'Pages.Administration.Labels.Delete')">
+                                            {{l('Actions')}}</th>
+                                        <th style="width: 180px">
+                                            {{l('Name')}}
+                                        </th>
+                                        <th style="width: 180px">
+                                            {{l('Code')}}
+                                        </th>
+                                        <th style="width: 150px">
+                                            {{l('Title')}}
+                                        </th>
+                                        <!-- <th style="width: 150px">
+                                            {{l('Description')}}
+                                        </th> -->
+                                        <th style="width: 150px">
+                                            {{l('Icon')}}
+                                        </th>
+                                        <th style="width: 150px">
+                                            {{l('Link')}}
+                                        </th>
+                                        <th style="width: 150px">
+                                            {{l('Menu')}}
+                                        </th>
+                                        <!-- <th style="width: 150px">
+                                            {{l('Parent')}}
+                                        </th> -->
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-rowNode let-rowData="rowData" let-i="rowIndex">
+                                    <tr [ttRow]="rowNode" [ngClass]="{
+                                    'kb-row-2' : rowData.label.parent >= 1,
+                                    'kb-bg-alter' : (rowData.treeIndex) % 2 == 0}">
+                                        <td style="width: 100px"
+                                            [hidden]="!isGrantedAny('Pages.Administration.Labels.Edit', 'Pages.Administration.Labels.Delete')">
+                                            <div class="btn-group dropdown" dropdown container="body">
+                                                <button class="dropdown-toggle btn btn-sm btn-primary" dropdownToggle>
+                                                    <i class="fa fa-cog"></i><span class="caret"></span>
+                                                </button>
+                                                <ul class="dropdown-menu" *dropdownMenu>
+                                                    <li>
+                                                        <a href="javascript:;"
+                                                            (click)="viewLabelModal.show(rowData)">{{l('Xem')}}</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="javascript:;"
+                                                            *ngIf="permission.isGranted('Pages.Administration.Labels.Edit')"
+                                                            (click)="createOrEditLabelModal.show(rowData.label.id)">{{l('Sửa')}}</a>
+                                                    </li>
+
+                                                    <li>
+                                                        <a href="javascript:;"
+                                                            *ngIf="permission.isGranted('Pages.Administration.Labels.Delete')"
+                                                            (click)="deleteLabel(rowData.label)">{{l('Xóa')}}</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="javascript:;"
+                                                            (click)="onClick.emit(rowData.label.id);navigateToDynamicModule();">{{l('Cấu hình động')}}</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="javascript:;"
+                                                        (click)="viewLabelRole.show(rowData)">{{l('Role')}}</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                        <td style="width: 180px" [ngClass]="{'kb-row' : rowData.label.parent == null ||  rowData.label.parent == 0 }">
+                                            <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
+                                            {{rowData.label.name}}
+                                        </td>
+                                        <td style="width: 180px" >
+                                            
+                                            {{rowData.label.code}}
+                                        </td>
+                                        <td style="width: 150px">
+                                            <span class="ui-treetable">Name</span>
+                                            {{rowData.label.title}}
+                                        </td>
+                                        <!-- <td style="width: 150px">{{rowData.label.description}}</td> -->
+                                        <td style="width: 150px">{{rowData.label.icon}}</td>
+                                        <td style="width: 150px">
+                                            {{rowData.label.link}}
+                                        </td>
+                                        <td style="width: 150px">{{rowData.label.menuName}}</td>
+                                        <!-- <td style="width: 150px">{{rowData.label.parentName}}</td> -->
+                                    </tr>
+                                </ng-template>
+                            </p-treeTable>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <createOrEditLabelFromHardDatasource #createOrEditLabelFromHardDatasource (modalSave)="search()">
+        </createOrEditLabelFromHardDatasource>
+        <createOrEditDynamicLabel #createOrEditDynamicLabel (modalSave)="search()"></createOrEditDynamicLabel>
+        <createOrEditLabelModal #createOrEditLabelModal (modalSave)="search()"></createOrEditLabelModal>
+        <viewLabelModal #viewLabelModal></viewLabelModal>
+        <viewLabelRole #viewLabelRole></viewLabelRole>
+
+    </div>
+</div>
+<style>
+    .ui-treetable-scrollable-body>table>.ui-treetable-tbody {
+        border-top: 0 none;
+        /* font-family: roboto; */
+        font-family: "Roboto";
+        border: none !important;
+        padding: 8px 10px !important;
+        overflow-wrap: break-word;
+    }
+
+    .ui-treetable-resizable .ui-treetable-thead>tr>th,
+    .ui-treetable-resizable .ui-treetable-tfoot>tr>td,
+    .ui-treetable-resizable .ui-treetable-tbody>tr>td {
+
+        border: 0 none !important;
+    }
+
+    body .ui-widget {
+        border-top: 0 none;
+        /* font-family: roboto; */
+        font-family: "Roboto";
+        border: none !important;
+        padding: 8px 10px !important;
+        text-overflow: ellipsis;
+    }
+
+
+    .ui-treetable-odd {
+        background: none repeat scroll 0 0 blue;
+    }
+    .kb-row {
+        color: #000000 !important;
+        font-weight: bold;
+        /* text-transform: uppercase; */
+        }
+    .kb-row-2 {
+        color: #000000 !important;
+            /* background-color: #f9f9f9 !important; */
+    }
+    .kb-bg-alter{
+        background-color: #f9f9f9 !important;
+    }
+
+
+
+</style>

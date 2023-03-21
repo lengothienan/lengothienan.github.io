@@ -1,0 +1,74 @@
+<div bsModal #createOrEditModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createOrEditModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    <span>{{l("Details")}}</span>
+                </h4>
+                <button type="button" class="close" (click)="close()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="row">
+                    <div class="col-6 mb-3">
+                        <h6>{{l("Handler")}} :</h6>
+                        {{ item.cA_OutDocumentHandling.handler }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{l("IsActive")}} :</h6>
+                        {{ item.cA_OutDocumentHandling.isActive }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{l("Order")}} :</h6>
+                        {{ item.cA_OutDocumentHandling.order }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{l("DateHandle")}} :</h6>
+                        {{ item.cA_OutDocumentHandling.dateHandle | momentFormat:'YYYY-MM-DD HH:mm:ss' }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{l("IsCurr")}} :</h6>
+                        {{ item.cA_OutDocumentHandling.isCurr }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{l("ProcessingDate")}} :</h6>
+                        {{ item.cA_OutDocumentHandling.processingDate | momentFormat:'YYYY-MM-DD HH:mm:ss' }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{l("ProcessingRecommended")}} :</h6>
+                        {{ item.cA_OutDocumentHandling.processingRecommended }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{l("Content")}} :</h6>
+                        {{ item.cA_OutDocumentHandling.content }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{l("HandlingType")}} :</h6>
+                        {{ item.cA_OutDocumentHandling.handlingType }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{l("DocumentId")}} :</h6>
+                        {{ item.cA_OutDocumentHandling.documentId }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{l("ParentHandlingId")}} :</h6>
+                        {{ item.cA_OutDocumentHandling.parentHandlingId }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{l("ImpersonateUserId")}} :</h6>
+                        {{ item.cA_OutDocumentHandling.impersonateUserId }}
+                    </div>
+
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button [disabled]="saving" type="button" class="btn btn-primary blue" (click)="close()">{{l("Close")}}</button>
+            </div>
+        </div>
+    </div>
+
+</div>

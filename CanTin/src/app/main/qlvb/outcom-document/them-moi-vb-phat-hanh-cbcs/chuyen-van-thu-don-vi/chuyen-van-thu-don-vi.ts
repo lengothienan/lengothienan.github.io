@@ -1,0 +1,778 @@
+// import { CreateOrEditLinkedDocumentDto, UserExtentionServiceProxy, UserExtenTionDto } from './../../../../shared/service-proxies/service-proxies';
+import { ModalDirective } from 'ngx-bootstrap';
+import { Component, Injector, ViewEncapsulation, ViewChild, ElementRef, Input } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { appModuleAnimation } from '@shared/animations/routerTransition';
+import { AppComponentBase } from '@shared/common/app-component-base';
+import * as _ from 'lodash';
+import { Router } from '@angular/router';
+import { DocumentsDto, DocumentTypeDto, DocumentTypesServiceProxy, DocumentServiceProxy, PriorityDto, TextBookDto, DynamicFieldsServiceProxy, HandlingUser, DocumentHandlingDetailsServiceProxy, DocumentHandlingsServiceProxy, LabelDto, PublishOrgsServiceProxy, ODocsServiceProxy, CreateOrEditODocDto, GetUserInRoleDto, LinkedDocumentsServiceProxy, ReceiverDto, UserExtentionServiceProxy, CreateOrEditLinkedDocumentDto, UserExtenTionDto, Comm_booksServiceProxy } from '@shared/service-proxies/service-proxies';
+import { finalize } from 'rxjs/operators';
+import * as moment from 'moment';
+import { AppConsts } from '@shared/AppConsts';
+import { DatePipe } from '@angular/common';
+import {formatDate} from '@angular/common';
+import { DxFormComponent, DxDateBoxComponent, DxSelectBoxComponent, DxTreeViewComponent, DxTagBoxComponent } from 'devextreme-angular';
+import { DxiGroupComponent } from 'devextreme-angular/ui/nested';
+import { Location } from '@angular/common';
+import { AppNavigationService } from '@app/shared/layout/nav/app-navigation.service';
+import { Observable } from 'rxjs';
+// import { SearchResponseDocumentModalComponent } from './../search-response-document/search';
+import { UtilityService } from '@shared/utils/UltilityService.service';
+import { CreatePublisherComponent } from '@app/main/documentHelper/createPublisher.component';
+import { CreateReceiverComponent } from 'app/main/documentHelper/createReceiver.component';
+import { isNullOrUndefined } from 'util';
+import { SearchDocumentDonViModalComponent } from '../search-response-document/search';
+
+@Component({
+    selector: 'createOutcommingDocumentSendToVTDonVi',
+    templateUrl: './chuyen-van-thu-don-vi.html',
+
+    encapsulation: ViewEncapsulation.None,
+    providers: [DatePipe] ,
+    animations: [appModuleAnimation()]
+
+})
+export class ThemMoiPhatHanhChuyenVTDonViComponent extends AppComponentBase {
+    @ViewChild('documentForm', {static: true}) documentForm: DxFormComponent;
+    @ViewChild('publisherForm', { static: false }) publisherForm: DxFormComponent;
+    @ViewChild('anotherInfo', { static: false}) anotherInfo: DxiGroupComponent;
+    @ViewChild('content', { static: true })  content: ElementRef;
+    @ViewChild('hanXyLy', { static: true}) hanXyLy: DxDateBoxComponent;
+    @ViewChild('incommingDateField', { static: true}) incommingDateField: DxDateBoxComponent;
+    @ViewChild('deadlineDateBox', { static: true}) deadlineDateBox: DxDateBoxComponent;
+    // @Input('editDocumentId') editDocumentId: number;
+    // @ViewChild('publisherSelect', { static: true }) publisherSelect: DxSelectBoxComponent;
+    @ViewChild('orgLevelTagBox', { static: true}) orgLevelTagBox: DxTagBoxComponent;
+    @ViewChild('publishOrgTagBox', { static: true}) publishOrgTagBox: DxTagBoxComponent;
+    @ViewChild('treeView', { static: true }) treeView: DxTreeViewComponent;
+    @ViewChild('treeViewDisplay', { static: true }) treeViewDisplay: DxTreeViewComponent;
+    @ViewChild('searchDocumentDonViModal', { static: true }) searchDocumentDonViModal: SearchDocumentDonViModalComponent;
+    @ViewChild('createReceiver', { static: true}) createReceiver: CreateReceiverComponent;
+    @ViewChild('linkedDocTagBox', { static: true }) linkedDocTagBox: DxTagBoxComponent;
+
+    documentData: CreateOrEditODocDto = new CreateOrEditODocDto();
+    editDocumentId = 0;
+    publisherData: any;
+    publisherPopupVisible = false;
+    documentTypeOptions: DocumentTypeDto[] = [];
+    popupVisible = false;
+    priorityOptions: PriorityDto[] = [];
+    saving = false;
+    nextNumber: string;
+    validationGroup: any;
+    publisherPopupVisible_report = false;
+    uploadUrl: string;
+    myDate = new Date();
+    currentTime: any ;
+    link = '';
+    error = true;
+    endDate: any;
+    incommingDate: any;
+    isSetData = false;
+    listReceive: HandlingUser[] = [];
+    dataSource = [];
+    //lưu index của đơn vị chủ trì
+    previousMainHandlingIndex: number;
+    //lưu id của đơn vị chủ trì
+    previousMainHandlingId: number;
+    old_DVXL = [];
+    // loại sổ văn bản
+    dataBook = [];
+    data_range = [];
+    data_position = [];
+    selectedRows = [];
+    data_publisher = [];
+    data_commBook = [];
+    // cấp gửi
+    data_groupAuthor = ['CATP', 'Phòng ban', 'Đội', 'Tổ'];
+    data_department = [];
+    _id: number;
+    data_secretLevel = [];
+    data_priority = [];
+    leaderDepartmentName: any ;
+    captain_department = [];
+    director_list = [];
+    rootUrl: string ;
+    deadLineDate: Date;
+    value: any[] = [];
+    currentDate = new Date();
+    nameArr: any[] = [];
+    dataDisplay = [];
+    tepDinhKemSave = '';
+    switchValue = false;
+    data_DVXL: any;
+    textBookOptions: TextBookDto[] = [];
+    userId: number;
+    signal = '';
+    publisherVal: any;
+    show = false ;
+    chkAutomaticValue = true;
+    incommingNumberDisabled = false;
+    bookVal: any;
+    secretVal: any;
+    priorityVal: any;
+    label: Observable<LabelDto>;
+    labelDto: LabelDto[] = [];
+    receiverPopupVisible = false;
+    selectedReceivers = [];
+    displayReceiverList = [];
+    listSelectedReceivers = [];
+    quantityDocPublishVal: number = 1;
+    piecesOfPaperVal: number = 1;
+    orgLevelSource = [];
+    data_receiver = [];
+    leaderType = [
+        {id: 1, name: 'Ban Giám Đốc CATP'}, {id: 2, name: 'Chỉ huy Phòng'}
+    ];
+    //danh sách thành viên trong phòng
+    editorList: any;
+    leaderTypeVal: number;
+    chi_huy: GetUserInRoleDto[] = [];
+    nguoi_ky = [];
+    linkedDocOptions: any;
+
+    selectedResponseDocs = [];
+    leaderIdVal: any;
+    listDocLink = '';
+    linkDocumentVal = '';
+    popup_publishType = false;
+    publishPlaceList = [
+        {id: 1, name: 'Chuyển cho VT CATP' }, {id: 2, name: 'Chuyển cho VT Phòng' }
+    ];
+    publishPlaceListVal = 1; //mặc định chuyển VT CATP
+    // editorIdOptions: any;
+
+    selectedLinkedDocuments = [];
+    selectedOrgLevels = [];
+    publishOrgSource = [];
+    isValidForm = false;
+    isDuplex:any= false;
+    scanTypes = [
+        {value: 2, display: "Scan 2 mặt (bằng tay)"},
+        {value: 3, display: "Scan 2 mặt"}
+    ];
+    scanType: any = 1;
+
+    kqxlData:any = [{key: true,
+        value: "Đã hoàn thành"
+        },{key: false,
+            value: "Tiếp tục xử lý"
+        }];
+    dgxlData:any = [{key: 1,
+            value: "Hoàn thành xuất sắc"
+            },{key: 2,
+                value: "Hoàn thành tốt"
+            },{key: 3,
+                value: "Hoàn thành nhiệm vụ"
+            }];
+
+    rateDisable: any= true;
+    statusDisableHandle:any=true;
+    rate: any=2;
+    status: any = true;
+    resultAndRateDisableHandle:any=true;
+    ProcessingResult:any = "";
+    handlingType:any;
+
+    constructor(
+        injector: Injector,
+        private router: Router,
+        protected activeRoute: ActivatedRoute,
+        private datePipe: DatePipe,
+        private _documentTypeAppService: DocumentTypesServiceProxy,
+        private _documentAppService: DocumentServiceProxy,
+        private _documentHandlingAppService: DocumentHandlingsServiceProxy,
+        // private _priorityAppService: PrioritiesServiceProxy,
+        private _dynamicFieldService: DynamicFieldsServiceProxy,
+        private _oDocsServiceProxy: ODocsServiceProxy,
+        private _linkedDocumentsProxy: LinkedDocumentsServiceProxy,
+        private _publishOrgAppService: PublishOrgsServiceProxy,
+        private _userExtentionServiceProxy: UserExtentionServiceProxy,
+        private _utilityService: UtilityService,
+        private _commBookService: Comm_booksServiceProxy,
+        private _location: Location    ) {
+        super(injector);
+        this.userId = this.appSession.userId;
+        this.uploadUrl = AppConsts.fileServerUrl  + '/fileupload/Upload_file?userId=' + this.userId ;
+        this.leaderTypeVal = this.leaderType[0].id;
+        this.bookVal = 7;
+    }
+
+    getLeaderInDept() {
+        this._oDocsServiceProxy.getLeaderInDepartment(this.appSession.organizationUnitId).subscribe(res => {
+            this.chi_huy = res;
+            for (let i = 0, len = this.chi_huy.length; i < len; i++) {
+                this.chi_huy[i]['nameWithPosition'] = this.chi_huy[i]['position'] + ' - ' + this.chi_huy[i]['fullName'];
+            }
+        });
+    }
+
+    back() {
+        this._location.back();
+    }
+
+    transformDate(date) {
+        return this.datePipe.transform(date, 'dd/MM/yyyy'); //whatever format you need.
+    }
+
+    resetForm() {
+        this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+        this.router.onSameUrlNavigation = 'reload';
+        this.documentForm.instance.resetValues();
+        this.documentData.orgEditor = this.appSession.organizationUnitId;
+        this.documentData.teamEditor= this.appSession.selfOrganizationUnitId;
+    }
+
+    addItem(newItem: string): void {
+        this.documentData.attachment += newItem ;
+    }
+
+    // tslint:disable-next-line:use-lifecycle-interface
+    ngOnInit() {
+        const that = this;
+
+        debugger
+
+        if (this._utilityService.selectedDocumentData !== undefined) {
+            console.log(this._utilityService.selectedDocumentData)
+            let linkedDocument = this._utilityService.selectedDocumentData;
+            let temp = new CreateOrEditLinkedDocumentDto();
+            temp.linkedDocId = linkedDocument["Id"];
+            temp.linkedDocNumber = linkedDocument["Number"];
+            let arr = [];
+            this.handlingType=linkedDocument.HandlingType;
+            if (linkedDocument.HandlingType==4){
+                this.statusDisableHandle=true;
+                this.status =true;
+            }else{
+                this.statusDisableHandle=false;
+            }
+            if(linkedDocument["Number"] != null){
+                arr.push({ id: linkedDocument["Id"], number: linkedDocument["Number"] });
+            }
+            else if(linkedDocument["IncommingNumberDV"] != null ) {
+                arr.push({ id: linkedDocument["Id"], number: linkedDocument["IncommingNumberDV"] });
+            }
+            this.selectedResponseDocs = arr;
+            this.selectedLinkedDocuments = [];
+            this.selectedLinkedDocuments.push(linkedDocument["Id"]);
+            this.resultAndRateDisableHandle=false;
+            this.rateDisable =false;
+            this.documentData.linkedDocumentList = [];
+            this.documentData.linkedDocumentList.push(temp);
+
+            this._utilityService.selectedDocumentData = undefined;
+        }
+        this._commBookService.getAllCommBookInDepartment("2", this.appSession.isCATP? this.appSession.selfOrganizationUnitId: this.appSession.organizationUnitId).subscribe(result => {
+            console.log(result);
+            this.dataBook = result;
+            for(let i = 0, len = this.dataBook.length; i < len; i++){
+                if(result[i].isDefault){
+                    that.documentData.book = this.dataBook[i].id;
+                    break;
+                }
+            }
+        });
+
+        this._documentTypeAppService.getAllDocumentType().subscribe(result => {
+            this.signal = result[0].signal;
+            this.documentTypeOptions = result;
+        });
+        this.link = this.router.url;
+        this._documentAppService.getListDepartment(this.appSession.organizationUnitId).subscribe(res => {
+            this.data_department = res;
+        });
+        // this.getIncommingNumber();
+        this.getPublishOrg();
+        this._dynamicFieldService.getDynamicFieldByModuleId(22, this.editDocumentId).subscribe(result => {
+            this.data_secretLevel = result[1].dataSource;
+            this.data_priority = result[2].dataSource;
+            this.data_range = result[3].dataSource;
+            this.data_position = result[4].dataSource;
+            this.secretVal = result[1].dataSource[0].key;
+            this.priorityVal = result[2].dataSource[0].key;
+        });
+        this.getLeaderInDept();
+        this._documentHandlingAppService.getLeaderList_PGD().subscribe(res => {
+            this.director_list = res;
+            for (let i = 0, len = this.director_list.length; i < len; i++) {
+                this.director_list[i]['nameWithPosition'] = this.director_list[i]['position'] + ' - ' + this.director_list[i]['fullName'];
+            }
+        });
+        this._documentHandlingAppService.getLeaderList_PB().subscribe(res => {
+            this.captain_department = res;
+            for (let i = 0, len = this.captain_department.length; i < len; i++) {
+                this.captain_department[i]['nameWithPosition'] = this.captain_department[i]['position'] + ' - ' + this.captain_department[i]['fullName'];
+            }
+        });
+        this._oDocsServiceProxy.getListOrgLevels().subscribe(res => {
+            this.orgLevelSource = res;
+        });
+
+
+        this.initForm();
+    }
+
+
+    oldNumber: any;
+    soKyHieu = "";
+    documentTypeDataSource: DocumentTypeDto[] = [];
+    onComBookValueChanged(e){
+        console.log(e);
+        console.log(this.incommingNumberDisabled);
+        ;
+        const that = this;
+        if(this.incommingNumberDisabled == true){
+            let curBook = this.dataBook.find(x => x.id == parseInt(e.value));
+            let currentSyntax = curBook["syntax"];
+            let currentNumberInBook = curBook["syntax"];
+            if(currentSyntax.includes("{currentValue}")){
+                let x = this.dataBook.find(x => x.id == e.previousValue);
+                if(x){
+                    this.oldNumber = (parseInt(x.currentValue) + 1).toString();
+                }
+                else {
+                    this.oldNumber = "{currentValue}";
+                }
+                currentNumberInBook = (parseInt(curBook.currentValue) + 1).toString();
+                this.documentData.number = currentNumberInBook;
+                // this.currentNumber = this.currentSyntax.valueOf();
+                // this.soKyHieu = this.soKyHieu.replace("{currentValue}", this.currentNumberInBook);
+            }
+
+            if(currentSyntax.includes("{documentType}")){
+                if(!this.documentData.documentTypeId){
+                    this.notify.warn("Chọn Loại VB");
+                    that.incommingNumberDisabled = false;
+                    that.soKyHieu = "";
+                    return;
+                }
+                let selectedDocType = this.documentTypeDataSource.find(x => x.id == this.documentData.documentTypeId).signal;
+                console.log(selectedDocType);
+                currentNumberInBook = currentNumberInBook.replace("{documentType}", selectedDocType);
+            }
+
+            if(currentSyntax.includes("{range}")){ // lĩnh vực
+                if(!this.documentData.range){
+                    that.incommingNumberDisabled = false;
+                    that.notify.warn("Chọn Lĩnh vực");
+                    that.soKyHieu = "";
+                    return;
+                }
+
+                currentNumberInBook = currentNumberInBook.replace("{range}", this.data_range.find(x => x.key == this.documentData.range).value);
+            }
+
+            if(currentSyntax.includes("{publisher}")){
+                currentNumberInBook = currentNumberInBook.replace("{publisher}", this.data_department.find(x => x.id == this.documentData.orgEditor).shortentCode);
+            }
+        }
+
+    }
+
+    orgLevelValueChanged(e: any) {
+        this.publishOrgTagBox.dataSource = [];
+        this.publishOrgSource = [];
+
+        this.selectedOrgLevels.forEach(x => {
+            Array.prototype.push.apply(this.publishOrgSource, this.data_receiver.filter(a => a.orgLevelId === x));
+        });
+        // this.publishOrgTagBox.dataSource = this.publishOrgSource;
+    }
+
+    delay(callback, ms) {
+        let timer: NodeJS.Timeout;
+        return function() {
+            let context = this, args = arguments;
+            clearTimeout(timer);
+            timer = setTimeout(function() {
+                callback.apply(context, args);
+            }, ms || 0);
+        };
+    }
+
+    setFullNameFile(e: any){
+        if(e.value.length == 0) return;
+
+        this.dataDisplay.length = 0;
+
+        let files = [];
+
+        let formData: any = new FormData();
+        e.value.forEach(el => formData.append("files", el));
+        $.ajax({
+            url: this.uploadUrl,
+            type: "POST",
+            contentType: false,
+            processData: false,
+            async: false,
+            data: formData,
+            success: (res) => {
+                files = res;
+            },
+            error: (err) => {
+                this.notify.error("Upload file thất bại");
+            }
+        });
+
+        files.forEach(f => {
+            this.dataDisplay.push({ "tepDinhKem": f });
+        });
+        this.value = [];
+        this.selectedRows = this.selectedRows.concat(this.dataDisplay);
+        this.tepDinhKemSave = this.selectedRows.map(x => x.tepDinhKem.toString()).join(';')
+    }
+    deleteFile(e: any) {
+        // this.selectedRows.splice(this.selectedRows.indexOf(e.row.data.tepDinhKem), 1);
+        this.selectedRows.splice(this.selectedRows.findIndex(x=>x.tepDinhKem===e.data.tepDinhKem), 1);
+        this.tepDinhKemSave = this.selectedRows.map(x => {return x.tepDinhKem.toString()}).join(';');
+
+        $.ajax({
+            url: AppConsts.fileServerUrl  + `/fileUpload/Delete_file?documentName=${e.data.tepDinhKem}`,
+            type: "delete",
+            contentType: "application/json",
+            success: (res) => {
+                this._documentAppService.deleteDocumentFileInServer(e.data.tepDinhKem, 0).subscribe(() => {});
+            },
+            error: (err) => {
+
+            }
+        });
+    }
+    showDetail(e: any) {
+        this.rootUrl = AppConsts.fileServerUrl ;
+        this.link = this.rootUrl + '/' + e.row.data.tepDinhKem;
+
+        window.open(this.link, '_blank');
+    }
+
+    save(): void {
+        const self=this;
+        let result = this.documentForm.instance.validate();
+        if (result.isValid) {
+            this.saving = true;
+            this.saveReceiveList();
+            this.documentData.publishDate = moment(this.documentData.publishDate).utc(true);
+            this.documentData.isActive = true;
+            this.documentData.status = false;
+            this.documentData.teamEditor = this.appSession.selfOrganizationUnitId;
+            this.documentData.orgEditor = this.appSession.organizationUnitId;
+            this.documentData.attachment = this.tepDinhKemSave !== '' ? this.tepDinhKemSave : null;
+            this.documentData.leaderType = this.leaderTypeVal;
+            this.documentData.secretLevel = this.documentData.secretLevel != null ? this.documentData.secretLevel : -1;
+            this.documentData.priority = this.documentData.priority != null ? this.documentData.priority : -1;
+            this.documentData.range = this.documentData.range != null ? this.documentData.range : -1;
+            this.documentData.quantityDocumentPublish = this.quantityDocPublishVal;
+            this.documentData.piecesOfPaper = this.piecesOfPaperVal;
+            this.documentData.linkedDocumentList = [];
+            this.selectedLinkedDocuments.forEach(x => {
+                let selectedItem = this.selectedResponseDocs.find(a => a.id === x);
+                let temp = new CreateOrEditLinkedDocumentDto();
+                temp.linkedDocId = selectedItem.id;
+                temp.linkedDocNumber = selectedItem.incommingNumber;
+                this.documentData.linkedDocumentList.push(temp);
+            });
+
+            this.documentData.orgLevels = this.selectedOrgLevels.join(';');
+            this.publishOrgTagBox.instance.option('selectedItems').forEach(x => {
+                let item = new ReceiverDto();
+                item.id = x.id;
+                item.name = x.name;
+                item.isLocal = x.isLocal;
+                this.documentData.receiverId.push(item);
+            });
+            if (this.documentData.receiverId.length > 0){
+                this.documentData.cA_Status = this.status;
+                this.documentData.cA_Rating =this.rate;
+                this.documentData.cA_ProcessingRecommended =this.ProcessingResult;
+            }
+            this.documentData.publishType = 2;
+            this._oDocsServiceProxy.oDocSaveAndTransferToDonVi(this.documentData)
+            .pipe(finalize(() => {
+                this.saving = false;
+                this.popup_publishType = false;
+               this.router.navigate(['/app/main/qlvb/danh-sach-vb-chuyen-catp-phat-hanh']);
+            }))
+            .subscribe(() => {
+                this.notify.info(this.l('Văn bản đã được chuyển cho Văn thư đơn vị'));
+                self.resetForm();
+                self.documentData.teamEditor = self.appSession.selfOrganizationUnitId;
+                self.documentData.orgEditor =self.appSession.organizationUnitId;
+            });
+        }
+    }
+
+    saveAndTransfer() {
+
+        let result = this.documentForm.instance.validate();
+
+        if (result.isValid) {
+            this.saving = true;
+            this.saveReceiveList();
+            this.documentData.publishDate = moment(this.documentData.publishDate).utc(true);
+            this.documentData.isActive = true;
+            this.documentData.status = false;
+            this.documentData.teamEditor = this.appSession.selfOrganizationUnitId;
+            this.documentData.orgEditor = this.appSession.organizationUnitId;
+            this.documentData.attachment = this.tepDinhKemSave !== '' ? this.tepDinhKemSave : null;
+            this.documentData.leaderType = this.leaderTypeVal;
+            this.documentData.secretLevel = this.documentData.secretLevel != null ? this.documentData.secretLevel : -1;
+            this.documentData.priority = this.documentData.priority != null ? this.documentData.priority : -1;
+            this.documentData.quantityDocumentPublish = this.quantityDocPublishVal;
+            this.documentData.piecesOfPaper = this.piecesOfPaperVal;
+            this._oDocsServiceProxy.createAndTransferODoc(this.publishPlaceListVal, this.documentData)
+             .pipe(finalize(() => { this.saving = false; this.popup_publishType = false; }))
+             .subscribe(() => {
+                this.notify.info(this.l('SavedSuccessfully'));
+                this.initForm();
+             });
+        }
+    }
+
+
+    arr_diff (a1, a2) {
+
+        let a = [], diff = [];
+
+        for (let i = 0; i < a1.length; i++) {
+            a[a1[i]] = true;
+        }
+
+        for (let i = 0; i < a2.length; i++) {
+            if (a[a2[i]]) {
+                delete a[a2[i]];
+            } else {
+                a[a2[i]] = true;
+            }
+        }
+
+        // tslint:disable-next-line:forin
+        for (let k in a) {
+            diff.push(k);
+        }
+
+        return diff;
+    }
+
+    onValueChanged(e: any) {
+        // this.receiverSelected = this.tagBox.value;
+        if (e.value.length < e.previousValue.length) {
+            this.arr_diff(e.value, e.previousValue).forEach(el => {
+                this.dataSource.findIndex(x => x.userId === el);
+                let index = this.dataSource.findIndex(x => x.userId === el);
+                this.dataSource[index]['mainHandling'] = false;
+                this.dataSource[index]['coHandling'] = false;
+                this.listReceive.splice(this.listReceive.findIndex(element => element.userId === el), 1);
+                // this.listVal.splice(this.listVal.findIndex(x => x == el), 1);
+            });
+        }
+    }
+
+    showPublisherPopup() {
+        //this.publisherPopupVisible = true;
+        this.createReceiver.show();
+    }
+
+    getPublishOrg() {
+        this._oDocsServiceProxy.getListPublishOrgTeam().subscribe((res) => {
+            console.log(res);
+            this.data_receiver = res;
+            this.selectedOrgLevels = [4];
+        });
+    }
+
+    addDays(val, days: number) {
+        let date = new Date(val);
+        date.setDate(date.getDate() + days);
+        return date;
+    }
+
+    onSelectionChanged(e: any) {
+        const that = this;
+        this.selectedReceivers.length = 0;
+        let list = this.treeView.instance.getNodes();
+        list.forEach(item => {
+            if (item.selected === true) {
+                let arr = item['items'];
+                arr.forEach(function(i, index, object) {
+                    that.selectedReceivers.push(i);
+                });
+            } else if (item.expanded === true) {
+                let arr = item['items'];
+                arr.forEach(function(i, index, object) {
+                    if (i.selected === true) {
+                        that.selectedReceivers.push(i);
+                    }
+                });
+
+            }
+        });
+    }
+
+    saveReceiveList() {
+        let arr = [];
+        this.displayReceiverList.length = 0;
+        this.selectedReceivers.forEach(x => {
+            this.displayReceiverList.push(x.key);
+            let item = new ReceiverDto();
+            item.id = x.itemData.index;
+            item.isLocal = x.itemData.isLocal;
+            item.name = x.itemData.name;
+            item.index = x.itemData.id;
+            arr.push(item);
+        });
+        this.documentData.receiverId = arr;
+        this.receiverPopupVisible = false;
+    }
+
+
+    closePopUp() {
+        this.receiverPopupVisible = false;
+    }
+
+    selectReplyDocument() {
+        this.searchDocumentDonViModal.type= 1;
+        var a= this.appSession.roleId;
+        //----------------làm tạm
+        if (a == 35 )
+            this.searchDocumentDonViModal.searchType = 3;
+        else
+            this.searchDocumentDonViModal.searchType = 2;
+        //------------------------
+        this.searchDocumentDonViModal.show();
+    }
+
+
+    getResponseDocuments(list: DocumentsDto[]) {
+        //lưu id
+        this.selectedResponseDocs.length = 0;
+        this.selectedLinkedDocuments.length = 0;
+        if (list.length > 0) {
+            this.documentData.linkedDocumentList = [];
+            this.selectedResponseDocs = list;
+            list.forEach(x => {
+                let temp = new CreateOrEditLinkedDocumentDto();
+                temp.linkedDocId = x.id;
+                temp.linkedDocNumber = x.number;
+                this.selectedLinkedDocuments.push(x.id);
+                this.documentData.linkedDocumentList.push(temp);
+            });
+        }
+    }
+
+    initForm() {
+        this.documentData = new CreateOrEditODocDto();
+        this.documentData.isNoneSubmit = false;
+        this.documentData.teamEditor = this.appSession.selfOrganizationUnitId;
+        this.documentData.orgEditor = this.appSession.organizationUnitId;
+        // this.documentData.editorId = this.appSession.userId;
+        this.leaderTypeVal = this.leaderType[0].id;
+        this.currentDate = new Date();
+    }
+
+    onScanTypeChanged(e: any){
+        if(e.value == 3){
+            this.isDuplex = true;
+        }
+    }
+
+    scan() {
+        const self = this;
+        self.spinnerService.show();
+        var scanFileName = "Van_ban_di_don_vi_" + Date.now() + ".pdf";
+
+        self._userExtentionServiceProxy.getByUser().subscribe((res)=>{
+
+            if (!isNullOrUndefined(res.id)){
+                var data = {
+                    "DisplayName": scanFileName,
+                    "DoMainAppPath": formatDate(self.currentDate, 'dd-MM-yyyy', 'en-US'),
+                    "DeviceName": res.scanName,
+                    "IsDuplex": self.isDuplex,
+                    "ScanType": self.scanType
+                };
+                self.scanRequest(data,scanFileName)
+            }
+            else
+            {
+                var data2 = {
+                    "DisplayName": scanFileName,
+                    "DoMainAppPath": formatDate(self.currentDate, 'dd-MM-yyyy', 'en-US'),
+                    "DeviceName": '',
+                    "IsDuplex": self.isDuplex,
+                    "ScanType": self.scanType
+                };
+                self.scanRequest(data2,scanFileName)
+            }
+
+        })
+
+    }
+
+    scanRequest(data,scanFileName){
+        const self = this;
+        $.ajax({
+            url: 'http://localhost:9001/ScanService/scan',
+            data: JSON.stringify(data),
+            contentType: 'application/json',
+            method: 'POST',
+            success: function (result) {
+                // cập nhật thông tin lên table
+
+                self.dataDisplay.length=0;
+                const cValue = formatDate(self.currentDate, 'dd-MM-yyyy', 'en-US');
+                self.currentTime = new Date().getHours() + "-" + new Date().getMinutes();
+                let listFileName = [];
+
+                self.dataDisplay.push({ tepDinhKem: cValue + "/" + scanFileName });
+                listFileName.push(scanFileName);
+
+                self.selectedRows = self.selectedRows.concat(self.dataDisplay);
+
+                //cập nhật lại thông tin máy in cho user
+                self.tepDinhKemSave = listFileName.join(';');
+                if (result["ExistDevice"]=="false"|| result["ExistDevice"]==false){
+                    var postData= new UserExtenTionDto();
+                    postData.scanName=result["DeviceName"];
+                    self._userExtentionServiceProxy.createOrEdit(postData).subscribe(()=>{
+
+                    })
+                }
+                self.spinnerService.hide();
+
+            },
+            error: function(data){
+            }
+        });
+    }
+
+    onKqxlValueChanged(e){
+        if (e.value ==false)
+        {
+            this.rateDisable=true;
+            this.rate=null;
+        }else{
+            this.rateDisable=false;
+            this.rate=2;
+        }
+    }
+    replyDocChanged= (e): void =>{
+        if(e.value.length>0){
+            this.resultAndRateDisableHandle=false;
+            this.rateDisable=false;
+            if (this.handlingType ==4){
+                this.statusDisableHandle=true;
+            }
+            else{
+                this.statusDisableHandle=false;
+            }
+
+        }else{
+            this.resultAndRateDisableHandle=true;
+            this.rateDisable=true;
+            this.statusDisableHandle=true;
+        }
+
+    }
+}

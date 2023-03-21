@@ -1,0 +1,15 @@
+body .si-pc {
+    margin: 0px;
+    padding: 0px;
+    font-family: "Comfortaa", cursive;
+    margin: 0;
+    background: #F0F4F9;
+    font-size: 15px;
+    font-weight: 400;
+    color: #8A98AC;
+    line-height: 1.5;
+}
+
+.text-center {
+    text-align: center!important;
+}

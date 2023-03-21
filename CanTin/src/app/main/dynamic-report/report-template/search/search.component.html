@@ -1,0 +1,70 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="col-sm-6">
+                    <h4 class="card-title">Tìm kiếm biểu mẫu</h4>
+                </div>
+                <br/>
+                <form (submit)="search()">
+                    <dx-form id="frmTemplate" [(formData)]="stateSearch" validationGroup="formValidateGroup" colCount="1">
+                        <dxi-item dataField="searchName" [colSpan]="1">
+                            <dxo-label text="Tên biểu mẫu"></dxo-label>
+                        </dxi-item>
+                    </dx-form>
+                    <br/>
+                    <div class="row justify-content-center">
+                        <dx-button text="Tìm kiếm" icon="fa fa-search" type="success" [useSubmitBehavior]="true" validationGroup="formValidateGroup"></dx-button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <div class="text-left">
+                    <dx-button text="Thêm mới" icon="fa fa-plus" type="success" (onClick)="createTemplate()"></dx-button>
+                </div>
+                <br/>
+                
+                <dx-data-grid #formDg [dataSource]="formDataSource" [showRowLines]="true" [showBorders]="true" 
+                    [rowAlternationEnabled]="true" [wordWrapEnabled]="true" (onContentReady)="onContentReady($event)" (onRowPrepared)="onRowPrepared_Forms($event)">
+                    <dxi-column caption="STT" width="50" dataType="number" alignment="center" cellTemplate="sttTemplate"></dxi-column>
+                    <dxi-column dataField="formName" caption="Tên biểu mẫu" dataType="string"></dxi-column>
+                    <dxi-column dataField="reportGroupName" caption="Nhóm biểu mẫu" width="200" dataType="string" groupIndex="0"></dxi-column>
+                    <dxi-column dataField="reportTypeName" caption="Loại biểu mẫu" width="80" dataType="string"></dxi-column>
+                    <dxi-column dataField="isActive" caption="Hiệu lực" width="60" dataType="boolean" alignment="center" cellTemplate="activeTemplate"></dxi-column>
+                    <dxi-column dataField="id" caption="Chỉnh sửa" width="60" dataType="number" alignment="center" cellTemplate="editTemplate"></dxi-column>
+                    <dxi-column dataField="pathTemplate" caption="File" width="60" dataType="string" alignment="center" cellTemplate="fileTemplate"></dxi-column>
+                    <dxi-column dataField="id" caption="Xóa" width="60" dataType="number" alignment="center" cellTemplate="deleteTemplate"></dxi-column>
+                    
+                    <div *dxTemplate="let cell of 'deleteTemplate'">
+                        <i  class='fa fa-remove' style="color:red; cursor: pointer;" (click)="delete(cell.value)"></i>
+                    </div>
+                    
+                    <div *dxTemplate="let cell of 'fileTemplate'">
+                        <i  class='fa fa-download' style="color:#1876d3; cursor: pointer;" (click)="download(cell.value)"></i>
+                        <!-- <a *ngIf="cell.value && cell.value.length > 0" href=".{{cell.value}}" target="_blank"><i class='fa fa-download' style="color:#1876d3; cursor: pointer;"></i></a> -->
+                    </div>
+                    
+                    <div *dxTemplate="let cell of 'editTemplate'">
+                        <i class="fa fa-edit" style="color:#1876d3; cursor: pointer;" (click)="edit(cell.value)"></i>
+                    </div>
+
+                    <div *dxTemplate="let cell of 'activeTemplate'">
+                        <i *ngIf="cell.value" class="fa fa-check-circle" style="color:green;"></i>
+                        <i *ngIf="!cell.value" class="fa fa-check-circle" style="color:gray;"></i>
+                    </div>
+
+                    <div *dxTemplate="let cell of 'sttTemplate'">
+                        <span>{{ cell.rowIndex + 1 }}</span>
+                    </div>
+
+                    <dxo-group-panel [visible]="true" emptyPanelText="Kéo vào các cột cần gom nhóm!"></dxo-group-panel>
+                    <dxo-paging [pageSize]="stateSearch.pageSize" [pageIndex]="stateSearch.pageIndex"></dxo-paging>
+                    <dxo-pager visible="true" infoText="Trang {0} trên {1} ({2} dòng)" [allowedPageSizes]="[20, 50, 100]" [showPageSizeSelector]="true"
+                        [showInfo]="true"></dxo-pager>
+                </dx-data-grid>
+            </div>
+        </div>
+    </div>
+</div>

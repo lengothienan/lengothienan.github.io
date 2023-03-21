@@ -1,0 +1,181 @@
+<div bsModal id="groupReceiverModal" #groupReceiverModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+    aria-labelledby="groupReceiverModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <form novalidate autocomplete="off">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        Danh sách nhóm
+                    </h4>
+                    <button type="button" class="close" (click)="close()" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                   
+                    <div class="row col-md-12" style="z-index: 1;">
+                        &nbsp;
+                        <dx-button type="success" icon="fa fa-save" text="Thêm mới" (onClick)="showCreatePopup()">
+                        </dx-button>
+                        <!-- <buttonUI #buttonUI (actionID)="getActionID($event)"></buttonUI> -->
+                    </div>
+                    <div class="row align-items-center">
+                        <!--<Primeng-TurboTable-Start>-->
+                        <div class="col primeng-datatable-container">
+                            <dx-data-grid #gridContainer id="gridContainer" [showColumnLines]="true" (onRowDblClick)="showEditPopup($event)"
+                                [(dataSource)]="initialData" [showRowLines]="true">
+                                <dxo-sorting mode="single"></dxo-sorting>
+                                <dxo-selection mode="single" > </dxo-selection>
+                                <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[50, 100]"
+                                    [showInfo]="true" [showNavigationButtons]="true"></dxo-pager>
+                                <dxo-paging [enabled]="true" [pageSize]="50"></dxo-paging>
+                                <dxi-column type="selection" [width]="4+'%'"></dxi-column>
+                                <dxi-column dataField="stt" columnIndex="1" caption="STT" alignment="center"
+                                    [allowFiltering]="false" [allowSorting]="false" cellTemplate="sttCellTemplate"
+                                    [width]="6+'%'"></dxi-column>
+                            
+                                <dxi-column dataField="GroupName" columnIndex="7" caption="Tên nhóm"
+                                    [allowSorting]="false" [width]="15+'%'"></dxi-column>
+                                    <dxi-column dataField="OrgLevelName" columnIndex="8" [width]="30+'%'"
+                                    [caption]="orgLevelText" [allowSorting]="false">
+                                </dxi-column>
+                                <dxi-column dataField="PublishOrgName" columnIndex="8" [width]="30+'%'"
+                                    [caption]="publisherOrgText" [allowSorting]="false">
+                                </dxi-column>
+                                <dxi-column caption="Sửa" [width]="5+'%'"alignment="center" dataField="id"
+                                    cellTemplate="editTemplate"></dxi-column>
+                                <dxi-column caption="Xóa" [width]="5+'%'"alignment="center" dataField="id"
+                                    cellTemplate="deleteTemplate"></dxi-column>
+                                <div *dxTemplate="let info of 'sttCellTemplate'">
+                                    <div> {{ info.component.pageIndex() * info.component.pageSize() + info.rowIndex + 1
+                                        }}</div>
+                                </div>
+                                <div *dxTemplate="let cell of 'editTemplate'">
+                                    <i class="fa fa-cog" style="color:#1876d3; cursor: pointer;"
+                                        (click)="showEditPopup()"></i>
+                                </div>
+                                <div *dxTemplate="let cell of 'deleteTemplate'">
+                                    <i class="fa fa-times" style="color:red; cursor: pointer;"
+                                      (click)="delete()"></i>
+                                </div>
+                                
+                            </dx-data-grid>
+                            <!-- Xem lịch sử upload chi tiết -->
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+
+                </div>
+            </form>
+            <dx-popup [width]="1200" height="auto" [maxHeight]="600" [showTitle]="true" [title]="popupTitle" [showCloseButton]="false" [dragEnabled]="false"
+                [(visible)]="createPopup">
+                <dx-scroll-view #scrollView width="100%" height="100%">
+                    <dx-form #publisherForm [formData]="">
+                        <dxi-item [colSpan]="2" editorType="dxTextBox">
+                            <dx-text-box dataField="name" [(value)]="documentData.name"></dx-text-box>
+                            <dxo-label text="Tên nhóm"></dxo-label>
+                        </dxi-item>
+                        <dxi-item [colSpan]="2" editorType="dxTextBox">
+                            <dx-tag-box #orgLevelTagBox id="orgLevelTagBox" [dataSource]="orgLevelSource" valueExpr="id"
+                                displayExpr="name" [searchEnabled]="true" [searchExpr]="['name']"
+                                [(value)]="selectedOrgLevels" (onValueChanged)="orgLevelValueChanged()">
+                            </dx-tag-box>
+                            <dxo-label [text]="orgLevelText"></dxo-label>
+                        </dxi-item>
+                        <dxi-item [colSpan]="2">
+                            <dx-tag-box #publishOrgTagBox id="publishOrgTagBox" valueExpr="id"
+                                [(dataSource)]="publishOrgSource" displayExpr="name" [searchEnabled]="true"
+                                [searchExpr]="['name']" [(value)]="displayReceiverList" [showSelectionControls]="true"
+                                [showClearButton]="true" (onOpened)="onOpenedTagBox($event)" (onValueChanged)="orgPublishOrgValueChanged()">
+                            </dx-tag-box>
+                            <dxo-label [text]="publisherOrgText"></dxo-label>
+                        </dxi-item>
+                        <dxi-item [colSpan]="2">
+                            <div style="width:inherit; height:inherit;float:right">
+                                <span style="padding: 0 10px 0 10px; font-size: 16px;">Đã chọn <b>{{countPublishOrgSelected}}</b> đơn vị</span>
+                            </div>
+                            
+                        </dxi-item>
+                        
+                        
+                    </dx-form>
+                    <br>
+                    <div class="row">
+                        <div style="display: block; margin-left: auto; margin-right: auto;">
+                            <dx-button [disabled]="saving" icon="save" text="Lưu" type="success" (onClick)="save()">
+                            </dx-button>
+                            <dx-button icon="close" text="Đóng" (onClick)="closePopup()"></dx-button>
+                        </div>
+                    </div>
+                </dx-scroll-view>
+                <dxo-position at="top" my="center" offset='0 200'> </dxo-position>
+            </dx-popup>
+
+            <dx-popup [width]="1200" height="auto" [maxHeight]="600" [showTitle]="true" [title]="editPopupTitle"
+                        [dragEnabled]="false" [(visible)]="editPopup" [showCloseButton]="false">
+                        <dx-scroll-view #scrollView width="100%" height="100%">
+                            <dx-form #publisherForm [formData]="documentData">
+                                <dxi-item [colSpan]="2"
+                                    editorType="dxTextBox">
+                                    <dx-text-box dataField="name" [(value)]="documentData.name"></dx-text-box>
+                                    <dxo-label text="Tên nhóm"></dxo-label>
+                                </dxi-item>
+                                <dxi-item [colSpan]="2"
+                                    editorType="dxTextBox">
+                                    <dx-tag-box #orgLevelTagBox id="orgLevelTagBox" [dataSource]="orgLevelSource" [showClearButton]="true"
+                                    valueExpr="id" displayExpr="name" [searchEnabled]="true" [searchExpr]="['name']"  [showSelectionControls]="true"
+                                    [(value)]="selectedOrgLevels" (onValueChanged)="orgLevelValueChanged()">
+                                </dx-tag-box>
+                                <dxo-label [text]="orgLevelText"></dxo-label>
+                                </dxi-item>
+                                <dxi-item [colSpan]="2">
+                                    <dx-tag-box #publishOrgTagBox id="publishOrgTagBox" valueExpr="id"
+                                    [(dataSource)]="publishOrgSource" displayExpr="name" [searchEnabled]="true"
+                                    [searchExpr]="['name']" [(value)]="displayReceiverList"
+                                    [showSelectionControls]="true" 
+                                    [showClearButton]="true" (onOpened)="onOpenedTagBox($event)">
+                                </dx-tag-box>
+                                <dxo-label [text]="publisherOrgText"></dxo-label>
+                                </dxi-item>
+                                <dxi-item [colSpan]="2">
+                                    <div style="width:inherit; height:inherit;float:right">
+                                        <span style="padding: 0 10px 0 10px; font-size: 16px;">Đã chọn <b>{{countPublishOrgSelected}}</b> đơn vị</span>
+                                    </div>
+                                    
+                                </dxi-item>
+                            </dx-form>
+
+                       
+                        
+                        <br>
+                        <div class="row">
+                            <div style="display: block; margin-left: auto; margin-right: auto;">
+                                <dx-button icon="save" text="Lưu" type="success" (onClick)="save()" >
+                                </dx-button>
+                                <dx-button icon="close" text="Đóng" (onClick)="closeEditPopup()"></dx-button>
+                            </div>
+                        </div>
+                    </dx-scroll-view>
+                    <dxo-position at="top" my="center" offset='0 200'> </dxo-position>
+                    </dx-popup>
+                    <dx-load-panel #loadPanel shadingColor="rgba(220,220,220, 0.5)"
+                    [position]="{ my: 'center', at: 'center', of: 'window' }" [(visible)]="saving" [showIndicator]="true"
+                    message="Đang xử lý..." [showPane]="true" [shading]="true" [closeOnOutsideClick]="false">
+                </dx-load-panel>
+        </div>
+    </div>
+
+</div>
+
+
+<style>
+    ::ng-deep .dx-row {
+        font-size: 15px;
+        white-space: normal;
+    }
+
+    /* ::ng-deep td[role="columnheader"]{
+            text-align: center !important;
+        }   */
+</style>

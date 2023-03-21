@@ -1,0 +1,52 @@
+<div bsModal #createOrEditModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createOrEditModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #documentTypeForm="ngForm" novalidate (ngSubmit)="save()" autocomplete="off">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span *ngIf="documentType.id">{{l("EditDocumentType")}}</span>
+                        <span *ngIf="!documentType.id">{{l("CreateNewDocumentType")}}</span>
+                    </h4>
+                    <button type="button" class="close" (click)="close()" aria-label="Close" [disabled]="saving">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                 
+
+
+								<div class="form-group">
+									<label for="DocumentType_TypeName">{{l("TypeName")}}</label>
+									<input type="text" id="DocumentType_TypeName" class="form-control" [(ngModel)]="documentType.typeName" name="TypeName"    />
+								</div>
+					
+                                <br/>
+                                <div class="form-group">
+									<label for="DocumentType_Signal">{{l("Signal")}}</label>
+									<input type="text" id="DocumentType_Signal" class="form-control" [(ngModel)]="documentType.signal" name="Signal"    />
+                                </div>
+                                <br/>
+                                <div class="form-group">
+									<label for="DocumentType_ProcessingDays">{{l("ProcessingDays")}}</label>
+									<input type="number" id="DocumentType_ProcessingDays" class="form-control" [(ngModel)]="documentType.processingDays" name="ProcessingDays"    />
+                                </div>
+                                <br/>
+                                <div class="m-checkbox-list">
+									<label for="DocumentType_IsActive" class="kt-checkbox">
+										<input id="DocumentType_IsActive" type="checkbox" name="IsActive" [(ngModel)]="documentType.isActive"> 
+										{{l("IsActive")}}
+										<span></span>
+									</label>
+								</div>
+					
+
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-default" (click)="close()">{{l("Cancel")}}</button>
+                    <button type="submit" class="btn btn-primary blue" [disabled]="!documentTypeForm.form.valid" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>

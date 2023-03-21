@@ -1,0 +1,54 @@
+﻿<div bsModal #createOrEditModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createOrEditModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    <span>{{l("Details")}}</span>
+                </h4>
+                <button type="button" class="close" (click)="close()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="row">
+                    <div class="col-6 mb-3">
+                        <h6>{{l("Name")}} :</h6>
+                        {{ item.comm_Book_Value.name }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{l("CurrValue")}} :</h6>
+                        {{ item.comm_Book_Value.currValue }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{l("FromValue")}} :</h6>
+                        {{ item.comm_Book_Value.fromValue }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{l("ToValue")}} :</h6>
+                        {{ item.comm_Book_Value.toValue }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{l("Version")}} :</h6>
+                        {{ item.comm_Book_Value.version }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{l("OrgId")}} :</h6>
+                        {{ item.comm_Book_Value.orgId }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{l("IsActive")}} :</h6>
+                        {{ item.comm_Book_Value.isActive }}
+                    </div>
+
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button [disabled]="saving" type="button" class="btn btn-primary blue" (click)="close()">{{l("Close")}}</button>
+            </div>
+        </div>
+    </div>
+
+</div>

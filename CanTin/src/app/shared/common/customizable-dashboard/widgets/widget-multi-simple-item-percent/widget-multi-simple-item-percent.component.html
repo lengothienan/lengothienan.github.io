@@ -1,0 +1,47 @@
+<div class="row">
+    <div class="col-12">
+        <div class="card card-outline-info" style="height: auto;">
+            <div class="card-body" id="content" [ngStyle]="msi_p_widget_formatcss">
+                <div class="pulse"></div>
+                <div class='row'>
+                    <div class="col - 12 col - md - 6">
+                        <div class="header" [ngStyle]="msi_p_frametitle_formatcss">
+                            <h3 [ngStyle]="msi_p_title_formatcss">{{msi_p_title}}</h3>
+                        </div>
+                        <div *ngFor="let d of this.chartData; ">
+                            <div class="card no-shadow rm-border widget-chart text-left" [ngStyle]="d.item_formatcss">
+                                <div style="width:70%;">
+                                    <h4 [ngStyle]="d.content_formatcss">{{d.title}}</h4>
+                                    <h5 [ngStyle]="d.description_formatcss">{{d.description}}</h5>
+                                    <div style="display:flex">
+                                        <h4 [ngStyle]="d.svalue_formatcss"> Success : {{d.s_value}}</h4>
+                                        <h4 style="margin-left:50px" [ngStyle]="d.fvalue_formatcss"> Failure : {{d.f_value}}</h4>
+                                    </div>
+                                </div>
+                                <div style="width:30%;">
+                                    <div>
+                                        <dx-pie-chart #pr_chart type="doughnut" [animation]="false" [innerRadius]="d.innerRadius" [palette]='d.palette' [startAngle]="-90" palette="Soft Pastel" [dataSource]="d.data">
+                                            <dxi-series argumentField="region">
+                                                <dxo-label [visible]="false" format="millions">
+                                                    <dxo-connector [visible]="false"></dxo-connector>
+                                                </dxo-label>
+                                            </dxi-series>
+                                            <dxo-export [enabled]="false"></dxo-export>
+                                            <dxo-legend [visible]="false" [margin]="0" horizontalAlignment="left" verticalAlignment="top"></dxo-legend>
+                                            <dxo-tooltip [enabled]="false" [customizeTooltip]="customizeTooltip" format="millions">
+                                            </dxo-tooltip>
+                                            <dxo-size [height]="d.progress_size" [width]="d.progress_size">
+                                            </dxo-size>
+                                        </dx-pie-chart>
+                                        <a href="#" target="_blank" class="xp-knob" style="position: absolute;vertical-align: middle;border: 0px;background: none;font: bold 20px Arial;text-align: center;padding: 0px;-webkit-appearance: none;" [style.width.px]="d.progress_size" [style.height.px]="d.progress_size"
+                                            [style.margin-top.px]="d.progress_size*(-0.59)" [ngStyle]="d.percent_content_formatcss">{{d.percent_content}}%</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

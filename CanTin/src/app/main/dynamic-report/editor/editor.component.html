@@ -1,0 +1,130 @@
+
+<div class="row">
+    <div class="col-12">
+        <div class="card card-outline-info">
+            <div class="card-body">
+                <h3 style="margin: 20px">{{reportName}}</h3>
+                <div class="row" style="margin: 20px">
+                    <div class="col-md-12">
+                        <form style="margin:20px" (submit)="viewreport()">
+                            <dx-form [(formData)]="formData" #form [items]="listItem" validationGroup="formValidateGroup"
+                                [colCount]="formCol" style="margin-bottom: 20px">
+
+                            </dx-form>
+                            <div class="row justify-content-center" style="margin-top: 20px; text-align: center;margin-bottom: 50px;">
+                                <dx-button text="Xem" icon="fa fa-eye" type="success" [useSubmitBehavior]="true" style="margin-right: 5px;"
+                                    validationGroup="formValidateGroup"></dx-button>
+                                <dx-button text="Hủy" icon="fa fa-arrow-left" (onClick)="back()"></dx-button>
+                            </div>
+                        </form>
+                    </div>
+
+                    
+
+                    <div class="btn-group dropdown btn-smaller-padding" dropdown container="body" style="margin-left: 10px; margin-bottom: 5px;">
+                        <!-- <dx-button icon="fas fa-file-import"
+                            class="dx-button dx-button-success dx-button-mode-contained dx-widget dx-button-has-icon dx-button-has-text"
+                            text="Xuất file template" style="justify-content: left; margin-bottom : 10px; margin-right: 10px;"
+                            (onClick)="downloadTemplate()"></dx-button> -->
+                        <dx-button icon="fas fa-file-import"
+                            class="dx-button dx-button-success dx-button-mode-contained dx-widget dx-button-has-icon dx-button-has-text"
+                            text="Import" style="justify-content: left; margin-bottom : 10px; margin-right: 10px;"
+                            (onClick)="openFile.click()"></dx-button>
+                        <input #openFile id="openFile" type="file" (change)="importFile($event)" style="display:none;"/>
+                        <dx-button icon="save"
+                            class="dx-button dx-button-success dx-button-mode-contained dx-widget dx-button-has-icon dx-button-has-text"
+                            text="Lưu" style="justify-content: left; margin-bottom : 10px; margin-right: 10px;"
+                            (onClick)="saveGridData()"></dx-button>
+                    </div>
+
+                    <div class="col-md-12" id="table" [style.visibility]="tableVisibility" [style.display]="tableDisplay">
+                        <dx-data-grid #data [columns]='column' [dataSource]="dataSourceTest3" [showRowLines]="true"
+                            [showBorders]="true" [allowColumnResizing]="true" [columnAutoWidth]="true"
+                            [allowColumnReordering]="true" [summary]='sumary' [wordWrapEnabled]="true"
+                            (onExporting)="onExporting($event)" [export]="{enabled: true}">
+                            <dxo-editing
+                                [allowUpdating]="true"
+                                mode="batch">
+                            </dxo-editing>
+                            <!-- <dxo-export [enabled]="true" [fileName]="reportName" [allowExportSelectedData]="false"></dxo-export> -->
+                            <dxo-group-panel [visible]="true"></dxo-group-panel>
+                            <dxo-grouping #expand [autoExpandAll]="true"></dxo-grouping>
+                            <dxo-paging [pageSize]="pageSize" [pageIndex]="pageIndex"></dxo-paging>
+                            <dxo-pager visible="true" infoText="Trang {0} trên {1} ({2} dòng)" [allowedPageSizes]="[20, 50, 100]"
+                                [showPageSizeSelector]="true" [showInfo]="true"></dxo-pager>
+                        </dx-data-grid>
+                    </div>
+
+                    <div id="dx-grid" style="display: none"></div>
+                        <!-- BarChart (type == 2)-->
+                        <div class="col-md-12" [style.visibility]="barChartVisibility" [style.display]="barChartDisplay"
+                            id="barChart">
+                            <dx-chart #barchart [dataSource]="barChartDataSource">
+                                <dxo-series-template [nameField]="seriesField"></dxo-series-template>
+                                <dxo-common-series-settings [argumentField]="ArgumentField" type="bar"
+                                    [valueField]="ValueField">
+                                    <dxo-label [visible]="true" [format]="{ formatter: formatService.formatNumber }"
+                                        backgroundColor="transparent">
+                                        <dxo-font [size]="11" color="green"></dxo-font>
+                                    </dxo-label>
+                                </dxo-common-series-settings>
+                                <dxo-legend verticalAlignment="bottom" horizontalAlignment="center">
+                                </dxo-legend>
+                                <dxo-export [enabled]="true"></dxo-export>
+                            </dx-chart>
+                        </div>
+                        <!-- PieChart (type == 3)-->
+                        <div class="col-md-12" [style.visibility]="pieChartVisibility" [style.display]="pieChartDisplay"
+                            id="pieChart">
+                            <dx-pie-chart #piechart id="pie" palette="bright" [dataSource]="pieChartDataSource" resolveLabelOverlapping="shift">
+                                <dxi-series [argumentField]="ArgumentField" [valueField]="ValueField">
+                                    <dxo-label [visible]="true">
+                                        <dxo-connector [visible]="true" [width]="1"></dxo-connector>
+                                    </dxo-label>
+                                </dxi-series>
+                                <dxo-size [width]="500"></dxo-size>
+                                <dxo-export [enabled]="true"></dxo-export>
+                                <dxo-legend verticalAlignment="bottom" horizontalAlignment="center"
+                                    itemTextPosition="right" [rowCount]="2">
+                                </dxo-legend>
+                            </dx-pie-chart>
+                        </div>
+                        <!-- StakedChart (type == 8) -->
+                        <div class="col-md-12" [style.visibility]="stakedChartVisibility" 
+                        [style.display]="stakedChartDisplay" id="stakedChart" style="width: 100%;">
+                            <dx-chart #stakedChart [dataSource]="stackedChartDataSource">
+                                <dxo-series-template [nameField]="seriesField"></dxo-series-template>
+                                <dxo-common-series-settings [argumentField]="ArgumentField" type="fullStackedBar"  [valueField]="ValueField">
+                                </dxo-common-series-settings>
+                                <dxo-legend verticalAlignment="bottom" horizontalAlignment="center"
+                                    itemTextPosition="right">
+                                </dxo-legend>
+                                <dxo-export enabled="true"></dxo-export>
+                                <dxo-tooltip enabled="true" location="edge" [customizeTooltip]="customizeTooltip1" [zIndex]="5000"></dxo-tooltip>
+                                <dxo-border [visible]="true"></dxo-border>
+                            </dx-chart>
+                        </div>
+                        <!-- LineChart (type == 9) -->
+                        <div class="col-md-12" [style.visibility]="lineChartVisibility"
+                            [style.display]="lineChartDisplay" id="lineChart" style="width: 100%;">
+                            <dx-chart #linechart palette="Violet" [dataSource]="lineChartDataSource">
+                                <dxo-series-template [nameField]="seriesField"></dxo-series-template>
+                                <dxo-common-series-settings [argumentField]="ArgumentField" type="line"  [valueField]="ValueField">
+                                </dxo-common-series-settings>
+                                <dxo-margin [bottom]="20"></dxo-margin>
+                                <dxo-argument-axis [valueMarginsEnabled]="false" discreteAxisDivisionMode="crossLabels">
+                                    <dxo-grid [visible]="true"></dxo-grid>
+                                </dxo-argument-axis>
+                                <dxo-legend verticalAlignment="bottom" horizontalAlignment="center"
+                                    itemTextPosition="right" >
+                                </dxo-legend>
+                                <dxo-export [enabled]="true"></dxo-export>
+                                <dxo-tooltip enabled="true" location="edge" [customizeTooltip]="customizeTooltip1" [zIndex]="5000"></dxo-tooltip>
+                            </dx-chart>
+                        </div>
+                        
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

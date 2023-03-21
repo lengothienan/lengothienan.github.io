@@ -1,0 +1,36 @@
+<div [@routerTransition]>
+    <div class="kt-content  kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor" [busyIf]="busy">
+        <div class="kt-subheader kt-grid__item">
+            <div [class]="containerClass">
+                <div class="kt-subheader__main">
+                    <h3 class="kt-subheader__title">
+                        <span>{{"Dashboard" | localize}}</span>
+                    </h3>
+                    <span class="kt-subheader__separator kt-subheader__separator--v"></span>
+                    <span class="kt-subheader__desc">
+                        {{"DashboardHeaderInfo" | localize}}
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div [class]="containerClass + ' kt-grid__item kt-grid__item--fluid'" *ngIf="!loading">
+            <div class="row">
+                <div class="col-md-12">
+                    <tabset #dashboardTabs [justified]="true" [ngClass]="{'nav-hidden': !moreThanOnePage()}">
+                        <tab *ngFor="let page of userDashboard.pages; let i = index" heading="{{page.name}}"
+                            (selectTab)="selectPageTab(page.pageCode,$event)">
+                            <gridster [options]="options[i]" [ngClass]="{'no-tab': !moreThanOnePage()}">
+                                <gridster-item *ngFor="let widget of page.widgets" [item]="widget.gridInformation">
+                                    <ng-container   *ngComponentOutlet="widget.component;
+                                                    ndcDynamicInputs: widget.inputs;
+                                                    ndcDynamicOutputs: outputs"
+                                    ></ng-container>
+                                </gridster-item>
+                            </gridster>
+                        </tab>
+                    </tabset>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

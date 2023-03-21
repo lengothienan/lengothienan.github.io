@@ -1,0 +1,169 @@
+<div [@routerTransition]>
+        <div class="kt-content  kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor">
+            <div class="kt-subheader kt-grid__item">
+              <div [class]="containerClass">
+                <div class="kt-subheader__main">
+                    <h3 class="kt-subheader__title">
+                        <span>{{l("Quá trình xử lý văn bản")}}</span>
+                    </h3>
+                    <!-- <span class="kt-subheader__separator kt-subheader__separator--v"></span> -->
+                    <!-- <span class="kt-subheader__desc">
+                        {{l("SchedulesHeaderInfo")}}
+                    </span> -->
+                    <!-- <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Tiếp nhận văn bản</li>
+                        </ol>
+                    </nav> -->
+                </div>
+                <div class="kt-subheader__toolbar">
+                    <div class="kt-subheader__wrapper">
+                        <button class="btn btn-outline-success"><i class="fa fa-file-excel"></i> {{l("ExportToExcel")}}</button>
+                        <!-- <button *ngIf="isGranted('Pages.Schedules.Create')"  class="btn btn-primary blue"><i class="fa fa-plus"></i> {{l("CreateNewSchedule")}}</button> -->
+                    
+                    </div>
+                </div>
+              </div>
+            </div>
+            <div [class]="containerClass + ' kt-grid__item kt-grid__item--fluid'">
+                <div class="kt-portlet kt-portlet--mobile">
+                    <div class="modal-body">
+                                <div class="col-xl-12" style = "padding-bottom: 17px;padding-left:0;">
+                                       
+                                        <dx-button text="Trở về" type="success" icon="fa fa-arrow-left" onclick="window.history.go(-1); return false;"></dx-button> 
+                                        &nbsp;
+                                        <!-- <dx-button text="Thêm mới" type="success" icon="fa fa-plus" (onClick)="addMove()"  > </dx-button> -->
+                                        <dx-button text="Chuyển" type="success" icon="email" (onClick)="addMoveDocumentReceive()" > </dx-button>
+                                        &nbsp;
+                                        <dx-button text="Kết thúc" type="success" icon="check" (onClick)="addRecevie()" > </dx-button>
+                                        &nbsp;
+                                        <dx-button text="Trả lại" type="success" icon="fa fa-arrow-right" onclick="window.history.go(1); return false;"></dx-button>               
+                                </div>
+    
+                        <dx-form [formData]="scheduleData" [showValidationSummary]="true" validationGroup="formValidateGroup">
+                            <dxi-item itemType="group" caption="Thông tin văn bản" colCount="4" cssClass="item-bold">
+            
+                                <!-- <dxi-item dataField="blockID" [colSpan]="2" >
+                                    <dxo-label text="Số văn bản đến"></dxo-label>
+                                    <dxi-validation-rule message="Số tờ trình đến"></dxi-validation-rule>
+                                </dxi-item> -->
+    
+                                <!-- <dxi-item dataField="blockID" [colSpan]="2" >
+                                        <dxo-label text="Độ khẩn"></dxo-label>
+                                        <dxi-validation-rule  message="Thường"></dxi-validation-rule>
+                                    </dxi-item> -->
+    
+                                    <dxi-item dataField="blockID" [colSpan]="2" >
+                                            <dxo-label text="Số đến"></dxo-label>
+                                            <dxi-validation-rule message="430"></dxi-validation-rule>
+                                        </dxi-item>
+                            
+                                <dxi-item dataField="startTime" [colSpan]="2" editorType="dxDateBox">
+                                    <dxo-label text="Ngày đến" ></dxo-label>
+                                    <dxi-validation-rule  message="Vui lòng chọn giờ bắt đầu!"></dxi-validation-rule>
+            
+                                </dxi-item>
+    
+                                <dxi-item dataField="blockID" [colSpan]="2" >
+                                        <dxo-label text="Số kí hiệu"></dxo-label>
+                                        <dxi-validation-rule  message="12/TTr-BTG"></dxi-validation-rule>
+                                    </dxi-item>
+    
+                                    <dxi-item dataField="startTime" [colSpan]="2" editorType="dxDateBox">
+                                     <dxo-label text="Ngày văn bản" required></dxo-label>
+                                     <dxi-validation-rule  message="Vui lòng chọn giờ bắt đầu!"></dxi-validation-rule>
+                                    </dxi-item>
+                                    <dxi-item dataField="blockID" [colSpan]="4" >
+                                     <dxo-label text="Tác giả "></dxo-label>
+                                      <dxi-validation-rule  message=""></dxi-validation-rule>
+                                     </dxi-item>
+    
+                                    <dxi-item dataField="blockID" [colSpan]="4" >
+                                      <dxo-label text="Trích yếu"></dxo-label>
+                                     <dxi-validation-rule  message=""></dxi-validation-rule>
+                                  </dxi-item>
+
+                                <dxi-item dataField="Place2" [colSpan]="3">
+                                    <dxo-label text="Tập tin "></dxo-label>
+                                    <dxi-validation-rule  message="Vui lòng chọn địa điểm!"></dxi-validation-rule>
+                                </dxi-item>
+    
+            
+                            </dxi-item>
+    
+                            <dxi-item itemType="group" caption="Thông tin xử lý" colCount="4" cssClass="item-bold">
+                               
+                                <dxi-item dataField="startTime" [colSpan]="4" editorType="dxDateBox">
+                                <dxo-label text="Hạn xử lý" ></dxo-label>
+                                <dxi-validation-rule message="Vui lòng chọn giờ bắt đầu!"></dxi-validation-rule>
+        
+                                 </dxi-item>
+                                <dxi-item dataField="OutDoor" [colSpan]="4" editorType="dxTextArea"
+                                        [editorOptions]="{ height: 90 }">
+                                        <dxo-label text="Ý kiến xử lý "></dxo-label>
+                                    </dxi-item>
+                                </dxi-item> 
+                
+                          
+                            <dxi-item itemType="group" caption="Tiến độ xử lý " colCount="1" cssClass="item-bold" colCount="4">
+    
+                                <dxi-item [colSpan]="4">
+                                    <dx-data-grid [dataSource]="listChildSchedule" [showBorders]="true">
+    
+                                        <dxi-column caption= "Người xử lý"  width="100" dataType="number" alignment="center"
+                                            cellTemplate="sttTemplate">
+                                        </dxi-column>
+                                        <dxi-column caption="Ngày xử lý " dataField="content" dataType="string">
+                                        </dxi-column>
+                                        <dxi-column caption="Thời gian bắt đầu" dataField="startTime" dataType="date"
+                                            format="ShortTime">
+                                        </dxi-column>
+                                        <dxi-column caption="Thông tin xử lý" dataField="endTime" dataType="date"
+                                            format="ShortTime">
+                                        </dxi-column>
+                                        <dxi-column caption="Tình trạng" dataField="id" width="100" dataType="string"
+                                            alignment="center" cellTemplate="detailTemplate"></dxi-column>
+                                        <dxi-column caption="#" dataField="id" width="50" dataType="number" alignment="center"
+                                            cellTemplate="deleteTemplate"></dxi-column>
+            
+                                        <div *dxTemplate="let cell of 'sttTemplate'">
+                                            <span>{{ cell.component.pageIndex() * cell.component.pageSize() + cell.rowIndex + 1 }}</span>
+                                        </div>
+            
+                                        <div *dxTemplate="let cell of'detailTemplate'">
+                                            <i class="fa fa-list-alt" style="color:blue; cursor: pointer;"
+                                               ></i>
+                                        </div>
+            
+                                        <div *dxTemplate="let cell of 'deleteTemplate'">
+                                            <i class="fa fa-times" style="color:red; cursor: pointer;"
+                                                ></i>
+                                        </div>
+                                    </dx-data-grid>
+                                </dxi-item>
+                            </dxi-item>
+                        </dx-form>
+            
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+    
+    <script type="text/javascript">
+        $(document).on('click', '.panel-heading.clickable', function(e){
+        var $this = $(this);
+        if(!$this.hasClass('panel-collapsed')) {
+            $this.parents('.panel').find('.panel-body').slideUp();
+            $this.addClass('panel-collapsed');
+            $this.find('i').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
+            
+        } else {
+            $this.parents('.panel').find('.panel-body').slideDown();
+            $this.removeClass('panel-collapsed');
+            $this.find('i').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
+            
+        }
+    })
+    </script>

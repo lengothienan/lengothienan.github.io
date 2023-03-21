@@ -1,0 +1,273 @@
+<div bsModal #yKienChiDaoModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+    aria-labelledby="yKienChiDaoModal" aria-hidden="true" [config]="{ backdrop: 'static' }">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form novalidate  autocomplete="off">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        Cập nhật chỉ đạo
+                    </h4>
+                    <button type="button" class="close" (click)="close()" aria-label="Close" [disabled]="saving">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <dx-scroll-view #scrollView
+                    id="scrollview"
+                    [scrollByContent]="true"
+                    [scrollByThumb]="true"
+                    [showScrollbar]="true"
+                    [bounceEnabled]="false"
+                    reachBottomText="Updating...">
+                        <div >
+                            <dx-form id="formBCH" #formBCH [(formData)]="formData" [showValidationSummary]="true"
+                            validationGroup="formValidateGroup">
+                            <dxi-item itemType="group" [colSpan]="6" colCount="6">
+                                <dxi-item [colSpan]="6" [cssClass]="'custom-label'">
+                                    <p style="display: inline-block;">SỐ CV: </p><p style="display: inline-block; font-weight: bold;"> &nbsp;{{incommingNumber}}</p>
+                                </dxi-item>
+                                <dxi-item itemType="group" colCount="6" [colSpan]="6">
+                                    <dxi-item [colSpan]="3">
+                                        <dx-select-box
+                                            [dataSource]="dataBook"
+                                            dataField="bookDV"
+                                            valueExpr="id"
+                                            displayExpr="name"
+                                            [searchEnabled]="true"
+                                            [searchExpr]="['name']"
+                                            [(value)]="book"
+                                            (onValueChanged)="changeBookDV($event)"
+                                            [disabled]="daVaoSo">
+                                        </dx-select-box>
+                                        <dxo-label text="Sổ đến ĐV"></dxo-label>
+                                        <dxi-validation-rule type="required" message="Chưa chọn sổ VB"></dxi-validation-rule>
+                                    </dxi-item>
+                                    <dxi-item [colSpan]="3" dataField="incommingDateDV" editorType="dxDateBox" [editorOptions]="{
+                                        showClearButton: true, displayFormat: 'dd/MM/yyyy', format: 'dd/MM/yyyy', max: currentDate, disabled: daVaoSo
+                                    }">
+                                        <dxo-label text="Ngày đến ĐV"></dxo-label>
+                                    </dxi-item>
+
+                                </dxi-item>
+                                <dxi-item itemType="group" colCount="16" [colSpan]="6">
+                                    <dxi-item [colSpan]="6" dataField="incommingNumberDV" [editorOptions]="{ disabled: daVaoSo?isChooseBook:incommingNumberDisabled }">
+                                        <dxo-label text="Số đến ĐV"></dxo-label>
+                                        <!-- <dxi-validation-rule type="required" message="Số đến không được bỏ trống"></dxi-validation-rule> -->
+                                        <!-- <dx-text-box #incommingNumberField dataField="formData.incommingNumberDV" [disabled]="incommingNumberDisabled"></dx-text-box> -->
+                                    </dxi-item>
+                                    <dxi-item [colSpan]="1">
+                                        <dx-button icon="info" alignment="right" [elementAttr]="{id:'btnShowMissingNum', class: 'btnShowMissingNum'}" hint="{{formData.missingNumber}}"></dx-button>
+                                    </dxi-item>  
+                                    <dxi-item [colSpan]="1" editorType="dxCheckBox" alignment="right" [cssClass]="'autoChkBxClass'">
+                                        <!-- <dxo-label text="Tự động"></dxo-label> -->
+                                        <dx-check-box [rtlEnabled]="true" [(value)]="chkAutomaticValue"  [disabled]="daVaoSo?isChooseBook:isChooseBook"
+                                        (onValueChanged)="chkAutomatic($event)"></dx-check-box>
+                                    </dxi-item>
+                                    <!-- <dxi-item type="empty" [colSpan]="8"></dxi-item> -->
+                                    <dxi-item [colSpan]="8" dataField="processingRecommendedDV" [editorOptions]="{
+                                        readOnly: true
+                                    }">
+                                        <dxo-label text="Ý kiến đề xuất của BCH Đội"></dxo-label>
+                                    </dxi-item>
+                                </dxi-item>
+                                <dxi-item dataField="approvingRecommended" [colSpan]="6" [editorOptions]="{ autoResizeEnabled: true }">
+                                    <dxo-label text="Ý kiến chỉ đạo BGĐ"></dxo-label>
+                                </dxi-item>
+                                <dxi-item [colSpan]="6" [cssClass]="'custom-label'">
+                                    <label>Ý KIẾN CHỈ ĐẠO TRƯỞNG PHÒNG/TRƯỞNG QUẬN</label>
+                                </dxi-item>
+                                <dxi-item [label]="{text: 'Đồng chí'}" [colSpan]="3">
+                                    <dx-select-box
+                                        id="tpSelect"
+                                        [items]="truongPhong"
+                                        valueExpr="userId"
+                                        displayExpr="displayName"
+                                        [searchEnabled]="true"
+                                        [searchExpr]="['fullName']"
+                                        [(value)]="truongPhongVal">
+                                    </dx-select-box>
+                                </dxi-item>
+                                <!-- <dxi-item caption="" [colSpan]="3"> -->
+                                    <dxi-item caption="" [colSpan]="3">
+                                        <!-- <dxi-item caption="" [colSpan]="2" editorType="dxDateBox" dataField="tpDate"
+                                                [editorOptions]="initTpDateOptions"> -->
+                                                <dx-date-box [(value)]="tpDate" type="date" displayFormat="dd/MM/yyyy" format="dd/MM/yyyy"></dx-date-box>
+                                                <dxo-label text="Ngày chỉ đạo"></dxo-label>
+                                        </dxi-item>
+                                <!-- <dxi-item caption="" [colSpan]="3" editorType="dxDateBox" dataField="tpDate"
+                                        [editorOptions]="initTpDateOptions">
+
+                                        <dxo-label text="Ngày chỉ đạo"></dxo-label>
+                                </dxi-item> -->
+                                <dxi-item dataField="" [colSpan]="6">
+                                    <dx-text-area
+                                        [autoResizeEnabled]="true"
+                                        [(value)]="tpComment">
+                                    </dx-text-area>
+                                    <dxo-label text="Nội dung chỉ đạo"></dxo-label>
+                                </dxi-item>
+                            </dxi-item>
+                            <dxi-item itemType="group" [colSpan]="6" colCount="6">
+                                <dxi-item [colSpan]="6" [cssClass]="'custom-label'">
+                                    <label>Ý KIẾN CHỈ ĐẠO PHÓ TRƯỞNG PHÒNG/PHÓ TRƯỞNG QUẬN</label>
+                                </dxi-item>
+                                <dxi-item [label]="{text: 'Đồng chí'}" [colSpan]="3" dataField="">
+                                    <dx-select-box dataField=""
+                                        id="ppSelect"
+                                        [items]="phoPhong"
+                                        valueExpr="userId"
+                                        displayExpr="displayName"
+                                        [searchEnabled]="true"
+                                        [searchExpr]="['fullName']"
+                                        [(value)]="phoPhongVal">
+                                    </dx-select-box>
+                                </dxi-item>
+                                <dxi-item caption="" [colSpan]="3">
+                                    <dx-date-box [(value)]="ppDate" type="date" displayFormat="dd/MM/yyyy" format="dd/MM/yyyy"></dx-date-box>
+                                    <dxo-label text="Ngày chỉ đạo"></dxo-label>
+                                </dxi-item>
+                                <dxi-item dataField="" [colSpan]="6">
+                                    <dx-text-area
+                                        [autoResizeEnabled]="true"
+                                        [(value)]="ppComment">
+                                    </dx-text-area>
+                                    <dxo-label text="Nội dung chỉ đạo"></dxo-label>
+                                </dxi-item>
+                                <dxi-item itemType="group" [colSpan]="6" colCount="12" [visible]="true">
+                                    <dxi-item itemType="group" [colSpan]="6" colCount="12">
+                                        <dxi-item [colSpan]="12">
+                                            <dxo-label text="Tập tin"></dxo-label>
+                                            <!-- <dxi-validation-rule type="required"></dxi-validation-rule> -->
+                                            <dx-file-uploader
+
+                                                [multiple]="true"
+                                                selectButtonText="Chọn file đính kèm"
+                                                accept="*"
+                                                icon="upload"
+                                                [(value)]="value"
+                                                 uploadMode="useForm"
+                                                (onValueChanged)="setFullNameFile($event)">
+                                            </dx-file-uploader>
+                                        </dxi-item>
+                                        <dxi-item [colSpan]="12">
+                                            <dxo-label text="Scan văn bản"></dxo-label>
+                                            <dx-button [disabled]="saving" text="Scan" type="success" icon="search"
+                                                (onClick)="scan()">
+                                            </dx-button>
+                                            <dx-radio-group
+                                                [dataSource]="scanTypes"
+                                                displayExpr="display"
+                                                valueExpr="value"
+                                                [(value)]="scanType"
+                                                (onValueChanged)="onScanTypeChanged($event)">
+                                            </dx-radio-group>
+                                        </dxi-item>
+                                        <!-- <dxi-item [colSpan]="6">
+                                            
+                                             <dx-check-box
+                                                [(value)]="isDuplex"
+                                                [width]="120"
+                                                text="Scan 2 mặt">
+                                            </dx-check-box> 
+                                        </dxi-item> -->
+                                    </dxi-item>
+                                    <dxi-item itemType="group" [colSpan]="6" colCount="12">
+                                        <dx-data-grid id="gridContainer" [dataSource]="selectedRows" [allowColumnReordering]="true"
+                                        [allowColumnResizing]="true" [columnAutoWidth]="true" [showBorders]="true">
+                                        <dxo-paging [pageSize]="10"></dxo-paging>
+                                        <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 20]" [showInfo]="true">
+                                        </dxo-pager>
+                                        <dxi-column dataField="tepDinhKem" caption="Tệp đính kèm"></dxi-column>
+                                        <dxi-column caption="Xem chi tiết" cellTemplate="detailTemplate" [width]="100">
+                                        </dxi-column>
+                                        <dxi-item caption="Xóa" cellTemplate="deleteTemplate">
+                                        </dxi-item>
+
+                                        <div *dxTemplate="let d of 'detailTemplate'">
+                                            <div class="row">
+                                                <div class="col-6" style="text-align: center;" (click)="showDetail(d)">
+                                                    <span><i class="fab fa-buffer"></i></span>
+                                                </div>
+                                                <div class="col-6" style="text-align: center;" (click)="deleteFile(d)">
+                                                    <span><i class="fas fa-trash-alt"></i> </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div *dxTemplate="let d of 'deleteTemplate'">
+                                            <div class="col-2" style="text-align: center;" (click)="deleteFile(d)">
+                                                <span ><i class="fas fa-trash-alt"></i> </span>
+                                            </div>
+                                        </div>
+                                    </dx-data-grid>
+                                    </dxi-item>
+                                </dxi-item>
+                                <dxi-item [colSpan]="6">
+                                    <dxo-label text="Đơn vị xử lý"></dxo-label>
+                                    <dx-data-grid #gridContainerOrg id="gridContainerOrg"
+                                        [remoteOperations]="false" [allowColumnReordering]="true"
+                                        [rowAlternationEnabled]="true" [allowColumnResizing]="true"
+                                        columnResizingMode="widget" [showBorders]="true" [height]="250"
+                                        [dataSource]="data_department">
+                                        <dxo-paging [enabled]="false"></dxo-paging>
+                                        <dxo-filter-row [visible]="true" placeholder="Nhập tên đội..." >
+                                        </dxo-filter-row>
+                                        <dxi-column [allowFiltering]="true" [allowEditing]="false"
+                                            caption="Danh sách đội" dataField="displayName" width="50%">
+                                        </dxi-column>
+                                        <dxi-column [allowFiltering]="true" [allowEditing]="false"
+                                            caption="Kí hiệu" dataField="shortentCode" width="10%">
+                                        </dxi-column>
+                                        <dxi-column dataField="mainHandling" caption="Chủ trì" width="20%" [allowEditing]="false"
+                                            cellTemplate="selectTemplate" alignment="center" [allowFiltering]="false">
+                                        </dxi-column>
+                                        <dxi-column dataField="coHandling" caption="Phối hợp xử lý" width="20%" [allowEditing]="false"
+                                            cellTemplate="selectTemplate" alignment="center" [allowFiltering]="false">
+                                        </dxi-column>
+                                        <div *dxTemplate="let cell of 'selectTemplate'">
+                                            <dx-check-box [value]="cell.value"
+                                                (onValueChanged)="onCheckBoxChanged($event, cell)"></dx-check-box>
+                                        </div>
+                                    </dx-data-grid>
+                                </dxi-item> 
+                            </dxi-item>
+
+                            <!-- <dxi-item [label]="{ text: 'Ý kiến giải quyết' }" dataField="processingRecommended"
+                                [colCount]="2" [colSpan]="4" editorType="dxTextArea"
+                                [editorOptions]="{ height: 100 }">
+                            </dxi-item> -->
+
+                        </dx-form>
+                        </div>
+                    </dx-scroll-view>
+
+                    <!-- <br>
+                    <div class="row">
+                        <div style="display: block; margin: auto;">
+                            <dx-button icon="cancel" text='{{l("Cancel")}}' type="normal" (onClick)="savepublisher()"></dx-button>
+                            <dx-button icon="save" text="Lưu" type="success" (onClick)="savepublisher()"></dx-button>
+                        </div>
+                    </div> -->
+                </div>
+                <div class="modal-footer">
+                    <div style="display: block; margin: auto;">
+                        <dx-button icon="save" text="Cập nhật chỉ đạo" type="success" (onClick)="clickSave()" [disabled]="disabled" style="margin-right: 0.5rem;"></dx-button>
+                        <dx-button icon="close" text="Trở về" type="normal" (onClick)="close()"></dx-button>
+                    </div>
+                    <!-- <button [disabled]="saving" type="button" class="btn btn-default" (click)="close()">{{l("Cancel")}}</button>
+                    <button type="submit" class="btn btn-primary blue" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button> -->
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    ::ng-deep .dx-row {
+        font-size: 15px;
+        white-space: normal;
+    }
+
+    /* ::ng-deep td[role="columnheader"]{
+            text-align: center !important;
+        }   */
+</style>

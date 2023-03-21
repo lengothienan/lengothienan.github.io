@@ -1,0 +1,24 @@
+<dx-data-grid #reportDetailDg 
+        [dataSource]="reportDetailDataSource" 
+        [columns]="reportDetailColumns" 
+        [showRowLines]="true"
+        [showBorders]="true" 
+        [wordWrapEnabled]="true"
+        [columnAutoWidth]="isColumnAutoWidth"
+        [rowAlternationEnabled]="!isAllowEdit"
+        (onContentReady)="onContentReady_ReportDetail($event)" 
+        (onRowPrepared)="onRowPrepared_ReportDetail($event)"
+        (onRowUpdating)="onRowUpdating_ReportDetail($event)"
+
+        (onEditingStart)="onEditingStart_ReportDetail($event)"
+        (onEditorPreparing)="onEditorPreparing_ReportDetail($event)" 
+        
+        (onRowValidating)="onRowValidating_ReportDetail($event)"
+        (onCellPrepared)="onCellPrepared_ReportDetail($event)"
+        keyExpr="SectionID"
+        >
+
+    <dxo-editing mode="batch"  [allowUpdating]="true"></dxo-editing>
+    <dxo-scrolling mode="infinite"></dxo-scrolling>
+    <dxo-export [enabled]="true" fileName="BaoCao"></dxo-export>
+</dx-data-grid>

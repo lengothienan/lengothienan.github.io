@@ -1,0 +1,100 @@
+<div class="row">
+    <div class="col-12">
+        <div class="card card-outline-info">
+            <div class="card-body">
+                <h4 class="card-title">{{page_title}}</h4>
+                <!-- <h6 class="card-subtitle">Just add <code>form-material</code> class to the form that's it.</h6> -->
+                    <dx-form id="form" [(formData)]="templateData" validationGroup="formValidateGroup" colCount="4">
+                            <dxi-item dataField="name" [colSpan]="2">
+                                <dxo-label text="Tên "></dxo-label>
+                                <dxi-validation-rule type="required" message="Tên báo cáo không được để trống"></dxi-validation-rule>
+                            </dxi-item>
+                            <dxi-item dataField="code"   [colSpan]="2">
+                                <dxo-label text="Mã"></dxo-label>
+                                <dxi-validation-rule type="required" message="mã báo cáo không được để trống"></dxi-validation-rule>
+                            </dxi-item>
+                            <dxi-item dataField="sqlType" editorType="dxSelectBox" [editorOptions]="SQLTypeOptions" [colSpan]="2">
+                                <dxo-label text="Loại SQL"></dxo-label>
+                            </dxi-item>
+                            <dxi-item dataField="dataSourceId" editorType="dxSelectBox" [editorOptions]="DataSourceOptions" [colSpan]="2">
+                                <dxo-label text="DataSource"></dxo-label>
+                            </dxi-item>
+                            <dxi-item dataField="sqlContent" editorType="dxTextArea" [editorOptions]="{ height: 200 }" [colSpan]="4">
+                                <dxo-label text="Nội dung SQL"></dxo-label>
+                                <dxi-validation-rule type="required" message="mã báo cáo không được để trống"></dxi-validation-rule>
+                            </dxi-item>
+                            <dxi-item dataField="sqlDefaultContent" [colSpan]="2">
+                                <dxo-label text="Store Default Filter"></dxo-label>                             
+                            </dxi-item>
+                            <dxi-item dataField="displayType" editorType="dxSelectBox" [editorOptions]="DisplayTypeOptions" [colSpan]="2">
+                                <dxo-label text="Kiểu hiển thị"></dxo-label>
+                            </dxi-item>
+                            <dxi-item dataField="layoutpFilter" [colSpan]="2">
+                                <dxo-label text="Cột tìm kiếm"></dxo-label>
+                                <dxi-validation-rule type="required" message="Cột tìm kiếm không được để trống"></dxi-validation-rule>
+                            </dxi-item>
+                            <dxi-item dataField="typeGetColumn" [colSpan]="2" editorType="dxSelectBox" [editorOptions]="GetColTypeOptions">
+                                <dxo-label text="Kiểu tạo cột"></dxo-label>
+                            </dxi-item>
+                            <dxi-item dataField="formID" [colSpan]="2" editorType="dxSelectBox" [editorOptions]="FormOptions">
+                                <dxo-label text="Biểu mẫu"></dxo-label>
+                            </dxi-item>
+                            <dxi-item dataField="groupLevel" editorType="dxSelectBox" [editorOptions]="GroupLevelOptions" [colSpan]="2">
+                                <dxo-label text="Group Level"></dxo-label>
+                            </dxi-item>
+                            <dxi-item dataField="excel" [colSpan]="2">
+                                <dxo-label text="Excel"></dxo-label>
+                                <label class="btn btn-primary">
+                                    <input type="file" style="display: none;" multiple="false" (change)="EXCELfileChange($event)">
+                                    <span>Chọn mẫu</span>
+                                </label>
+                                &nbsp;
+                                <div style="display: flex;justify-content:flex-start">
+                                    <span>{{ templateData.excel }}</span>
+                                    <span class="btn-download" *ngIf="templateData.excel != null && templateData.excel != ''">
+                                        <a [href]="fileServerUrl + templateData.excel" target="_blank">
+                                            <i class="fa fa-download"></i>
+                                        </a>
+                                    </span>
+                                    <span class="btn-remove" *ngIf="templateData.excel != null && templateData.excel != ''">
+                                        <span (click)="removeTemplateExcel()">
+                                            <i class="fa fa-remove"></i>
+                                        </span>
+                                    </span>
+                                </div>
+                            </dxi-item>
+                            <dxi-item dataField="isActive" editorType="dxCheckBox" [colSpan]="2">
+                                <dxo-label text="Hoạt động"></dxo-label>
+                            </dxi-item>
+                            <dxi-item dataField="word" [colSpan]="2">
+                                <dxo-label text="Word"></dxo-label>
+                                <label class="btn btn-info">
+                                    <input type="file" style="display: none;" multiple="false" (change)="WORDfileChange($event)">
+                                    <span>Chọn mẫu</span>
+                                </label>
+                                &nbsp;
+                                <div style="display: flex;justify-content:flex-start">
+                                    <span>{{ templateData.word }}</span>
+                                    <span class="btn-download" *ngIf="templateData.word != null && templateData.word != ''">
+                                        <a [href]="fileServerUrl + templateData.word" target="_blank">
+                                            <i class="fa fa-download"></i>
+                                        </a>
+                                    </span>
+                                    <span class="btn-remove" *ngIf="templateData.word != null && templateData.word != ''">
+                                        <span (click)="removeTemplateWord()">
+                                            <i class="fa fa-remove"></i>
+                                        </span>
+                                    </span>
+                                </div>
+                            </dxi-item>
+                        </dx-form>
+
+                        <div class="row justify-content-center" style="margin-top: 20px;">
+                            <dx-button text="Lưu" icon="fa fa-save" type="success" [useSubmitBehavior]="true" validationGroup="formValidateGroup" (onClick)="Save()" ></dx-button>
+                            &nbsp;
+                            <dx-button text="Trở về" icon="fa fa-arrow-left" (onClick)="Back()"></dx-button>
+                        </div>
+            </div>
+        </div>
+    </div>
+</div>

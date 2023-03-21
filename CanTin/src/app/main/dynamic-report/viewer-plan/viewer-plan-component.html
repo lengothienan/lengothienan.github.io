@@ -1,0 +1,202 @@
+<div class="col-lg-12">
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-outline-info">
+                <div class="card-body">
+                    <div style="background-color: #c9ddf7 !important;margin: 10px">
+                        <h3 class="kt-container"
+                            style="padding-top: 10px;padding-bottom: 10px;font-size: 1.2rem;font-weight: 500;color: #434349;text-transform: uppercase;">
+                            <i class="kt-menu__link-icon flaticon-graphic-1"> </i>
+                            {{reportName}}
+                        </h3>
+                    </div>
+                    <div class="row" style="margin: 10px">
+                        <div class="col-md-12">
+                            <form style="margin:10px" (submit)="viewreport()">
+                                <dx-form [(formData)]="formData" #form [items]="listItem"
+                                    validationGroup="formValidateGroup" [colCount]="formCol"
+                                    style="margin-bottom: 20px">
+
+                                </dx-form>
+                                <div class="row justify-content-center" *ngIf="show_search"
+                                    style="margin-top: 20px; text-align: center;margin-bottom: 50px;">
+                                    <dx-button text="Xem" icon="fa fa-eye" type="success" [useSubmitBehavior]="true"
+                                        validationGroup="formValidateGroup"></dx-button>
+                                    <dx-button text="Hủy" icon="fa fa-arrow-left" (onClick)="back()"></dx-button>
+                                </div>
+                            </form>
+                            <div id="dx-form" style="display: none"></div>
+                        </div>
+
+                        <!-- <div class="col-md-10" style="z-index: 1;">
+                        <div class="row" style="text-align: center;margin-bottom: -35px; margin-left: -5px;">
+                            <dx-button
+                                stylingMode="contained"
+                                text="Xét nghiệm"
+                                type="default"
+                                [width]="150"
+                                [visible]="XN_KCL"
+                                (onClick)="fnXN_KCL($event)">
+                            </dx-button>
+                        </div>
+                    </div> -->
+
+                        <div class="col-md-12" [style.visibility]="tableVisibility" [style.display]="tableDisplay"
+                            id="table">
+                            <dx-data-grid #data [columns]='column' [dataSource]="dataSourceTest3" [showRowLines]="true"
+                                [showBorders]="true" [allowColumnResizing]="true" [columnAutoWidth]="true"
+                                [allowColumnReordering]="true" [summary]='sumary' [wordWrapEnabled]="true"
+                                (onExporting)="onExporting($event)" (onToolbarPreparing)="onToolbarPreparing($event)">
+                                <!-- <dxo-export [enabled]="true" [fileName]="reportName" [allowExportSelectedData]="false">
+                                </dxo-export> -->
+                                <dxo-search-panel [visible]="true" placeholder="Nhập nội dung..." width="250">
+                                </dxo-search-panel>
+                                <dxo-group-panel [visible]="true"></dxo-group-panel>
+                                <dxo-grouping #expand [autoExpandAll]="true"></dxo-grouping>
+                                <dxo-paging [pageSize]="pageSize" [pageIndex]="pageIndex"></dxo-paging>
+                                <dxo-pager visible="true" infoText="Trang {0} trên {1} ({2} dòng)"
+                                    [allowedPageSizes]="[20, 50, 100]" [showPageSizeSelector]="true" [showInfo]="true">
+                                </dxo-pager>
+                                <!-- <dxo-selection
+                                mode="multiple">
+                            </dxo-selection> -->
+                                <div *dxTemplate="let d of 'customTemplate'">
+                                    <div class="btn-group dropdown btn-smaller-padding" dropdown container="body">
+                                        <button class="dropdown-toggle btn btn-sm btn-primary" dropdownToggle>
+                                            <i class="fa fa-cog"></i>
+                                        </button>
+                                        <ul class="dropdown-menu" *dropdownMenu>
+                                            <li *ngIf="action_button.edit">
+                                                <a href="javascript:;" (click)="edit(d)"><i class="fas fa-edit"
+                                                        style="color: rgb(7, 88, 44);"></i>Chỉnh sửa</a>
+                                            </li>
+                                            <li *ngIf="action_button.edit_team">
+                                                <a href="javascript:;" (click)="edit_team(d)"><i class="fas fa-edit"
+                                                        style="color: rgb(7, 88, 44);"></i>Chỉnh sửa</a>
+                                            </li>
+                                            <li *ngIf="action_button.results">
+                                                <a href="javascript:;" (click)="results(d)"><i class="fa fa-clipboard"
+                                                        style="color: rgb(7, 88, 44);"></i>Kết quả thực hiện</a>
+                                            </li>
+                                            <li *ngIf="action_button.team_results">
+                                                <a href="javascript:;" (click)="team_results(d)"><i
+                                                        class="fa fa-clipboard" style="color: rgb(7, 88, 44);"></i>Kết
+                                                    quả thực hiện</a>
+                                            </li>
+                                            <li *ngIf="action_button.assignment_duties">
+                                                <a href="javascript:;" (click)="assignment_duties(d)"><i
+                                                        class="fa fa-id-card" style="color: rgb(7, 88, 44);"></i>Danh
+                                                    sách phân công nhiệm vụ</a>
+                                            </li>
+                                            <li *ngIf="action_button.delete">
+                                                <a href="javascript:;" (click)="delete(d)"><i class="fas fa-trash-alt"
+                                                        style="color: rgb(7, 88, 44);"></i>Xóa</a>
+                                            </li>
+                                            <li *ngIf="action_button.pause">
+                                                <a href="javascript:;" (click)="pause(d)"><i class="fa fa-pause"
+                                                        style="color: rgb(7, 88, 44);"></i>Tạm ngưng</a>
+                                            </li>
+                                            <li *ngIf="action_button.cancel">
+                                                <a href="javascript:;" (click)="cancel(d)"><i class="fa fa-ban"
+                                                        style="color: rgb(7, 88, 44);"></i>Hủy bỏ</a>
+                                            </li>
+                                            <li *ngIf="action_button.reopen">
+                                                <a href="javascript:;" (click)="reopen(d)"><i class="fa fa-repeat" aria-hidden="true"
+                                                        style="color: rgb(7, 88, 44);"></i>Mở lại</a>
+                                            </li>
+                                            <li *ngIf="action_button.view">
+                                                <a href="javascript:;" (click)="view(d)"> <i class="fa fa-eye"
+                                                        style="color: rgb(7, 88, 44);"></i>Xem</a>
+                                            </li>
+                                            <li *ngIf="action_button.view_team">
+                                                <a href="javascript:;" (click)="view_team(d)"> <i class="fa fa-eye"
+                                                        style="color: rgb(7, 88, 44);"></i>Xem kế hoạch</a>
+                                            </li>
+                                            <li *ngIf="action_button.trips_report">
+                                                <a href="javascript:;" (click)="trips_report(d)"><i
+                                                        class="fas fa-file-contract"
+                                                        style="color: rgb(7, 88, 44);"></i>Báo cáo kết quả</a>
+                                            </li>
+                                            <li *ngIf="action_button.see_reviews">
+                                                <a href="javascript:;" (click)="see_reviews(d)"><i
+                                                        class="fas fa-file-contract"
+                                                        style="color: rgb(7, 88, 44);"></i>Xem đánh giá</a>
+                                            </li>
+                                            <li *ngIf="action_button.processing_process">
+                                                <a href="javascript:;" (click)="viewProcess(d)"><i class="fa fa-cog"
+                                                        style="color: rgb(7, 88, 44);"></i>Quy trình xử lý</a>
+                                            </li>
+                                            <li *ngIf="action_button.update_results">
+                                                <a href="javascript:;" (click)="update_results(d)"><i
+                                                        class="far fa-save" style="color: rgb(7, 88, 44);"></i>Cập nhật
+                                                    đánh giá KQ</a>
+                                            </li>
+                                            <li *ngIf="action_button.update_results_team">
+                                                <a href="javascript:;" (click)="update_results_team(d)"><i
+                                                        class="far fa-save" style="color: rgb(7, 88, 44);"></i>Cập nhật
+                                                    đánh giá KQ</a>
+                                            </li>
+                                            <li *ngIf="action_button.gantt_chart">
+                                                <a href="javascript:;" (click)="gantt_chart(d)"><i
+                                                        class="flaticon2-infographic"
+                                                        style="color: rgb(7, 88, 44);"></i>Sơ đồ Gantt</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div *dxTemplate="let data of 'totalGroupCount'">
+                                    <div style="font-style: italic;">
+                                        <span>Có <b>{{totalCount}}</b> kết quả tìm kiếm</span>
+                                    </div>
+                                </div>
+                            </dx-data-grid>
+                        </div>
+
+                        <div id="dx-grid" style="display: none"></div>
+
+                        <div class="col-md-12" [style.visibility]="barChartVisibility" [style.display]="barChartDisplay"
+                            id="barChart">
+                            <div>
+                                <dx-chart [dataSource]="barChartDataSource">
+                                    <dxo-series-template [nameField]="seriesField"></dxo-series-template>
+                                    <dxo-common-series-settings [argumentField]="ArgumentField" type="bar"
+                                        [valueField]="ValueField">
+                                        <dxo-label [visible]="true" [format]="{ formatter: formatService.formatNumber }"
+                                            backgroundColor="transparent">
+                                            <dxo-font [size]="11" [weight]="900" color="green"></dxo-font>
+                                        </dxo-label>
+                                    </dxo-common-series-settings>
+                                    <dxo-legend verticalAlignment="right" horizontalAlignment="top">
+                                    </dxo-legend>
+                                    <dxo-export [enabled]="true"></dxo-export>
+                                </dx-chart>
+                            </div>
+
+                        </div>
+                        <div class="col-md-12" [style.visibility]="pieChartVisibility" [style.display]="pieChartDisplay"
+                            id="pieChart">
+                            <dx-pie-chart id="pie" [size]="size" palette="bright" [dataSource]="pieChartDataSource">
+                                <dxi-series [argumentField]="ArgumentField" [valueField]="ValueField">
+                                    <dxo-label [visible]="true">
+                                        <dxo-connector [visible]="true" [width]="1"></dxo-connector>
+                                    </dxo-label>
+                                </dxi-series>
+                                <dxo-size [width]="500"></dxo-size>
+                                <dxo-export [enabled]="true"></dxo-export>
+                                <dxo-legend verticalAlignment="bottom" horizontalAlignment="center"
+                                    itemTextPosition="right">
+                                </dxo-legend>
+                            </dx-pie-chart>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <baoCaoKetQua #baoCaoKetQua (saveSuccess)="viewreport()"></baoCaoKetQua>
+        <ketQuaCongTacPhong #ketQuaCongTacPhong (saveSuccess)="viewreport()"></ketQuaCongTacPhong>
+        <chiTietPhanCongNV #chiTietPhanCongNV></chiTietPhanCongNV>
+        <ketQuaCongTacDoi #ketQuaCongTacDoi (saveSuccess)="viewreport()"></ketQuaCongTacDoi>
+    </div>
+</div>

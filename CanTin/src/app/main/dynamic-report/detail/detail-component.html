@@ -1,0 +1,78 @@
+
+<div class="row">
+    <div class="col-12" style="text-align: right">
+       <!--<dx-button text="Chọn báo cáo" icon="fa fa-cog" type="success" (onClick)="popupOpen()"></dx-button>-->
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        <div class="card card-outline-info">
+            <div class="card-body">
+                <h3 style="margin: 20px">{{reportName}}</h3>
+                <div class="row" style="margin: 20px">
+                    <div class="col-md-12">
+                        <dx-button icon="fa fa-arrow-left" (onClick)="back()"></dx-button>
+                        <!-- <form style="margin:20px" (submit)="viewreport()">
+                            <dx-form [(formData)]="formData" #form [items]="listItem" validationGroup="formValidateGroup"
+                                colCount="4" style="margin-bottom: 20px">
+
+                            </dx-form>
+                            <div class="row justify-content-center" style="margin-top: 20px; text-align: center;margin-bottom: 50px;">
+                                <dx-button text="Xem" icon="fa fa-eye" type="success" [useSubmitBehavior]="true"
+                                    validationGroup="formValidateGroup"></dx-button>
+                                <dx-button text="Hủy" icon="fa fa-arrow-left" (onClick)="back()"></dx-button>
+                            </div>
+                        </form> -->
+                    </div>
+
+                    <div class="col-md-12" id="table" [style.visibility]="tableVisibility" [style.display]="tableDisplay" >
+                        <dx-data-grid #data [columns]='column' [dataSource]="dataSourceTest3" [showRowLines]="true"
+                            [showBorders]="true" [allowColumnResizing]="true" [columnAutoWidth]="true"
+                            [allowColumnReordering]="true" [summary]='sumary' [wordWrapEnabled]="true" (onExporting)="onExporting($event)" [export]="{enabled: true}">
+                            <!-- <dxo-export [enabled]="true" [fileName]="reportName" [allowExportSelectedData]="false"></dxo-export> -->
+                            <dxo-group-panel [visible]="true"></dxo-group-panel>
+                            <dxo-grouping #expand [autoExpandAll]="true"></dxo-grouping>
+                            <dxo-paging [pageSize]="pageSize" [pageIndex]="pageIndex"></dxo-paging>
+                            <dxo-pager visible="true" infoText="Trang {0} trên {1} ({2} dòng)" [allowedPageSizes]="[20, 50, 100]"
+                                [showPageSizeSelector]="true" [showInfo]="true"></dxo-pager>
+                        </dx-data-grid>
+                    </div>
+
+                    <div id="dx-grid" style="display: none"></div>
+
+
+                    <div class="col-md-12" id="barChart" style="text-align: center" [style.visibility]="barChartVisibility" [style.display]="barChartDisplay">
+                        <div>
+                            <dx-chart [dataSource]="barChartDataSource">
+                                <dxo-series-template [nameField]="seriesField"></dxo-series-template>
+                                <dxo-common-series-settings [argumentField]="ArgumentField" type="bar" [valueField]="ValueField">
+                                    <dxo-label [visible]="true" [format]="{ formatter: formatService.formatNumber }"
+                                        backgroundColor="transparent">
+                                        <dxo-font [size]="11" [weight]="900" color="green"></dxo-font>
+                                    </dxo-label>
+                                </dxo-common-series-settings>
+                                <dxo-legend verticalAlignment="right" horizontalAlignment="top">
+                                </dxo-legend>
+                                <dxo-export [enabled]="true"></dxo-export>
+                            </dx-chart>
+                        </div>
+
+                    </div>
+                    <div class="col-md-12" id="pieChart" style="text-align: center" [style.visibility]="pieChartVisibility" [style.display]="pieChartDisplay">
+                        <dx-pie-chart id="pie" [size]="size" palette="bright" [dataSource]="pieChartDataSource">
+                            <dxi-series [argumentField]="ArgumentField" [valueField]="ValueField">
+                                <dxo-label [visible]="true">
+                                    <dxo-connector [visible]="true" [width]="1"></dxo-connector>
+                                </dxo-label>
+                            </dxi-series>
+                            <dxo-size [width]="500"></dxo-size>
+                            <dxo-export [enabled]="true"></dxo-export>
+                            <dxo-legend verticalAlignment="bottom" horizontalAlignment="center" itemTextPosition= "right">
+                            </dxo-legend>
+                        </dx-pie-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

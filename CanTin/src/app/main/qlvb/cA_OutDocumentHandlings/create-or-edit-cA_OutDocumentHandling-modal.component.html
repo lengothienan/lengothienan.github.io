@@ -1,0 +1,94 @@
+<div bsModal #createOrEditModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createOrEditModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #cA_OutDocumentHandlingForm="ngForm" novalidate (ngSubmit)="save()" autocomplete="off">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span *ngIf="cA_OutDocumentHandling.id">{{l("EditCA_OutDocumentHandling")}}</span>
+                        <span *ngIf="!cA_OutDocumentHandling.id">{{l("CreateNewCA_OutDocumentHandling")}}</span>
+                    </h4>
+                    <button type="button" class="close" (click)="close()" aria-label="Close" [disabled]="saving">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                 
+
+
+								<div class="form-group">
+									<label for="CA_OutDocumentHandling_Handler">{{l("Handler")}}</label>
+									<input type="number" id="CA_OutDocumentHandling_Handler" class="form-control" [(ngModel)]="cA_OutDocumentHandling.handler" name="Handler"  />
+								</div>
+					
+								<br/><div class="m-checkbox-list">
+									<label for="CA_OutDocumentHandling_IsActive" class="kt-checkbox">
+										<input id="CA_OutDocumentHandling_IsActive" type="checkbox" name="IsActive" [(ngModel)]="cA_OutDocumentHandling.isActive"> 
+										{{l("IsActive")}}
+										<span></span>
+									</label>
+								</div>
+					
+								<div class="form-group">
+									<label for="CA_OutDocumentHandling_Order">{{l("Order")}}</label>
+									<input type="number" id="CA_OutDocumentHandling_Order" class="form-control" [(ngModel)]="cA_OutDocumentHandling.order" name="Order"  />
+								</div>
+					
+								<div class="form-group">
+									<label for="CA_OutDocumentHandling_DateHandle">{{l("DateHandle")}}</label>
+									 <input class="form-control m-input" type="datetime" bsDatepicker [(ngModel)]="dateHandle" id="CA_OutDocumentHandling_DateHandle" name="CA_OutDocumentHandling_DateHandle">
+								</div>
+					
+								<br/><div class="m-checkbox-list">
+									<label for="CA_OutDocumentHandling_IsCurr" class="kt-checkbox">
+										<input id="CA_OutDocumentHandling_IsCurr" type="checkbox" name="IsCurr" [(ngModel)]="cA_OutDocumentHandling.isCurr"> 
+										{{l("IsCurr")}}
+										<span></span>
+									</label>
+								</div>
+					
+								<div class="form-group">
+									<label for="CA_OutDocumentHandling_ProcessingDate">{{l("ProcessingDate")}}</label>
+									 <input class="form-control m-input" type="datetime" bsDatepicker [(ngModel)]="processingDate" id="CA_OutDocumentHandling_ProcessingDate" name="CA_OutDocumentHandling_ProcessingDate">
+								</div>
+					
+								<div class="form-group">
+									<label for="CA_OutDocumentHandling_ProcessingRecommended">{{l("ProcessingRecommended")}}</label>
+									<input type="text" id="CA_OutDocumentHandling_ProcessingRecommended" class="form-control" [(ngModel)]="cA_OutDocumentHandling.processingRecommended" name="ProcessingRecommended"    />
+								</div>
+					
+								<div class="form-group">
+									<label for="CA_OutDocumentHandling_Content">{{l("Content")}}</label>
+									<input type="text" id="CA_OutDocumentHandling_Content" class="form-control" [(ngModel)]="cA_OutDocumentHandling.content" name="Content"    />
+								</div>
+					
+								<div class="form-group">
+									<label for="CA_OutDocumentHandling_HandlingType">{{l("HandlingType")}}</label>
+									<input type="number" id="CA_OutDocumentHandling_HandlingType" class="form-control" [(ngModel)]="cA_OutDocumentHandling.handlingType" name="HandlingType"  />
+								</div>
+					
+								<div class="form-group">
+									<label for="CA_OutDocumentHandling_DocumentId">{{l("DocumentId")}}</label>
+									<input type="number" id="CA_OutDocumentHandling_DocumentId" class="form-control" [(ngModel)]="cA_OutDocumentHandling.documentId" name="DocumentId"  />
+								</div>
+					
+								<div class="form-group">
+									<label for="CA_OutDocumentHandling_ParentHandlingId">{{l("ParentHandlingId")}}</label>
+									<input type="number" id="CA_OutDocumentHandling_ParentHandlingId" class="form-control" [(ngModel)]="cA_OutDocumentHandling.parentHandlingId" name="ParentHandlingId"  />
+								</div>
+					
+								<div class="form-group">
+									<label for="CA_OutDocumentHandling_ImpersonateUserId">{{l("ImpersonateUserId")}}</label>
+									<input type="number" id="CA_OutDocumentHandling_ImpersonateUserId" class="form-control" [(ngModel)]="cA_OutDocumentHandling.impersonateUserId" name="ImpersonateUserId"  />
+								</div>
+					
+
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-default" (click)="close()">{{l("Cancel")}}</button>
+                    <button type="submit" class="btn btn-primary blue" [disabled]="!cA_OutDocumentHandlingForm.form.valid" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>

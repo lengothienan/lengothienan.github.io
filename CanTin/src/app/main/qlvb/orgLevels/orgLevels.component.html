@@ -1,0 +1,127 @@
+<div [@routerTransition]>
+  <div class="kt-content  kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor">
+    <div class="kt-subheader kt-grid__item">
+      <div [class]="containerClass">
+        <div class="kt-subheader__main">
+            <h3 class="kt-subheader__title">
+                <span>Danh mục cấp gửi</span>
+            </h3>
+            <!-- <span class="kt-subheader__separator kt-subheader__separator--v"></span>
+            <span class="kt-subheader__desc">
+                {{l("OrgLevelsHeaderInfo")}}
+            </span> -->
+        </div>
+        <div class="kt-subheader__toolbar">
+            <div class="kt-subheader__wrapper">
+				<!-- <button (click)="exportToExcel()" class="btn btn-outline-success"><i class="fa fa-file-excel"></i> {{l("ExportToExcel")}}</button> -->
+                <button *ngIf="isGranted('Pages.OrgLevels.Create')" (click)="createOrgLevel()" 
+			class="btn btn-primary blue"><i class="fa fa-plus"></i>Tạo mới cấp gửi</button>
+            </div>
+        </div>
+      </div>
+    </div>
+    <div [class]="containerClass + ' kt-grid__item kt-grid__item--fluid'">
+        <div class="kt-portlet kt-portlet--mobile">
+            <div class="kt-portlet__body">
+                <!-- <form class="kt-form" autocomplete="off">
+                    <div>
+                        <div class="row align-items-center">
+                            <div class="col-xl-12">
+                                <div class="form-group m-form__group align-items-center">
+                                    <div class="input-group">
+                                        <input [(ngModel)]="filterText" name="filterText" autoFocus class="form-control m-input" [placeholder]="l('SearchWithThreeDot')" type="text">
+                                        <span class="input-group-btn">
+                                            <button (click)="getOrgLevels()" class="btn btn-primary" type="submit"><i class="flaticon-search-1"></i></button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+						 <div class="row" [hidden]="!advancedFiltersAreShown">
+						 	<div class="col-md-12">
+						         <div class="kt-separator kt-separator--border-dashed"></div>
+						     </div>
+
+
+							<div class="col-md-3">
+								<div class="form-group">
+									<label for="CodeFilter">{{l("Code")}}</label>
+									<input type="text" class="form-control" id="CodeFilter" name="codeFilter" [(ngModel)]="codeFilter">
+								</div>
+                            </div>
+							<div class="col-md-3">
+								<div class="form-group">
+									<label for="NameFilter">{{l("Name")}}</label>
+									<input type="text" class="form-control" id="NameFilter" name="nameFilter" [(ngModel)]="nameFilter">
+								</div>
+                            </div>	
+							<div class="col-md-3">
+								<label for="IsActiveFilterSelect">{{l("IsActive")}}</label>
+								<select class="form-control" name="IsActiveFilter" id="IsActiveFilterSelect" [(ngModel)]="isActiveFilter">
+								<option value="-1">{{l("All")}}</option>
+								<option value="0">{{l("False")}}</option>
+								<option value="1">{{l("True")}}</option>
+								</select>
+                            </div>
+
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-sm-12">
+                                <span class="clickable-item text-muted" *ngIf="!advancedFiltersAreShown" (click)="advancedFiltersAreShown=!advancedFiltersAreShown"><i class="fa fa-angle-down"></i> {{l("ShowAdvancedFilters")}}</span>
+                                <span class="clickable-item text-muted" *ngIf="advancedFiltersAreShown" (click)="advancedFiltersAreShown=!advancedFiltersAreShown"><i class="fa fa-angle-up"></i> {{l("HideAdvancedFilters")}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </form> -->
+
+                <div class="row align-items-center">
+                    <!--<Primeng-Datatable-Start>-->
+                    <div class="primeng-datatable-container col-12"
+                        [busyIf]="primengTableHelper.isLoading">
+                        <dx-data-grid
+                            #gridContainer id="gridContainer"
+                            [dataSource]="tableResult"
+                            keyExpr="id"
+                            [showRowLines]="true"
+                            [allowColumnReordering]="true"
+                            [showBorders]="true"
+                            >
+                            <dxo-export [enabled]="true" fileName="DynamicDatasource" [allowExportSelectedData]="true"></dxo-export>
+                            <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[10, 25, 50, 100]" [showInfo]="true"></dxo-pager>
+                            <dxo-search-panel [visible]="true" placeholder="Nhập nội dung..." width="350"></dxo-search-panel>
+                                <dxo-paging [enabled]="true" [pageSize]="10"></dxo-paging>
+                                <dxi-column caption='#' cellTemplate='dropdown' [width]="8+'%'" alignment="center"></dxi-column>
+                                <dxi-column dataField='id' caption='Id' [visible]="false"></dxi-column>
+                                <dxi-column dataField='code' caption='Mã' [width]="35+'%'"></dxi-column>
+                                <dxi-column dataField='name' caption='Tên' [width]="35+'%'"></dxi-column>
+                                <dxi-column dataField='isActive' caption='Hoạt động' [width]="12+'%'"></dxi-column>
+                                <dxi-column dataField='publishOrg.order' caption='Thứ tự' [width]="10+'%'"></dxi-column>
+                                <div *dxTemplate="let info of 'dropdown'">
+                                    <div class="btn-group dropdown" dropdown container="body">
+                                        <button class="dropdown-toggle btn btn-sm btn-primary" dropdownToggle>
+                                            <i class="fa fa-cog"></i><span class="caret"></span>
+                                        </button>
+										<ul class="dropdown-menu"  *dropdownMenu>
+                                            <li>
+												<a href="javascript:;" *ngIf="permission.isGranted('Pages.OrgLevels.Edit')" (click)="createOrEditOrgLevelModal.show(info.data.id)">{{l('Edit')}}</a>
+											</li>
+											<li>
+											    <a href="javascript:;" *ngIf="permission.isGranted('Pages.OrgLevels.Delete')"
+													(click)="deleteOrgLevel(info.data)">{{l('Delete')}}</a>
+											</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                        </dx-data-grid>
+                    </div>
+                    <!--<Primeng-Datatable-End>-->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <createOrEditOrgLevelModal #createOrEditOrgLevelModal (modalSave)="loadData()"></createOrEditOrgLevelModal>
+    
+    
+  </div>
+</div>

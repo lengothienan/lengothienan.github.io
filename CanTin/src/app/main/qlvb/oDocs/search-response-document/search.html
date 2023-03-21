@@ -1,0 +1,228 @@
+<div bsModal #createOrEditModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createOrEditModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form #comm_bookForm="ngForm" novalidate (ngSubmit)="select()" autocomplete="off">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span>{{l("Tra cứu VB")}}</span>
+                    </h4>
+                    <button type="button" class="close" (click)="close()" aria-label="Close" [disabled]="saving">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row align-items-center">
+                        <div class="col primeng-datatable-container">
+                            <dx-form #documentForm [formData]="documentSearchData" [showValidationSummary]="true"
+                                [showColonAfterLabel]="false" validationGroup="formValidateGroup" colCount="6">
+                                <dxi-item [colSpan]="2" dataField="orgLevel" editorType="dxSelectBox" [editorOptions]="orgLevelOptions">
+                                    <dxo-label text="Cấp gửi"></dxo-label>
+                                </dxi-item>
+                                <dxi-item [colSpan]="4" dataField="publisher" editorType="dxSelectBox" [editorOptions]="{
+                                    dataSource: data_publisher,
+                                    valueExpr: 'publishOrg.id',
+                                    displayExpr: 'publishOrg.name',
+                                    searchEnabled: true,
+                                    searchExpr: 'publishOrg.name',
+                                    showClearButton: true
+                                }">
+                                    <dxo-label text="Nơi gửi"></dxo-label>
+                                </dxi-item>
+
+                                <dxi-item dataField="number" [colSpan]="2">
+                                    <dxo-label text="Số kí hiệu"></dxo-label>
+                                </dxi-item>
+                                <dxi-item [colSpan]="2" dataField="bookId" editorType="dxSelectBox" [editorOptions]="{
+                                    dataSource: bookList,
+                                    valueExpr: 'id',
+                                    displayExpr: 'name',
+                                    searchEnabled: true,
+                                    searchExpr: 'name'
+                                }">
+                                    <dxo-label text="Sổ VB"></dxo-label>
+                                </dxi-item>
+
+                                <dxi-item itemType="empty" [colSpan]="2"></dxi-item>
+
+                                <dxi-item [colSpan]="2" dataField="incommingNumber">
+                                    <dxo-label text="Số đến"></dxo-label>
+                                </dxi-item>
+                                <dxi-item [colSpan]="2" dataField="fromDate" editorType="dxDateBox" [editorOptions]="fromDateOptions">
+                                    <dxo-label text="Từ ngày"></dxo-label>
+                                    <!-- <dx-date-box #fromDate [displayFormat]="'dd/MM/yyyy'" [showClearButton]="true" [(value)]="fromDateVal"></dx-date-box> -->
+                                </dxi-item>
+                                <dxi-item [colSpan]="2" dataField="toDate" editorType="dxDateBox" [editorOptions]="toDateOptions">
+                                <!-- <dx-date-box #toDate [displayFormat]="'dd/MM/yyyy'" [showClearButton]="true" [(value)]="toDateVal"></dx-date-box> -->
+                                    <dxo-label text="Đến ngày"></dxo-label>
+                                </dxi-item>
+                                <dxi-item [colSpan]="2" dataField="documentTypeId" editorType="dxSelectBox" [editorOptions]="documentTypeOptions">
+                                    <dxo-label text="Loại VB"></dxo-label>
+                                    <!-- onValueChanged: docTypeSelectionChange -->
+                                    <!-- <dxi-validation-rule type="required"></dxi-validation-rule> -->
+                                </dxi-item>
+                                <dxi-item [colSpan]="2" dataField="secretLevel" editorType="dxSelectBox" [editorOptions]="{
+                                    dataSource: data_secretLevel,
+                                    valueExpr: 'key',
+                                    displayExpr: 'value',
+                                    searchEnabled: true,
+                                    searchExpr: 'value'
+                                    }">
+                                    <!-- <dxi-validation-rule type="required"></dxi-validation-rule> -->
+                                    <dxo-label text="Độ mật"></dxo-label>
+                                </dxi-item>
+                                <dxi-item [colSpan]="2" dataField="priority"
+                                    editorType="dxSelectBox" [editorOptions]="{
+                                    dataSource: data_priority,
+                                    valueExpr: 'key',
+                                    displayExpr: 'value',
+                                    searchEnabled: true,
+                                    searchExpr: 'value'
+                                }">
+                                    <dxo-label text="Độ khẩn"></dxo-label>
+                                </dxi-item>
+
+                                <!-- <dxi-item [colSpan]="6" dataField="summary" editorType="dxTextArea" [editorOptions]="{
+                                }">
+                                    <dxo-label text="Trích yếu"></dxo-label>
+                                </dxi-item> -->
+                                <dxi-item [colSpan]="6" dataField="summary" editorType="dxTagBox" [editorOptions]="summaryOptions">
+                                    <dxo-label text="Trích yếu"></dxo-label>
+                                </dxi-item>
+                            </dx-form>
+
+                        </div>
+                    </div>
+                    <div class="row" style="display: block; padding-top: 20px; margin-left: auto; margin-right: auto; width: 250px;">
+                        <dx-button text="Tìm kiếm" type="success" icon="fa fa-search"
+                        (onClick)="search()"> </dx-button>
+                        &nbsp;
+                        <dx-button text="Chọn" icon="fa fa-check" type="success" (onClick)="select()"></dx-button>
+                    </div>
+                    <br>
+                    <!-- <div class="row align-items-center">
+                        <dx-button text="Chọn" icon="fa fa-check" type="success" (onClick)="select()"></dx-button>
+                    </div> -->
+                    <div class="row">
+
+                        <div class="col primeng-datatable-container">
+                            <dx-data-grid #gridContainer id="gridContainer" [showColumnLines]="true"
+                                    [remoteOperations]="false" [allowColumnReordering]="true" [rowAlternationEnabled]="true"
+                                    [showBorders]="true" [allowColumnResizing]="true" [columnAutoWidth]="true"
+                                    [(dataSource)]="initialData" [width]="'100%'" [wordWrapEnabled]="true" [(selectedRowKeys)]="selectedRowsData"
+                                    (onToolbarPreparing)="onToolbarPreparing($event)">
+                                    <dxo-selection mode="single"> </dxo-selection>
+                                    <!-- <dxo-export [enabled]="true" fileName="Documents" [allowExportSelectedData]="true"></dxo-export> -->
+                                    <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20,50]"
+                                        [showInfo]="true"></dxo-pager>
+                                    <!-- <dxo-search-panel [visible]="true" placeholder="Nhập nội dung..." width="250">
+                                    </dxo-search-panel> -->
+                                    <!-- <dxo-header-filter [visible]="true"></dxo-header-filter> -->
+                                    <dxo-filter-row [visible]="false"></dxo-filter-row>
+                                    <!-- <dxo- <dxo-filter-panel [visible]="true"></dxo-filter-panel>column-chooser [enabled]="true"></dxo-column-chooser> -->
+                                    <dxo-paging [pageSize]="20"></dxo-paging>
+                                    <dxi-column type="selection" [width]="50"></dxi-column>
+                                    <dxi-column dataField="stt" columnIndex="1" caption="STT" alignment="center"
+                                        [width]="'6%'"></dxi-column>
+                                    <!-- <dxi-column columnIndex="9" alignment="center" [width]="'7%'"
+                                    cellTemplate="customTemplate" caption="Xử lý"></dxi-column> -->
+                                    <!-- <dxi-column dataField="action_button " columnIndex="2" cellTemplate="actionTemplate"
+                                        caption="#" [width]="'7%'" alignment="center"></dxi-column> -->
+                                    <dxi-column cellTemplate="diffCellTemplate" [allowSearch]="true"
+                                        headerCellTemplate="titleHeaderTemplate" columnIndex="3" [width]="'11%'"
+                                        dataType="date" format="d/M/yyyy"
+                                        alignment="center">
+                                    </dxi-column>
+                                    <dxi-column dataField="publisherName" columnIndex="7"
+                                        headerCellTemplate="titleHeaderTemplate2" alignment="left" [width]="'11%'"
+                                      >
+                                    </dxi-column>
+                                    <dxi-column columnIndex="4" cellTemplate="diffCellTemplate1"
+                                        headerCellTemplate="titleHeaderTemplate1" alignment="center" [width]="'11%'"></dxi-column>
+                                    <dxi-column dataField="deadline"  columnIndex="5"
+                                        headerCellTemplate="titleHeaderTemplate3" alignment="center" [width]="'11%'"
+                                        dataType="date" format="d/M/yyyy" >
+                                    </dxi-column>
+                                    <dxi-column dataField="summary" columnIndex="8" alignment="left" [width]="'13%'"
+                                        caption="Trích yếu"></dxi-column>
+                                    <dxi-column dataField="processingRecommended" headerCellTemplate="titleHeaderTemplate4"
+                                        columnIndex="6" alignment="left" [width]="'11%'" >
+                                    </dxi-column>
+                                    <dxi-column dataField="directorName" columnIndex="6" alignment="center" [width]="'11%'"
+                                        caption="BGĐ"></dxi-column>
+                                    <div *dxTemplate="let info of 'titleHeaderTemplate4'">
+                                        <div class="current-value">Ý kiến đề</div>
+                                        <div class="diff">xuất PV01</div>
+                                    </div>
+                                    <div *dxTemplate="let info of 'titleHeaderTemplate'">
+                                        <div class="current-value">Số VB đến</div>
+                                        <div class="diff">Ngày VB đến</div>
+                                    </div>
+                                    <div *dxTemplate="let info of 'titleHeaderTemplate3'">
+                                        <div class="current-value">Hạn </div>
+                                        <div class="diff"> giải quyết</div>
+                                    </div>
+                                    <div *dxTemplate="let info of 'titleHeaderTemplate2'">
+                                        <div class="current-value">Nơi phát</div>
+                                        <div class="diff">hành</div>
+                                    </div>
+                                    <div *dxTemplate="let info of 'titleHeaderTemplate1'">
+                                        <div class="current-value">Số đến</div>
+                                        <div class="diff">Ngày đến</div>
+                                    </div>
+                                    <div *dxTemplate="let d of 'customTemplate'">
+                                        <div class="btn-group dropdown" dropdown container="body">
+                                            <button class="dropdown-toggle btn btn-sm btn-primary" dropdownToggle>
+                                                <i class="fa fa-cog"></i>
+                                            </button>
+                                            <ul class="dropdown-menu" *dropdownMenu>
+                                                <li>
+                                                    <!-- <a href="javascript:;" (click)="viewRow(d)"><i class="fas fa-eye"
+                                                            style="color: rgb(7, 88, 44);"></i>{{l('Xem')}}</a> -->
+                                                        <a href="javascript:;" (click)="select(d)"><i class="fas fa-eye"
+                                                            style="color: rgb(7, 88, 44);"></i>{{l('Chọn')}}</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <!-- <div *dxTemplate="let d of 'actionTemplate'">
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <span (click)="viewProcess(d)" style="position: absolute; top: 10px"> <i
+                                                        class="fas fa-share-alt"></i></span>
+                                            </div>
+                                            <div class="col-6">
+                                                <span (click)="showListHistory(d)"><i class="fas fa-file-pdf"></i></span>
+                                                <br>
+                                                <span (click)="instaff(d)"><i
+                                                        [ngStyle]="{'color' : d.data.star == true ? '#d41022e8': 'black'}"
+                                                        class="fas fa-star" id=d.data.id></i></span>
+                                            </div>
+                                        </div>
+                                    </div> -->
+                                    <div *dxTemplate="let data of 'totalGroupCount'">
+                                        <div style="font-style: italic;">
+                                            <span>Có <b>{{totalCount}}</b> kết quả tìm kiếm</span>
+                                        </div>
+                                    </div>
+                                    <div *dxTemplate="let d of 'diffCellTemplate'">
+                                        <div class="current-value">{{d.data.number}}</div>
+                                        <div class="diff">{{d.data.publishDate | date: "dd/MM/yyyy " }}</div>
+                                    </div>
+                                    <div *dxTemplate="let d of 'diffCellTemplate1'">
+                                        <div class="current-value">{{d.data.incommingNumber}}</div>
+                                        <div class="diff">{{d.data.incommingDate | date: "dd/MM/yyyy "}}</div>
+                                    </div>
+                            </dx-data-grid>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .modal-lg, .modal-xl{
+        max-width: 1000px;
+    }
+</style>

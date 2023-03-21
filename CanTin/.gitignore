@@ -1,46 +1,66 @@
-# See http://help.github.com/ignore-files/ for more about ignoring files.
+﻿# See http://help.github.com/ignore-files/ for more about ignoring files.
 
 # compiled output
 /dist
 /tmp
-/out-tsc
-# Only exists if Bazel was run
-/bazel-out
 
 # dependencies
 /node_modules
-
-# profiling files
-chrome-profiler-events*.json
-speed-measure-plugin*.json
+/bower_components
 
 # IDEs and editors
 /.idea
 .project
 .classpath
-.c9/
 *.launch
 .settings/
-*.sublime-workspace
-
-# IDE - VSCode
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-.history/*
+.vs/
+obj/
+bin/
 
 # misc
 /.sass-cache
 /connect.lock
-/coverage
+/coverage/*
 /libpeerconnection.log
 npm-debug.log
 yarn-error.log
 testem.log
 /typings
+package-lock
 
-# System Files
+# e2e
+/e2e/*.js
+/e2e/*.map
+
+#System Files
 .DS_Store
 Thumbs.db
+
+# VS files
+/Hinnova.AngularUI.csproj.user
+project.lock.json
+Properties/launchSettings.json
+/Hinnova.AngularUI.xproj.user
+/src/assets/common/styles/**/*.min.*
+
+src/assets/metronic/themes/**/css/*.min.css
+!src/assets/metronic/themes/**/css/pages/
+
+src/assets/primeng/datatable/css/*.min.css
+
+src/assets/metronic/themes/**/css/*.min.css
+!src/assets/metronic/themes/**/css/pages/
+
+src/assets/fonts/*min.css
+
+src/assets/metronic/themes/default/css/skins/**/*.min.css
+yarn.lock
+src/shared/service-proxies/service-proxies.ts
+dist_26_3.rar
+dist_27_3.rar
+dist_NEW_27_3.rar
+dist.rar
+dist25.03.zip
+dist.rar
+src/shared/service-proxies/service-proxies.ts

@@ -1,0 +1,271 @@
+<!-- <div [@routerTransition] (window:resize)="onResize($event)"> -->
+    <div [@routerTransition]>
+        <div class="kt-content  kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor">
+            <div class="kt-subheader kt-grid__item">
+                <div [class]="containerClass">
+                    <div class="kt-subheader__main">
+                        <h3 class="kt-subheader__title">
+                            <span>{{"Văn bản đến đội Chưa phân xử lý"}}</span>
+                        </h3>
+                    </div>
+                </div>
+            </div>
+            <div [class]="containerClass + ' kt-grid__item kt-grid__item--fluid'">
+                <div class="kt-portlet kt-portlet--mobile">
+                    <div class="modal-body">
+                        <div class="row align-items-center">
+                            <div class="col primeng-datatable-container">
+                                <dx-form #documentForm [formData]="documentSearchData" [showValidationSummary]="true"
+                                    [showColonAfterLabel]="false" validationGroup="formValidateGroup" colCount="6">
+                                    <dxi-item [colSpan]="2" dataField="fromDate" editorType="dxDateBox" [editorOptions]="fromDateOptions">
+                                        <dxo-label text="Từ ngày"></dxo-label>
+                                        <dxi-validation-rule type="required"></dxi-validation-rule>
+                                        <dx-date-box #fromDate [displayFormat]="'dd/MM/yyyy'" [showClearButton]="true" [(value)]="fromDateVal"></dx-date-box> 
+                                    </dxi-item>
+                                    <dxi-item [colSpan]="2" dataField="toDate" editorType="dxDateBox" [editorOptions]="toDateOptions">
+                                        <dxo-label text="Đến ngày"></dxo-label>
+                                        <dxi-validation-rule type="required"></dxi-validation-rule>
+                                        <dx-date-box #toDate [displayFormat]="'dd/MM/yyyy'" [showClearButton]="true" [(value)]="toDateVal"></dx-date-box> 
+                                    </dxi-item>
+                                </dx-form>
+                                <div class="row" style="display: block; padding-top: 20px; margin-left: auto; margin-right: auto; width: 200px;">
+                                    <dx-button text="Tìm kiếm" type="success" icon="fa fa-search"
+                                    (onClick)="search()"> </dx-button>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row col-md-12" style="z-index: 1;">
+                            <!-- <buttonUI #buttonUI (actionID)="getActionID($event)"></buttonUI> -->
+                            <dx-button text="CẬP NHẬT CHỈ ĐẠO BCH ĐỘI" type="success" (onClick)="cap_nhat_chi_dao($event)"></dx-button>
+                        </div>
+                        <div class="row align-items-center">
+                            <!--<Primeng-TurboTable-Start>-->
+                            <div class="col primeng-datatable-container">
+                                <dx-data-grid #gridContainer id="gridContainer" [showColumnLines]="true"
+                                    [(selectedRowKeys)]="selectedRowsData" [showRowLines]="true" [wordWrapEnabled]="true"
+                                    [remoteOperations]="false" [allowColumnReordering]="true" [rowAlternationEnabled]="true"
+                                    [showBorders]="true" [allowColumnResizing]="true" [columnAutoWidth]="true"
+                                    [(dataSource)]="initialData" [cellHintEnabled]="true" (onToolbarPreparing)="onToolbarPreparing($event)"
+                                    (onExporting)="onExporting($event)"
+                                    (onExported)="onExported($event)">
+                                    <dxo-selection mode="multiple"> </dxo-selection>
+                                    <dxo-export [enabled]="true" fileName="Danh sách văn bản" [allowExportSelectedData]="true"></dxo-export>
+                                    <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[50, 100]"
+                                        [showInfo]="true"></dxo-pager>
+                                    <dxo-search-panel [visible]="true" placeholder="Nhập nội dung..." width="250">
+                                    </dxo-search-panel>
+                                    <!-- <dxo-header-filter [visible]="true"></dxo-header-filter> -->
+                                    <dxo-filter-row [visible]="false"></dxo-filter-row>
+                                    <!-- <dxo- <dxo-filter-panel [visible]="true"></dxo-filter-panel>column-chooser [enabled]="true"></dxo-column-chooser> -->
+                                    <dxo-paging [pageSize]="50"></dxo-paging>
+                                    <dxi-column dataField="Number" [visible]="false" [allowExporting]="false"></dxi-column>
+                                    <dxi-column type="selection" [width]="4+'%'"></dxi-column>
+                                    <dxi-column dataField="stt" columnIndex="1" caption="STT" alignment="center"
+                                        [width]="5+'%'"></dxi-column>
+                                    <dxi-column columnIndex="9" alignment="center" [width]="6+'%'"
+                                        cellTemplate="customTemplate" caption="Xử lý" [allowExporting]="false"></dxi-column>
+                                    <!-- <dxi-column dataField="action_button " columnIndex="2" cellTemplate="actionTemplate"
+                                        caption="#" [width]="7+'%'" alignment="center"></dxi-column> -->
+                                      
+                                    <!-- <dxi-column dataField="number_incomingdatedv"  alignment="center" [encodeHtml]="false" caption="Số đến / Ngày đến" [allowExporting]="false" ></dxi-column> -->
+                                    <dxi-column alignment="center" 
+                                        cellTemplate="colTemplate2" caption="Số đến / Ngày đến" [allowExporting]="false"></dxi-column>
+                                    <dxi-column columnIndex="4" cellTemplate="diffCellTemplate1"
+                                        headerCellTemplate="SoNgayDenHeader" alignment="center" [width]="9+'%'" [allowExporting]="false"></dxi-column>
+                                        <!-- <dxi-column columnIndex="4" cellTemplate="diffCellTemplate2"
+                                        headerCellTemplate="titleHeaderTemplate5" alignment="center" [width]="9+'%'" [allowExporting]="false"></dxi-column> -->
+                                    <dxi-column dataField="PublisherName" columnIndex="7" caption="Nơi phát hành"
+                                        [width]="10+'%'" headerCellTemplate="titleHeaderTemplate3">
+                                    </dxi-column>
+                                    <dxi-column dataField="Deadline" columnIndex="5" caption="Hạn giải quyết"
+                                        alignment="center" [width]="8+'%'"
+                                        dataType="date" format="dd/MM/yyyy" >
+                                    </dxi-column>
+                                    <dxi-column dataField="Summary" columnIndex="8"  [width]="14+'%'"
+                                        caption="Trích yếu"></dxi-column>
+                                    <dxi-column caption="Chỉ đạo BGĐ" cellTemplate="BGDTemplate"
+                                        columnIndex="6" [width]="16+'%'" [allowExporting]="false">
+                                    </dxi-column>
+                                    <dxi-column headerCellTemplate="BCHHeader" caption="Chỉ đạo của BCH P/BCH Q" cellTemplate="BCHTemplate"
+                                        columnIndex="6" [width]="16+'%'" [allowExporting]="false">
+                                    </dxi-column>
+                                    <dxi-column caption="Ghi chú" cellTemplate="CTPHTemplate"
+                                        columnIndex="6" [width]="10+'%'" alignment="center" [allowExporting]="false">
+                                    </dxi-column>
+                                    <!-- for export -->
+                                    <dxi-column dataField="bgd" caption="Chỉ đạo BGĐ" columnIndex="6" [width]="200" [visible]="false"></dxi-column>
+                                    <dxi-column dataField="bch" caption="Chỉ đạo của BCH P/BCH Q" columnIndex="6" [width]="200" [visible]="false"></dxi-column>
+                                    
+                                    <!-- <dxi-column dataField="DoiPhoiHop" caption="Đội phối hợp" columnIndex="7" [visible]="false"></dxi-column> -->
+                                    <!-- <dxi-column headerCellTemplate="dvthHeaderTemplate" cellTemplate="dvth"
+                                        columnIndex="6">
+                                    </dxi-column> -->
+
+                                    <!-- <div *dxTemplate="let info of 'dvthHeaderTemplate'">
+                                        <div class="current-value">Đội</div>
+                                        <div class="diff">phối hợp</div>
+                                    </div> -->
+                                    <div *dxTemplate="let d of 'dvth'">
+                                        <div class="font-b">{{d.data.DoiPhoiHop}}</div>
+                                    </div>
+                                    <div *dxTemplate="let info of 'sttCellTemplate'">
+                                        <div> {{info.rowIndex + 1}}</div>
+                                    </div>
+                                    <div *dxTemplate="let info of 'BCHHeader'">
+                                        <div class="diff" style="text-align: center;">Chỉ đạo</div>
+                                        <div class="diff">BCH P/BCH Q</div>
+                                    </div>
+                                    <div *dxTemplate="let info of 'SoNgayDenHeader'">
+                                        <div class="current-value" style="text-align: center;">Số ký hiệu</div>
+                                        <div class="diff" style="text-align: center;">Ngày phát hành</div>
+                                        <!-- <div class="diff">Số VB đơn vị/Ngày</div> -->
+                                    </div>
+                                    <!-- <div *dxTemplate="let info of 'titleHeaderTemplate5'">
+                                        <div class="current-value" style="text-align: center;">Số đến</div>
+                                        <div class="diff" style="text-align: center;">Ngày đến</div>
+                                        <div class="diff">Số VB đơn vị/Ngày</div> 
+                                    </div> -->
+                                    <div *dxTemplate="let d of 'colTemplate1'">
+                                        <div class="current-value" style="font-weight: bold;">{{d.data.Number}}</div>
+                                        <div class="diff">{{d.data.PublishDate | date: "dd/MM/yyyy " }}</div>
+                                    </div>
+                                    <div *dxTemplate="let d of 'titleHeaderTemplate1'">
+                                        <div class="current-value">Số kí hiệu</div>
+                                        <div class="diff">Ngày VB</div>
+                                    </div>
+                                    <div *dxTemplate="let d of 'colTemplate2'">
+                                        <div class="current-value" style="font-weight: bold;">{{d.data.NumberDV_IsSeen}}
+                                            <sup *ngIf="d.data.IsSeen==false" style="font-weight: 300;font-family: 'Poppins', sans-serif;background-color: rgb(201, 61, 61);border-radius: 20%;color: white; padding: 3.2px;">Mới</sup>
+                                        </div>
+                                        <div class="diff">{{d.data.DateDV_IsSeen | date: "dd/MM/yyyy " }}</div>
+                                    </div>
+                                    <div *dxTemplate="let d of 'titleHeaderTemplate2'">
+                                        <div class="current-value">Số đến phòng</div>
+                                        <div class="diff">Ngày đến</div>
+                                    </div>
+                                    <div *dxTemplate="let d of 'titleHeaderTemplate3'">
+                                        <div class="current-value">Nơi</div>
+                                        <div class="diff">phát hành</div>
+                                    </div>
+                                    <div *dxTemplate="let d of 'titleHeaderTemplate4'">
+                                        <div class="current-value">Hạn</div>
+                                        <div class="diff">giải quyết</div>
+                                    </div>
+                                    <div *dxTemplate="let d of 'diffCellTemplate3'">
+                                        <div class="current-value" style="font-weight: bold;font-style: italic;">{{d.data.Deadline | date: "dd/MM/yyyy " }}</div>
+                                    </div>
+                                    <div *dxTemplate="let d of 'customTemplate'">
+                                        <div class="btn-group dropdown btn-smaller-padding" dropdown container="body">
+                                            <button class="dropdown-toggle btn btn-sm btn-primary" dropdownToggle>
+                                                <i class="fa fa-cog"></i>
+                                            </button>
+                                            <ul class="dropdown-menu" *dropdownMenu>
+                                                <!-- <li *ngIf="num.includes(2)">
+                                                    <a href="javascript:;" (click)="saveToBook(d)"><i class="fas fa-atlas"
+                                                            style="color: rgb(7, 88, 44);"></i>{{l('Vào sổ')}}</a>
+
+                                                </li> -->
+                                                <li>
+                                                    <a href="javascript:;" (click)="view(d.data)"><i class="fa fa-eye"
+                                                            style="color: rgb(7, 88, 44);"></i>{{l('Xem')}}</a>
+                                                </li>
+                                                <li>
+                                                    <a href="javascript:;" (click)="viewProcess(d)"><i class="fa fa-cog"
+                                                            style="color: rgb(7, 88, 44);"></i>Quy trình xử lý</a>
+                                                </li>
+                                                <!-- <li>
+                                                    <a href="javascript:;" (click)="phancong()"><i class="fas fa-edit"
+                                                            style="color: rgb(7, 88, 44);"></i>{{l('Phân công xử lý')}}</a>
+                                                </li> -->
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div *dxTemplate="let d of 'actionTemplate'">
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <span (click)="viewProcess(d)" style="position: absolute; top: 10px"> <i
+                                                        class="fas fa-share-alt"></i></span>
+                                            </div>
+                                            <div class="col-6">
+                                                <span (click)="showListHistory(d)"><i class="fas fa-file-pdf"></i></span>
+                                                <br>
+                                                <span (click)="instaff(d)"><i
+                                                        [ngStyle]="{'color' : d.data.star == true ? '#d41022e8': 'black'}"
+                                                        class="fas fa-star" id=d.data.id></i></span>
+                                            </div>
+                                            <!-- <div class="col-4"    >
+                                        </div> -->
+                                        </div>
+                                    </div>
+                                    <div *dxTemplate="let d of 'BGDTemplate'">
+                                        <div class="font-b">{{d.data.DirectorName}}</div>
+                                        <div *ngIf="d.data.ProcessingRecommended" class="font-i">PV01 đx: {{d.data.ProcessingRecommended}}</div>
+                                        <div class="font-b font-i">{{d.data.ApprovingRecommended}}</div>
+                                    </div>
+                                    <div *dxTemplate="let d of 'BCHTemplate'">
+                                        <div><b>Trưởng phòng:{{d.data.TPFullName}}</b> : <i> {{d.data.TPProcessingRecommended}} </i> </div>
+                                        <div *ngIf="d.data.PTPFullName">PTP: <b>{{d.data.PTPFullName}} </b> : <i> {{d.data.PTPProcessingRecommended}} </i></div>
+
+                                    </div>
+
+                                    <div *dxTemplate="let d of 'diffCellTemplate1'">
+                                        <div class="current-value" style="font-weight: bold;"*ngIf="d.data.Number">{{d.data.Number}}</div>
+                                        <div class="current-value" style="font-weight: bold;" *ngIf="!d.data.Number">-</div>
+                                        <div class="diff">{{d.data.PublishDate | date: "dd/MM/yyyy "}}</div>
+                                    </div>
+                                    <div *dxTemplate="let d of 'diffCellTemplate2'">
+                                        <div class="current-value" style="font-weight: bold;"*ngIf="d.data.IncommingNumberDV">{{d.data.IncommingNumberDV}}</div>
+                                        <div class="current-value" style="font-weight: bold;" *ngIf="!d.data.IncommingNumberDV">-</div>
+                                        <div class="diff">{{d.data.IncommingDateDV | date: "dd/MM/yyyy "}}</div>
+                                    </div>
+                                    <div *dxTemplate="let data of 'totalGroupCount'">
+                                        <div style="font-style: italic;">
+                                            <span>Có <b>{{totalCount}}</b> kết quả tìm kiếm</span>
+                                        </div>
+                                    </div>
+                                    <div *dxTemplate="let d of 'CTPHTemplate'">
+                                        <div *ngIf="d.data.TypeHandling==0">
+                                            <span><b class="center">Phối hợp</b></span>
+                                        </div>
+                                        <div *ngIf="d.data.TypeHandling==1">
+                                           <span><b class="center">Chủ trì</b></span>
+                                        </div>
+                                    </div>
+                                </dx-data-grid>
+                                <!-- Xem lịch sử upload chi tiết -->
+                                <dx-popup [width]="800" [height]="600" [showTitle]="true" title="Lịch sử upload file"
+                                    [dragEnabled]="false" [closeOnOutsideClick]="false" [(visible)]="historyPopupVisible">
+                                    <dx-data-grid id="gridContainer113" [dataSource]="history_Upload"
+                                        [allowColumnReordering]="true" [allowColumnResizing]="true" [columnAutoWidth]="true"
+                                        [showBorders]="true">
+                                        <dxo-paging [pageSize]="10"></dxo-paging>
+                                        <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 20]"
+                                            [showInfo]="true">
+                                        </dxo-pager>
+
+                                        <dxi-column dataField="file"></dxi-column>
+                                        <dxi-column dataField="version"></dxi-column>
+                                        <dxi-column type="buttons" dataField="Xem chi tiết">
+                                            <dxi-button [onClick]="showDetail" icon="fab fa-buffer"></dxi-button>
+                                        </dxi-column>
+
+                                    </dx-data-grid>
+                                </dx-popup>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <yKienChiDaoTeamPH #yKienChiDaoTeam (saveSuccess)="loadData()"></yKienChiDaoTeamPH>
+    </div>
+    <style>
+        ::ng-deep .dx-row {
+            font-size: 16px;
+            height: px;
+            white-space: normal;
+        }
+    </style>
+
+

@@ -1,0 +1,45 @@
+﻿<div bsModal #createOrEditModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createOrEditModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <!-- <form #comm_Book_SyntaxForm="ngForm" novalidate (ngSubmit)="save()" autocomplete="off"> -->
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span *ngIf="comm_Book_Syntax.id">{{l("EditComm_Book_Syntax")}}</span>
+                        <span *ngIf="!comm_Book_Syntax.id">{{l("CreateNewComm_Book_Syntax")}}</span>
+                    </h4>
+                    <button type="button" class="close" (click)="close()" aria-label="Close" [disabled]="saving">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <dx-form #documentForm [formData]="comm_Book_Syntax" [showValidationSummary]="true"
+                        [showColonAfterLabel]="false" validationGroup="formValidateGroup">
+                        <dxi-item itemType="group" colCount="4">
+                            <dxi-item [colSpan]="2" dataField="name">
+                                <dxo-label text="Tên"></dxo-label>
+                            </dxi-item>
+                            <dxi-item [colSpan]="2" dataField="orgId" editorType="dxSelectBox" [visible]="isHidden" [editorOptions]="{
+                                dataSource: listOrganizationUnit,
+                                displayExpr: 'displayName',
+                                valueExpr: 'id'
+                            }">
+                                <dxo-label text="Phòng ban"></dxo-label>
+                            </dxi-item>
+                            <dxi-item dataField="syntax" [colSpan]="2">
+                                <dxo-label text="Syntax"></dxo-label>
+                            </dxi-item>
+                            <dxi-item [colSpan]="2" dataField="isActive" editorType="dxCheckBox">
+                                <dxo-label text="Hoạt động"></dxo-label>
+                            </dxi-item>
+                        </dxi-item>
+                    </dx-form>
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-default" (click)="close()">{{l("Cancel")}}</button>
+                    <button type="submit" class="btn btn-primary blue" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')" (click)="save()"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
+                </div>
+            <!-- </form> -->
+        </div>
+    </div>
+
+</div>

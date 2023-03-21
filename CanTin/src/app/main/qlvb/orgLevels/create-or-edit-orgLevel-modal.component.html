@@ -1,0 +1,47 @@
+<div bsModal #createOrEditModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createOrEditModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #orgLevelForm="ngForm" novalidate (ngSubmit)="save()" autocomplete="off">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span *ngIf="orgLevel.id">{{l("EditOrgLevel")}}</span>
+                        <span *ngIf="!orgLevel.id">{{l("CreateNewOrgLevel")}}</span>
+                    </h4>
+                    <button type="button" class="close" (click)="close()" aria-label="Close" [disabled]="saving">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                 
+
+
+								<div class="form-group">
+									<label for="OrgLevel_Code">{{l("Code")}}</label>
+									<input type="text" id="OrgLevel_Code" class="form-control" [(ngModel)]="orgLevel.code" name="Code"    />
+								</div>
+					
+								<div class="form-group">
+									<label for="OrgLevel_Name">{{l("Name")}}</label>
+									<input type="text" id="OrgLevel_Name" class="form-control" [(ngModel)]="orgLevel.name" name="Name"    />
+								</div>
+					
+								<br/><div class="m-checkbox-list">
+									<label for="OrgLevel_IsActive" class="kt-checkbox">
+										<input id="OrgLevel_IsActive" type="checkbox" name="IsActive" [(ngModel)]="orgLevel.isActive"> 
+										{{l("IsActive")}}
+										<span></span>
+									</label>
+                                  
+								</div>
+					
+
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-default" (click)="close()">{{l("Cancel")}}</button>
+                    <button type="submit" class="btn btn-primary blue" [disabled]="!orgLevelForm.form.valid" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>

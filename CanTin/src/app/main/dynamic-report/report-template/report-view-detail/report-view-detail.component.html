@@ -1,0 +1,36 @@
+<div class="card">
+    <div class="card-title font-20 font-bold mt-4 text-center">
+        <div [innerHTML]="reportNameHtml"></div>
+    </div>
+    <div class="card-body mt-3">
+        <div class="row">
+            <div class="col-12">
+                <dx-button text="Lưu" [visible]="!isLock" [elementAttr]="{ class: 'mr-1' }" icon="fa fa-floppy-o" type="success" (onClick)="save()"></dx-button>
+                <dx-button text="Tải mẫu" [visible]="!isLock" [elementAttr]="{ class: 'mr-1' }" icon="fa fa-download" type="success" (onClick)="downloadTemplate()"></dx-button>
+                <dx-button text="Xuất báo cáo" [elementAttr]="{ class: 'mr-1' }" icon="fa fa-file-excel-o" type="success" (onClick)="exportExcel()"></dx-button>
+                <dx-file-uploader accept="*" selectButtonText="Nhập báo cáo" labelText="" [showFileList]="false" name="file" [visible]="!isLock"
+                    [uploadUrl]="uploadUrl" [elementAttr]="{ class: 'd-inline-flex'}" (onContentReady)="onContentReady_InputReport($event)"
+                    (onProgress)="onProgress_InputReport($event)" (onUploaded)="onUploaded_InputReport($event)" (onUploadError)="onUploadError_InputReport($event)">
+                </dx-file-uploader>
+                <dx-button text="Nộp báo cáo" [visible]="!isLock" [elementAttr]="{ class: 'ml-1 mr-1' }" icon="fa fa-paper-plane" type="success"
+                    (onClick)="sendReport()"></dx-button>
+                <dx-button text="Trở về" [elementAttr]="{ class: 'float-right' }" icon="fa fa-arrow-left" (onClick)="back()"></dx-button>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-12">
+                <appc-rf-report-detail [reportId]="currentId" [isAllowEdit]="!isLock"></appc-rf-report-detail>
+            </div>
+        </div>
+    </div>
+</div>
+<dx-popup [(visible)]="loadingVisible" [width]="400" [height]="200" [showCloseButton]="false" [closeOnOutsideClick]="false"
+    [dragEnabled]="false" title="Thông báo">
+    <div *dxTemplate="let data of 'content'">
+        <div class="h-100 d-flex">
+            <div class="mx-auto align-self-center">
+                <dx-load-indicator [(visible)]="loadingVisible" indicatorSrc="/assets/img/Spinner.gif" width="160" height="60"></dx-load-indicator>
+            </div>
+        </div>
+    </div>
+</dx-popup>

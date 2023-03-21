@@ -1,0 +1,60 @@
+﻿<div bsModal #createOrEditModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createOrEditModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #templateForm="ngForm" novalidate (ngSubmit)="save()" autocomplete="off">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span *ngIf="template.id">{{l("EditTemplate")}}</span>
+                        <span *ngIf="!template.id">{{l("CreateNewTemplate")}}</span>
+                    </h4>
+                    <button type="button" class="close" (click)="close()" aria-label="Close" [disabled]="saving">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                 
+
+
+								<div class="form-group">
+									<label for="Template_Code">{{l("Code")}}</label>
+									<input type="text" id="Template_Code" class="form-control" [(ngModel)]="template.code" name="Code"    />
+								</div>
+					
+								<div class="form-group">
+									<label for="Template_Name">{{l("Name")}}</label>
+									<input type="text" id="Template_Name" class="form-control" [(ngModel)]="template.name" name="Name"    />
+								</div>
+					
+								<div class="form-group">
+									<label for="Template_Path">{{l("TemplatePath")}}</label>
+                                    <!-- <input type="text" id="Template_Path" class="form-control" [(ngModel)]="template.templatePath" name="PathUrl"    /> -->
+                                    <input type="file" class="form-control-file" name="Template_Path">
+                                </div>
+                                
+                                <div class="form-group">
+									<label for="OrgId">Phòng ban</label>
+                                    <!-- <input type="text" id="OrgName" class="form-control" [(ngModel)]="template.orgId" name="PathUrl"    /> -->
+                                    <select class="form-control" name="OrgId" [(ngModel)]="template.orgId">
+                                        <option *ngFor="let org of orgList" [value]="org.id">{{org.displayName}} <span *ngIf="org.shortentCode">({{org.shortentCode}})</span></option>
+                                    </select>
+								</div>
+					
+								<br/><div class="m-checkbox-list">
+									<label for="Template_IsActive" class="kt-checkbox">
+										<input id="Template_IsActive" type="checkbox" name="IsActive" [(ngModel)]="template.isActive"> 
+										{{l("IsActive")}}
+										<span></span>
+									</label>
+								</div>
+					
+
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-default" (click)="close()">{{l("Cancel")}}</button>
+                    <button type="submit" class="btn btn-primary blue" [disabled]="!templateForm.form.valid" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>

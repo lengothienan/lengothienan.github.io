@@ -1,0 +1,96 @@
+<div class="row">
+    <div class="col-12">
+        <div class="card card-outline-info">
+            <div class="card-body">
+                <h4 class="card-title">Tìm kiếm</h4>
+                    <form style="margin:20px" (submit)="search()">
+                        <dx-form id="form" [(formData)]="templateData" validationGroup="formValidateGroup" colCount="4">
+                            <dxi-item dataField="name" [colSpan]="4">
+                                <dxo-label text="Tên "></dxo-label>
+                            </dxi-item>
+                        </dx-form>
+
+                        <div class="row justify-content-center" style="margin-top:20px">
+                            <dx-button text="Tìm kiếm" icon="fa fa-save" type="success" [useSubmitBehavior]="true" validationGroup="formValidateGroup"></dx-button>
+                            &nbsp;
+                            <dx-button text="Quay lại" icon="fa fa-arrow-left" (onClick)="dismiss()"></dx-button>
+                        </div>
+                    </form>
+            </div>
+        </div>
+    </div>
+</div>
+<dx-popup #popup title="Thêm mới" [(visible)]="visible" [width]="800"  [height]="250">
+    <div *dxTemplate="let data of 'content'">
+        <form (submit)="onSubmit($event)">
+            <dx-form id="form" [(formData)]="addData" colCount="4" validationGroup="changePasswordGroup">
+                <dxi-item dataField="code" [editorOptions]="passwordOptions"[colSpan]="2">
+                    <dxo-label text="Giá trị"></dxo-label>
+                    <dxi-validation-rule type="required"  message="Tên không được để trống"></dxi-validation-rule>
+                </dxi-item>
+                <dxi-item dataField="name" [editorOptions]="passwordOptions"[colSpan]="2">
+                    <dxo-label text="Hiển thị"></dxo-label>
+                    <dxi-validation-rule type="required" message="Mã không được để trống"></dxi-validation-rule>
+                </dxi-item>
+                <dxi-item dataField="prority" editorType="dxCheckBox" [colSpan]="2">
+                    <dxo-label text="Ưu tiên"></dxo-label>
+                </dxi-item>
+                <dxi-item dataField="isActive" editorType="dxCheckBox" [colSpan]="2">
+                    <dxo-label text="Hoạt động"></dxo-label>
+                </dxi-item>
+            </dx-form>
+            <br />
+            <div class="pull-right popup-footer">
+                <dx-button text="Lưu" type="success" [useSubmitBehavior]="true" validationGroup="changePasswordGroup"></dx-button>
+                <dx-button text="Đóng" (onClick)="onClose()"></dx-button>
+            </div>
+        </form>
+    </div>
+</dx-popup>
+<div class="row">
+    <div class="col-12">
+        <div class="card card-outline-info">
+            <div class="card-body">
+                <dx-button text="Thêm mới" icon="fa fa-save" type="success" (onClick)="add()"></dx-button>
+                <div class="row">
+                    <div class="col-md-12">
+                        <dx-data-grid #dataTable
+                            [showRowLines]="true" 
+                            [showBorders]="true" 
+                            [allowColumnResizing]="true" 
+                            [columnAutoWidth]="true"
+                            [dataSource]="dataSource"
+                            [wordWrapEnabled]= true>
+                            <dxi-column caption="STT" [allowEditing]="false" width="60" cellTemplate="sttCellTemplate"  >
+                                <dxi-validation-rule type="required"></dxi-validation-rule>
+                            </dxi-column>
+                            <dxi-column caption="Mã" width="100" dataField="code" >
+                            </dxi-column>
+
+                            <dxi-column caption="Tên" dataField="name" width="*"  >
+                            </dxi-column>
+                            <dxi-column caption="Chi tiết" width="100" dataField="id" alignment="center" cellTemplate="detailTemplate"></dxi-column>
+                            <dxi-column caption="Xóa" width="60" alignment="center" dataField="id" cellTemplate="deleteTemplate"></dxi-column>
+                            
+                            <div *dxTemplate="let d of 'sttCellTemplate'">
+                                <div> {{d.rowIndex + 1}}</div>
+                            </div>
+                            
+                            <div *dxTemplate="let cell of 'detailTemplate'">
+                                    <i class="fa fa-list-alt" style="color:#1876d3; cursor: pointer;" (click)="detail(cell.value)"></i>
+                            </div>
+
+                            <div *dxTemplate="let cell of 'deleteTemplate'">
+                                <i class="fa fa-times" style="color:red; cursor: pointer;" (click)="delete(cell.value)"></i>
+                            </div>
+                            <dxo-paging [pageSize]="templateData.pageSize" [pageIndex]="templateData.pageIndex"></dxo-paging>
+                            <dxo-pager visible="true" infoText="Trang {0} trên {1} ({2} dòng)" [allowedPageSizes]="[20, 50, 100]" [showPageSizeSelector]="true"
+                            [showInfo]="true"></dxo-pager>
+                        </dx-data-grid>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

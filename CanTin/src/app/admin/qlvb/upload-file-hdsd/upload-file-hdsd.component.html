@@ -1,0 +1,148 @@
+<div [@routerTransition]>
+    <div class="kt-content kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor">
+        <div _ngcontent-rwr-c23="" class="kt-subheader kt-grid__item">
+            <div _ngcontent-rwr-c23="" class="kt-container">
+                <div class="kt-subheader__main">
+                    <h3 class="kt-subheader__title">
+                        <span class="ng-tns-c23-1">File manager</span>
+                    </h3>
+                    <span class="kt-subheader__separator kt-subheader__separator--v"></span>
+                    <span class="kt-subheader__desc"> Quản lý file</span>
+                </div>
+                <div class="kt-subheader__toolbar">
+                    <div class="kt-subheader__wrapper">
+                        <dx-button class="btn btn-primary ng-tns-c23-1 ng-star-inserted" (onClick)="showUploadFile()"><i class="fa fa-plus"></i>
+                            Upload file mới</dx-button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="kt-container kt-grid__item kt-grid__item--fluid">
+            <div class="kt-portlet kt-portlet--mobile">
+                <div class="card card-outline-info">
+                    <div class="modal-body">
+                        <dx-form #documentForm [showValidationSummary]="true"
+                            [showColonAfterLabel]="false" validationGroup="formValidateGroup" colCount="5">
+                            <dxi-item [colSpan]="1">
+                                <dx-select-box aria-required="true" style="margin-left: 10px;" 
+                                    [items]="selectTypeFile" displayExpr="Name" valueExpr="ID"
+                                    placeholder="Chọn đuôi file" [showClearButton]="true"
+                                    (onValueChanged)="changeSearchTypeFile($event)">
+                                </dx-select-box>
+                                <dxo-label text="Loại file"></dxo-label>
+                            </dxi-item>
+                            <dxi-item [colSpan]="1">
+                                <dx-select-box aria-required="true" style="margin-left: 10px;"
+                                    [items]="selectTypeForder" displayExpr="Name" valueExpr="ID"
+                                    placeholder="Chọn thư mục lưu" [showClearButton]="true"
+                                    (onValueChanged)="changeSearchForder($event)">
+                                </dx-select-box>
+                                <dxo-label text="Thư mục"></dxo-label>
+                            </dxi-item>
+                        </dx-form>
+                        <div class="row"
+                            style="display: block; padding-top: 20px; margin-left: auto; margin-right: auto; width: 200px;">
+                            <dx-button text="Tìm kiếm" type="success" icon="fa fa-search" (onClick)="loadDataUpload()">
+                            </dx-button>
+                        </div>
+
+                        <dx-popup [height]="400" [width]="500"  [showTitle]="true" title="Thêm mới"
+                            [closeOnOutsideClick]="false" [dragEnabled]="true" [showCloseButton]="true" [(visible)]="popupVisible" [resizeEnabled]="true">
+                            <!-- [(action)]="uploadUrl"  -->
+                          
+                            <form #formupoadfile id="formupoadfile" style="padding-left: 10px; padding-right: 10px;" method="post" (submit)="UploadFile($event)"
+                                enctype="multipart/form-data">
+                                <div class="dx-field">
+                                    <dx-select-box aria-required="true" id="selectTypeForder" #selectBox
+                                        [items]="selectTypeForder" displayExpr="Name" valueExpr="ID"
+                                        placeholder="Chọn thư mục lưu" [showClearButton]="true"
+                                        (onValueChanged)="changeforder($event)">
+                                    </dx-select-box>
+                                </div>
+                                <br />
+                                <!-- <div class="dx-field">
+                            <div class="dx-field-label">Forder</div>
+                            <dx-text-box id="fordername" class="dx-field-value" name="fordername" [(value)]="fordername"
+                                [(disabled)]="hasDisableFordername" placeholder="Create and save at forder">
+                            </dx-text-box>
+                        </div>
+                        <br /> -->
+                                <div class="dx-field">
+                                    <div class="dx-field-label">Version file</div>
+                                    <dx-number-box id="ver" class="dx-field-value" name="VersionUpload" [min]="1" [max]="1000"
+                                        [showSpinButtons]="true" (onKeyDown)="keyDownNumberVersion($event)"
+                                        [(value)]="VersionUpload">
+                                    </dx-number-box>
+                                </div>
+
+                                <br />
+                                <!-- (onUploaded)="onUploaded($event)" -->
+                                <dx-file-uploader style="border: 1px solid #d3d3d3;" #fileUploader id="fileupload_" 
+                                    name="file" [(accept)]="condition" [multiple]="false" (change)="onChangeUploadFile($event)" 
+                                    [(value)]="value" [(uploadMode)]="useUploadmode" [chunkSize]="200000"  
+                                    [(allowedFileExtensions)]="condition">
+                                </dx-file-uploader>
+                                <br />
+                                <div class="d-flex justify-content-end">
+                                    <dx-button text="Upload" style="margin-right: 2px;" icon="fa fa-file-upload"
+                                        type="default" [useSubmitBehavior]="true" validationGroup="formValidateGroup">
+                                    </dx-button>
+                                    <dx-button text="Hủy" icon="fa fa-times" type="danger"
+                                        validationGroup="formValidateGroup" (onClick)="CloseUploadFile()">
+                                    </dx-button>
+                                </div>
+                            </form>
+                        </dx-popup>
+
+                        <dx-data-grid #dataGrid columnResizingMode="widget" [remoteOperations]="false"
+                            [allowColumnReordering]="true" [rowAlternationEnabled]="true" [showBorders]="true"
+                            [allowColumnResizing]="true" [columnAutoWidth]="true" [height]="600"
+                            [(dataSource)]="filelist" [cellHintEnabled]="true">
+                            <dxo-paging [enabled]="true" [pageSize]="10">
+                            </dxo-paging>
+                            <dxo-search-panel [visible]="true" placeholder="Nhập nội dung..." width="250">
+                            </dxo-search-panel>
+                            <dxo-filter-row [visible]="true"></dxo-filter-row>
+                            <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[10, 20, 50, 100]"></dxo-pager>
+                            <dxi-column name="No" caption="STT" columnIndex="1" cellTemplate="NoTemplate"
+                                alignment="center">
+                            </dxi-column>
+
+                            <dxi-column dataField="fileName" columnIndex="2" caption="Tên File" alignment="left" 
+                                [allowFiltering]="true" [allowEditing]="false">
+                            </dxi-column>
+                            <dxi-column dataField="diskFileName" columnIndex="3" caption="Đường dẫn" alignment="left"
+                                [allowFiltering]="true" [allowEditing]="false">
+                            </dxi-column>
+                            <dxi-column columnIndex="4" dataField="fileSize" caption="Kích cỡ" alignment="left" cellTemplate="sizeTemplate"
+                                [allowFiltering]="true" [allowEditing]="false" dataType="string">
+                            </dxi-column>
+                            <!-- <dxi-column dataField="diskDirectory" columnIndex="4" caption="DiskDirectory"
+                                alignment="left" [allowFiltering]="true" [allowEditing]="false">
+                            </dxi-column> -->
+                            <dxi-column dataField="creationTime" columnIndex="5" caption="Thời gian Upload"
+                                alignment="center" [allowFiltering]="true" dataType="datetime"
+                               [allowEditing]="false">
+                            </dxi-column>
+                            <dxi-column dataField="version" columnIndex="6" caption="Version" alignment="center"
+                                [allowFiltering]="true" [allowEditing]="false">
+                            </dxi-column>
+                            <dxi-column type="buttons" caption="Tải xuống">
+                                <dxi-button icon="fa fa-file-download" [onClick]="IconClickDownload">
+                                </dxi-button>
+                            </dxi-column>
+
+                            <div *dxTemplate="let data of 'NoTemplate'">
+                                {{ (data.rowIndex + 1)+((dataGrid.instance.pageIndex())*dataGrid.instance.pageSize()) }}
+                            </div>
+                            <div *dxTemplate="let data of 'sizeTemplate'">
+                                {{ data.data.fileSize/1024/1024 | number}}  {{"mb"}}
+                            </div>
+                        </dx-data-grid>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

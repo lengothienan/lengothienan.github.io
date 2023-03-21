@@ -1,0 +1,313 @@
+﻿<div [@routerTransition]>
+  <div class="kt-content  kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor">
+    <div class="kt-subheader kt-grid__item">
+      <div [class]="containerClass">
+        <div class="kt-subheader__main">
+            <h3 class="kt-subheader__title">
+                <span>{{l("Impersonates")}}</span>
+            </h3>
+            <span class="kt-subheader__separator kt-subheader__separator--v"></span>
+            <span class="kt-subheader__desc">
+                {{l("ImpersonatesHeaderInfo")}}
+            </span>
+        </div>
+        <div class="kt-subheader__toolbar">
+            <div class="kt-subheader__wrapper">
+				<button *ngIf="isGranted('Pages.Impersonates.Create')" (click)="createImpersonate()"
+			class="btn btn-primary blue"><i class="fa fa-plus"></i> {{l("Thêm mới ủy quyền")}}</button>
+            </div>
+        </div>
+      </div>
+    </div>
+    <div [class]="containerClass + ' kt-grid__item kt-grid__item--fluid'">
+        <div class="kt-portlet kt-portlet--mobile">
+            <div class="kt-portlet__body">
+                <div class="row align-items-center">
+                    <dx-data-grid #gridContainer id="gridContainer" [height]="500" [showColumnLines]="true"
+                        [(selectedRowKeys)]="selectedRowsData"
+                        [remoteOperations]="false" [allowColumnReordering]="true" [rowAlternationEnabled]="true"
+                        [showBorders]="true" [allowColumnResizing]="true" [columnAutoWidth]="true"
+                        [(dataSource)]="initialData" [cellHintEnabled]="true">
+                        <dxo-selection mode="single"> </dxo-selection>
+                        <!-- <dxo-header-filter [visible]="true"></dxo-header-filter> -->
+                        <dxo-filter-row [visible]="false"></dxo-filter-row>
+                        <dxo-search-panel [visible]="true" placeholder="Nhập nội dung..." width="250">
+                        </dxo-search-panel>
+                        <dxi-column columnIndex="9" alignment="center" [width]="8+'%'" columnIndex="2"
+                            cellTemplate="customTemplate" caption="Xử lý"></dxi-column>
+                        <dxi-column dataField="userFullName" caption="Người được ủy quyền" alignment="left"  columnIndex="3" [width]="23+'%'"></dxi-column>
+                        <dxi-column dataField="impersonatedFullName" caption="Người ủy quyền" alignment="left"  columnIndex="4" [width]="23+'%'"></dxi-column>
+                        <dxi-column dataField="impersonate.isActive" alignment="center" columnIndex="5" [width]="10+'%'" cellTemplate="isActiveColumn" caption="Hoạt động"></dxi-column>
+                        <dxi-column dataField="impersonate.startDate" caption="Ngày bắt đầu" alignment="center" columnIndex="5" [width]="23+'%'" dataType="date" format="d/M/yyyy"></dxi-column>
+                        <dxi-column dataField="impersonate.endDate" caption="Ngày kết thúc" alignment="center" columnIndex="5" [width]="23+'%'" dataType="date" format="d/M/yyyy"></dxi-column>
+                        <div *dxTemplate="let d of 'customTemplate'">
+                            <div class="btn-group dropdown btn-smaller-padding" dropdown container="body">
+                                <button class="dropdown-toggle btn btn-sm btn-primary" dropdownToggle>
+                                    <i class="fa fa-cog"></i>
+                                </button>
+                                <ul class="dropdown-menu" *dropdownMenu>
+                                    <!-- <li *ngIf="num.includes(2)">
+                                        <a href="javascript:;" (click)="saveToBook(d)"><i class="fas fa-atlas"
+                                                style="color: rgb(7, 88, 44);"></i>{{l('Vào sổ')}}</a>
+
+                                    </li> -->
+                                    <li>
+                                        <a href="javascript:;" *ngIf="permission.isGranted('Pages.Impersonates.Edit')"
+                                            (click)="createOrEditImpersonateModal.show(d.data.impersonate.id)">{{l('Edit')}}</a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:;" *ngIf="permission.isGranted('Pages.Impersonates.Delete')"
+                                            (click)="deleteImpersonate(d.data.impersonate)">{{l('Delete')}}</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div *dxTemplate="let d of 'isActiveColumn'">
+                            <dx-check-box [(value)]="d.data.impersonate.isActive" [readOnly]="true"></dx-check-box>
+                        </div>
+                        <div *dxTemplate="let d of 'activeTemplate'">
+                            <div class="current-value" style="text-align: center;">Kích hoạt/</div>
+                            <div class="diff" style="text-align: center;">Tạm ngưng</div>
+                        </div>
+                    </dx-data-grid>
+                </div>
+                <!-- <form class="kt-form" autocomplete="off">
+                    <div>
+                        <div class="row align-items-center">
+                            <div class="col-xl-12">
+                                <div class="form-group m-form__group align-items-center">
+                                    <div class="input-group">
+                                        <input [(ngModel)]="filterText" name="filterText" autoFocus class="form-control m-input" [placeholder]="l('SearchWithThreeDot')" type="text">
+                                        <span class="input-group-btn">
+                                            <button (click)="getImpersonates()" class="btn btn-primary" type="submit"><i class="flaticon-search-1"></i></button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+						 <div class="row" [hidden]="!advancedFiltersAreShown">
+						 	<div class="col-md-12">
+						         <div class="kt-separator kt-separator--border-dashed"></div>
+						     </div>
+
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+									<label for="MinUserIdFilter">{{l("MinMax")}} {{l("UserId")}}</label>
+									<div class="input-group">
+                                        <input type="number" class="form-control" id="MinUserIdFilter" [(ngModel)]="minUserIdFilter" placeholder="{{l('MinValue')}}" name="minUserIdFilter" />
+                                        <input type="number" class="form-control" [(ngModel)]="maxUserIdFilter" placeholder="{{l('MaxValue')}}" name="maxUserIdFilter" />
+									</div>
+                                </div>
+                            </div>
+							<div class="col-md-3">
+								<div class="form-group">
+									<label for="UserNameFilter">{{l("UserName")}}</label>
+									<input type="text" class="form-control" id="UserNameFilter" name="userNameFilter" [(ngModel)]="userNameFilter">
+								</div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+									<label for="MinImpersonateUserIdFilter">{{l("MinMax")}} {{l("ImpersonateUserId")}}</label>
+									<div class="input-group">
+                                        <input type="number" class="form-control" id="MinImpersonateUserIdFilter" [(ngModel)]="minImpersonateUserIdFilter" placeholder="{{l('MinValue')}}" name="minImpersonateUserIdFilter" />
+                                        <input type="number" class="form-control" [(ngModel)]="maxImpersonateUserIdFilter" placeholder="{{l('MaxValue')}}" name="maxImpersonateUserIdFilter" />
+									</div>
+                                </div>
+                            </div>
+							<div class="col-md-3">
+								<div class="form-group">
+									<label for="ImpersonateUserNameFilter">{{l("ImpersonateUserName")}}</label>
+									<input type="text" class="form-control" id="ImpersonateUserNameFilter" name="impersonateUserNameFilter" [(ngModel)]="impersonateUserNameFilter">
+								</div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+									<label  for="MinStartDateFilter">{{l("StartDateRange")}}</label>
+									<div class="input-group">
+                                        <input class="form-control m-input" id="MinStartDateFilter" name="MinStartDateFilter" type="datetime" bsDatepicker  placeholder="{{l('MinValue')}}" [(ngModel)]="minStartDateFilter">
+			                            <span style="line-height: 40px;padding: 0 15px 0 15px;"> &mdash; </span>
+                                        <input class="form-control m-input" id="MaxStartDateFilter" name="MaxStartDateFilter" type="datetime" bsDatepicker  placeholder="{{l('MaxValue')}}" [(ngModel)]="maxStartDateFilter">
+									</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+									<label  for="MinEndDateFilter">{{l("EndDateRange")}}</label>
+									<div class="input-group">
+                                        <input class="form-control m-input" id="MinEndDateFilter" name="MinEndDateFilter" type="datetime" bsDatepicker  placeholder="{{l('MinValue')}}" [(ngModel)]="minEndDateFilter">
+			                            <span style="line-height: 40px;padding: 0 15px 0 15px;"> &mdash; </span>
+                                        <input class="form-control m-input" id="MaxEndDateFilter" name="MaxEndDateFilter" type="datetime" bsDatepicker  placeholder="{{l('MaxValue')}}" [(ngModel)]="maxEndDateFilter">
+									</div>
+                                </div>
+                            </div>
+							<div class="col-md-3">
+								<label for="IsActiveFilterSelect">{{l("IsActive")}}</label>
+								<select class="form-control" name="IsActiveFilter" id="IsActiveFilterSelect" [(ngModel)]="isActiveFilter">
+								<option value="-1">{{l("All")}}</option>
+								<option value="0">{{l("False")}}</option>
+								<option value="1">{{l("True")}}</option>
+								</select>
+                            </div>
+							<div class="col-md-3">
+								<label for="IsDeletedFilterSelect">{{l("IsDeleted")}}</label>
+								<select class="form-control" name="IsDeletedFilter" id="IsDeletedFilterSelect" [(ngModel)]="isDeletedFilter">
+								<option value="-1">{{l("All")}}</option>
+								<option value="0">{{l("False")}}</option>
+								<option value="1">{{l("True")}}</option>
+								</select>
+                            </div>
+
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-sm-12">
+                                <span class="clickable-item text-muted" *ngIf="!advancedFiltersAreShown" (click)="advancedFiltersAreShown=!advancedFiltersAreShown"><i class="fa fa-angle-down"></i> {{l("ShowAdvancedFilters")}}</span>
+                                <span class="clickable-item text-muted" *ngIf="advancedFiltersAreShown" (click)="advancedFiltersAreShown=!advancedFiltersAreShown"><i class="fa fa-angle-up"></i> {{l("HideAdvancedFilters")}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="row align-items-center">
+
+                    <div class="primeng-datatable-container col-12"
+                         [busyIf]="primengTableHelper.isLoading">
+                        <p-table #dataTable
+                                     (onLazyLoad)="getImpersonates($event)"
+                                     [value]="primengTableHelper.records"
+                                     rows="{{primengTableHelper.defaultRecordsCountPerPage}}"
+                                     [paginator]="false"
+                                     [lazy]="true"
+                                     [scrollable]="true"
+                                     ScrollWidth="100%"
+                                     [responsive]="primengTableHelper.isResponsive"
+                                     [resizableColumns]="primengTableHelper.resizableColumns">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th style="width: 130px" [hidden]="!isGrantedAny('Pages.Impersonates.Edit', 'Pages.Impersonates.Delete')">{{l('Actions')}}</th>
+                                    <th style="width: 150px" pSortableColumn="userId">
+                                        {{l('UserId')}}
+                                        <p-sortIcon field="impersonate.userId"></p-sortIcon>
+                                    </th>
+                                    <th style="width: 150px" pSortableColumn="userName">
+                                        {{l('UserName')}}
+                                        <p-sortIcon field="impersonate.userName"></p-sortIcon>
+                                    </th>
+                                    <th style="width: 150px" pSortableColumn="impersonateUserId">
+                                        {{l('ImpersonateUserId')}}
+                                        <p-sortIcon field="impersonate.impersonateUserId"></p-sortIcon>
+                                    </th>
+                                    <th style="width: 150px" pSortableColumn="impersonateUserName">
+                                        {{l('ImpersonateUserName')}}
+                                        <p-sortIcon field="impersonate.impersonateUserName"></p-sortIcon>
+                                    </th>
+                                    <th style="width: 150px" pSortableColumn="startDate">
+                                        {{l('StartDate')}}
+                                        <p-sortIcon field="impersonate.startDate"></p-sortIcon>
+                                    </th>
+                                    <th style="width: 150px" pSortableColumn="endDate">
+                                        {{l('EndDate')}}
+                                        <p-sortIcon field="impersonate.endDate"></p-sortIcon>
+                                    </th>
+                                    <th style="width: 150px" pSortableColumn="isActive">
+                                        {{l('IsActive')}}
+                                        <p-sortIcon field="impersonate.isActive"></p-sortIcon>
+                                    </th>
+                                    <th style="width: 150px" pSortableColumn="isDeleted">
+                                        {{l('IsDeleted')}}
+                                        <p-sortIcon field="impersonate.isDeleted"></p-sortIcon>
+                                    </th>
+
+                                </tr>
+                            </ng-template>
+							<ng-template pTemplate="body" let-record="$implicit">
+                                <tr>
+                                    <td style="width: 130px"
+                                        [hidden]="!isGrantedAny('Pages.Impersonates.Edit', 'Pages.Impersonates.Delete')">
+                                       <div class="btn-group dropdown" dropdown container="body">
+                                            <button class="dropdown-toggle btn btn-sm btn-primary" dropdownToggle>
+                                                <i class="fa fa-cog"></i><span class="caret"></span>
+                                            </button>
+												<ul class="dropdown-menu"  *dropdownMenu>
+
+												<li>
+													<a href="javascript:;" *ngIf="permission.isGranted('Pages.Impersonates.Edit')"
+														(click)="createOrEditImpersonateModal.show(record.impersonate.id)">{{l('Edit')}}</a>
+												</li>
+												<li>
+											        <a href="javascript:;" *ngIf="permission.isGranted('Pages.Impersonates.Delete')"
+														(click)="deleteImpersonate(record.impersonate)">{{l('Delete')}}</a>
+												</li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                    <td style="width:150px">
+											<span class="ui-column-title"> {{l('UserId')}}</span>
+											{{record.impersonate.userId}}
+										</td>
+                                    <td style="width:150px">
+											<span class="ui-column-title"> {{l('UserName')}}</span>
+											{{record.impersonate.userName}}
+										</td>
+                                    <td style="width:150px">
+											<span class="ui-column-title"> {{l('ImpersonateUserId')}}</span>
+											{{record.impersonate.impersonateUserId}}
+										</td>
+                                    <td style="width:150px">
+											<span class="ui-column-title"> {{l('ImpersonateUserName')}}</span>
+											{{record.impersonate.impersonateUserName}}
+										</td>
+                                    <td style="width:150px">
+										<span class="ui-column-title"> {{l('StartDate')}}</span>
+                                        <span *ngIf="record.impersonate.startDate">
+											{{record.impersonate.startDate | momentFormat:'L'}}
+                                        </span>
+                                        <span *ngIf="!record.impersonate.startDate">-</span>
+                                    </td>
+                                    <td style="width:150px">
+										<span class="ui-column-title"> {{l('EndDate')}}</span>
+                                        <span *ngIf="record.impersonate.endDate">
+											{{record.impersonate.endDate | momentFormat:'L'}}
+                                        </span>
+                                        <span *ngIf="!record.impersonate.endDate">-</span>
+                                    </td>
+                                    <td style="width:150px">
+										<span class="ui-column-title"> {{l('IsActive')}}</span>
+                                        <div *ngIf="record.impersonate.isActive" class="text-center"><i class="fa fa-check-circle kt--font-success" title="True"></i></div>
+										<div *ngIf="!record.impersonate.isActive" class="text-center"><i class="fa fa-times-circle" title="False"></i></div>
+                                    </td>
+                                    <td style="width:150px">
+										<span class="ui-column-title"> {{l('IsDeleted')}}</span>
+                                        <div *ngIf="record.impersonate.isDeleted" class="text-center"><i class="fa fa-check-circle kt--font-success" title="True"></i></div>
+										<div *ngIf="!record.impersonate.isDeleted" class="text-center"><i class="fa fa-times-circle" title="False"></i></div>
+                                    </td>
+
+                                </tr>
+                            </ng-template>
+                        </p-table>
+						<div class="primeng-no-data" *ngIf="primengTableHelper.totalRecordsCount == 0">
+                            {{l('NoData')}}
+                        </div>
+                        <div class="primeng-paging-container">
+                            <p-paginator [rows]="primengTableHelper.defaultRecordsCountPerPage"
+                                         #paginator
+                                         (onPageChange)="getImpersonates($event)"
+                                         [totalRecords]="primengTableHelper.totalRecordsCount"
+                                         [rowsPerPageOptions]="primengTableHelper.predefinedRecordsCountPerPage">
+                            </p-paginator>
+                            <span class="total-records-count">
+                                {{l('TotalRecordsCount', primengTableHelper.totalRecordsCount)}}
+                            </span>
+                        </div>
+                    </div>
+                </div> -->
+
+            </div>
+        </div>
+    </div>
+
+    <createOrEditImpersonateModal #createOrEditImpersonateModal (modalSave)="getImpersonates()"></createOrEditImpersonateModal>
+
+
+  </div>
+</div>

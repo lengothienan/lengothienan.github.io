@@ -1,0 +1,3 @@
+::ng-deep .dx-datagrid-rowsview .dx-select-checkboxes-hidden > tbody > tr > td > .dx-select-checkbox {
+    display: block;
+}

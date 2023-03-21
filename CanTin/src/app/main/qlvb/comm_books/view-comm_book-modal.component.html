@@ -1,0 +1,74 @@
+﻿<div bsModal #createOrEditModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createOrEditModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    <span>{{l("Details")}}</span>
+                </h4>
+                <button type="button" class="close" (click)="close()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="row">
+                    <div class="col-6 mb-3">
+                        <h6>{{l("Name")}} :</h6>
+                        {{ item.comm_book.name }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{l("Type")}} :</h6>
+                        {{ item.comm_book.type }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{l("FromDate")}} :</h6>
+                        {{ item.comm_book.fromDate | momentFormat:'YYYY-MM-DD HH:mm:ss' }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{l("ToDate")}} :</h6>
+                        {{ item.comm_book.toDate | momentFormat:'YYYY-MM-DD HH:mm:ss' }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{l("FromValue")}} :</h6>
+                        {{ item.comm_book.fromValue }}
+                    </div>
+                    <!-- <div class="col-6 mb-3">
+                        <h6>{{l("ToValue")}} :</h6>
+                        {{ item.comm_book.toValue }}
+                    </div> -->
+                    <div class="col-6 mb-3">
+                        <h6>{{l("CurrentValue")}} :</h6>
+                        {{ item.comm_book.currentValue }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{l("Code")}} :</h6>
+                        {{ item.comm_book.code }}
+                    </div>
+                    <!-- <div class="col-6 mb-3">
+                        <h6>{{l("Version")}} :</h6>
+                        {{ item.comm_book.version }}
+                    </div> -->
+                    <div class="col-6 mb-3">
+                        <h6>{{l("SyntaxId")}} :</h6>
+                        {{ item.comm_book.syntaxId }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{l("OrgId")}} :</h6>
+                        {{ item.comm_book.orgId }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{l("IsActive")}} :</h6>
+                        {{ item.comm_book.isActive }}
+                    </div>
+
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button [disabled]="saving" type="button" class="btn btn-primary blue" (click)="close()">{{l("Close")}}</button>
+            </div>
+        </div>
+    </div>
+
+</div>

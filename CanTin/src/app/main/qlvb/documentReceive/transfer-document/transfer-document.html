@@ -1,0 +1,103 @@
+<div *ngIf="checkType == 0 then incommingDoc"></div>
+<div *ngIf="checkType == 1 then outcommingDoc"></div>
+
+<ng-template #incommingDoc>
+    <div [@routerTransition]>
+        <div class="kt-content  kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor">
+            <div class="kt-subheader kt-grid__item">
+                <div [class]="containerClass">
+                    <div class="kt-subheader__main">
+                        <h3 class="kt-subheader__title">
+                            <span>{{l("Quy trình xử lý văn bản  ")}}</span>
+                        </h3>
+                    </div>
+                </div>
+            </div>
+            <div [class]="containerClass + ' kt-grid__item kt-grid__item--fluid'">
+                <div class="kt-portlet kt-portlet--mobile">
+                    <div class="modal-body">
+                        <div class="col-xl-12" style="padding-bottom: 17px;padding-left:0;">
+                            <dx-button text="Trở về" type="success" icon="fa fa-arrow-left"
+                                onclick="window.history.go(-1); return false;"></dx-button>
+                            &nbsp;
+                        </div>
+                        <dx-tree-list #treeList keyExpr="Id" parentIdExpr="ParentHandlingId"
+                        [expandedRowKeys]="['FullName']" [columnAutoWidth]="true" [wordWrapEnabled]="true"
+                        [showBorders]="true" [autoExpandAll]="true" [dataSource]="quytrinhxulyvbden">
+                        <dxi-column [encodeHtml]="false" dataField="UnitName" caption="Phòng ban"></dxi-column>
+                        <dxi-column [encodeHtml]="false" dataField="FullName" caption="Người thực hiện"></dxi-column>
+                        <dxi-column [encodeHtml]="false" dataField="Description" caption="Bước xử lý"></dxi-column>   
+                        <dxi-column  caption="Loại xử lý" alignment="left" cellTemplate="typeCellTemplate" >
+                        </dxi-column>
+                        <!-- <dxi-column dataField="impersonatedFullName" caption="Người được ủy quyền"></dxi-column> -->
+                        <!-- <dxi-column dataField="handlingDescription" caption="Bước xử lý"></dxi-column> -->
+                        <dxi-column dataField="ProcessingRecommended" [encodeHtml]="false" caption="Nội dung xử lý"></dxi-column>
+                        <!-- <dxi-column dataField="Receiver" caption="Nguời nhận"></dxi-column> -->
+                        <!-- <dxi-column dataField="dvxl" caption="Đơn vị nhận"></dxi-column> -->
+                        <dxi-column dataField="ProcessingDate" caption="Ngày thực hiện" dataType="date" [format]="'dd/MM/yyyy'"></dxi-column>
+                        <dxi-column dataField="FinishedDate" caption="Ngày hoàn thành" dataType="date" [format]="'dd/MM/yyyy'"></dxi-column>
+                        <dxi-column caption="Trạng thái" cellTemplate="statusCellTemplate"></dxi-column>
+                        <dxi-column dataField="TimeCheckMessage" caption="Ngày xem" dataType="date" [format]="'dd/MM/yyyy'"></dxi-column>
+                        <dxi-column dataField="TypeHandling" sortOrder="desc" [allowSorting]="true" [visible]="false"  caption="Chủ trì"></dxi-column>
+    
+    
+    
+                        <div *dxTemplate="let d of 'typeCellTemplate'">
+                            <div>
+                                <div *ngIf="d.data.Type== 1 && d.data.HandlingType==6" class="current-value" style="font-weight: bold;"> Lưu tham khảo </div>
+                                <div *ngIf="d.data.Type== 2 && d.data.HandlingType==6" class="current-value" style="font-weight: bold;"> Báo cáo </div>
+                                <div *ngIf="d.data.Type== 3 && d.data.HandlingType==6" class="current-value" style="font-weight: bold;"> Dự họp </div>
+                                <div *ngIf="d.data.Type== 4 && d.data.HandlingType==6" class="current-value" style="font-weight: bold;"> Dự thảo văn bản đi </div>
+                            </div>
+                        </div>
+                        <div *dxTemplate="let d of 'statusCellTemplate'">
+                            <div>
+                                <div *ngIf="d.data.IsSeen==1" class="current-value" style="font-weight: bold;"> Đã xem </div>
+                                <div *ngIf="d.data.IsSeen==0" class="current-value" style="font-weight: bold;"> Đã nhận </div>
+                            </div>
+                        </div>
+                    </dx-tree-list>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+<ng-template #outcommingDoc>
+    <div [@routerTransition]>
+        <div class="kt-content  kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor">
+            <div class="kt-subheader kt-grid__item">
+                <div [class]="containerClass">
+                    <div class="kt-subheader__main">
+                        <h3 class="kt-subheader__title">
+                            <span>{{l("Quy trình xử lý văn bản  ")}}</span>
+                        </h3>
+                    </div>
+                </div>
+            </div>
+            <div [class]="containerClass + ' kt-grid__item kt-grid__item--fluid'">
+                <div class="kt-portlet kt-portlet--mobile">
+                    <div class="modal-body">
+                        <div class="col-xl-12" style="padding-bottom: 17px;padding-left:0;">
+                            <dx-button text="Trở về" type="success" icon="fa fa-arrow-left"
+                                onclick="window.history.go(-1); return false;"></dx-button>
+                            &nbsp;
+                        </div>
+                        <dx-tree-list #treeListVBDi keyExpr="id" parentIdExpr="parentHandlingId"
+                            [expandedRowKeys]="['fullName']" [columnAutoWidth]="true" [wordWrapEnabled]="true"
+                            [showBorders]="true" [autoExpandAll]="true" [dataSource]="quytrinhxulyvbdi">
+                            <dxi-column dataField="fullName" caption="Người thực hiện"></dxi-column>
+                            <dxi-column dataField="unitName" caption="Phòng ban"></dxi-column>
+                            <dxi-column dataField="impersonatedFullName" caption="Người được ủy quyền"></dxi-column>
+                            <dxi-column dataField="handlingDescription" caption="Bước xử lý"></dxi-column>
+                            <dxi-column dataField="processingRecommended" [encodeHtml]="false" caption="Nội dung xử lý"></dxi-column>
+                            <dxi-column dataField="receiver" caption="Nguời nhận"></dxi-column>
+                            <dxi-column dataField="dvxl" caption="Đơn vị nhận"></dxi-column>
+                            <dxi-column dataField="processingDate" caption="Ngày thực hiện" dataType="date" [format]="'dd/MM/yyyy'"></dxi-column>
+                        </dx-tree-list>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>

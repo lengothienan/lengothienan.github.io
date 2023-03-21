@@ -1,0 +1,55 @@
+<div [@routerTransition]>
+    <div class="kt-content  kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor">
+        <div class="kt-subheader kt-grid__item">
+          <div [class]="containerClass">
+            <div class="kt-subheader__main">
+                    <h3 class="kt-subheader__title">
+                            <span>{{l("Các công việc cần giải quyết")}}</span>
+                         </h3>
+                <!-- <span class="kt-subheader__separator kt-subheader__separator--v"></span> -->
+                <!-- <span class="kt-subheader__desc">
+                    {{l("SchedulesHeaderInfo")}}
+                </span> -->
+                <!-- <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Văn bản đến</li>
+                    </ol>
+                </nav> -->
+            </div>
+            <div class="kt-subheader__toolbar">
+                <div class="kt-subheader__wrapper">
+                    <button class="btn btn-outline-success"><i class="fa fa-file-excel"></i> {{l("ExportToExcel")}}</button>
+                    <!-- <button *ngIf="isGranted('Pages.Schedules.Create')"  class="btn btn-primary blue"><i class="fa fa-plus"></i> {{l("CreateNewSchedule")}}</button> -->
+                
+                </div>
+            </div>
+          </div>
+        </div>
+        <div [class]="containerClass + ' kt-grid__item kt-grid__item--fluid'">
+            <div class="kt-portlet kt-portlet--mobile">
+                <div class="modal-body">
+
+                    <div class="form">
+                        <dx-tree-view
+                            id="simple-treeview"
+                            [items]="products"
+                            dataStructure="plain"
+                            keyExpr="ID"
+                            
+                            displayExpr="name"
+                            [width]="800"
+                            (onItemClick)="selectItem($event)"
+                        ></dx-tree-view>
+                        <div id="product-details" >
+                            <!-- <img [src]="currentItem.icon" /> -->
+                            <a href="{{currentItem.name}}"></a>
+                           
+                        </div>
+                    </div>
+                    <!-- parentIdExpr="categoryId" -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

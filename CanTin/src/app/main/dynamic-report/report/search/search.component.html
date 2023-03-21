@@ -1,0 +1,87 @@
+<div class="row">
+    <div class="col-12">
+        <div class="card card-outline-info">
+            <div class="card-body">
+                <h4 class="card-title">Tìm kiếm</h4>
+                <form (submit)="search()">
+                    <dx-form #reportForm [(formData)]="searchData" validationGroup="formValidateGroup" colCount="2">
+                        <dxi-item dataField="code" [colSpan]="1">
+                            <dxo-label text="Mã"></dxo-label>
+                        </dxi-item>
+                        <dxi-item dataField="name" [colSpan]="2">
+                            <dxo-label text="Tên"></dxo-label>
+                        </dxi-item>
+                    </dx-form>
+                    <br/>
+                    <div class="row justify-content-center">
+                        <dx-button text="Tìm kiếm" icon="fa fa-search" type="success" [useSubmitBehavior]="true" validationGroup="formValidateGroup"></dx-button>
+                        &nbsp;
+                        <dx-button text="Đặt lại" icon="fa fa-rotate-left" (onClick)="reset()"></dx-button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        <div class="card card-outline-info">
+            <div class="card-body">
+                <div class="row mb-1">
+                    <div class="col-12">
+                        <dx-button text="Thêm mới" icon="fa fa-plus" type="success" (onClick)="add()"></dx-button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <dx-data-grid #reportDg [dataSource]="DataSource" [showRowLines]="true" [showBorders]="true"
+                            [wordWrapEnabled]="true">
+                            <dxi-column caption="STT" width="60" dataType="number" alignment="center" cellTemplate="sttCellTemplate"></dxi-column>
+                            <dxi-column caption="Mã" dataType="string" dataField="code" width="150"></dxi-column>
+                            <dxi-column caption="Tên" dataType="string" dataField="name" ></dxi-column>
+                            <!-- <dxi-column caption="Excel Template" alignment="center" dataField="c.excel" width="100" cellTemplate="downloadTemplate"></dxi-column>
+                            <dxi-column caption="Trạng thái" width="100" dataField="isActive" dataType="boolean"  cellTemplate="activeTemplate"></dxi-column> -->
+                            
+                            <dxi-column caption="Chi tiết" width="100" dataField="id" alignment="center" cellTemplate="detailTemplate"></dxi-column>
+                            <dxi-column caption="Cấu hình" width="100" dataField="id" alignment="center" cellTemplate="reportFilterTemplate"></dxi-column>
+                            <dxi-column caption="Sao chép" width="100" alignment="center" dataField="id" cellTemplate="copyTemplate"></dxi-column>
+                            <dxi-column caption="Xóa" width="100" alignment="center" dataField="id" cellTemplate="deleteTemplate"></dxi-column>
+
+                            <div *dxTemplate="let d of 'sttCellTemplate'">
+                                <div> {{d.rowIndex + 1}}</div>
+                            </div>
+
+                            <!-- <div *dxTemplate="let cell of 'activeTemplate'">
+                                <i *ngIf="cell.value" class="fa fa-check-circle" style="color:green;"></i>
+                                <i *ngIf="!cell.value" class="fa fa-check-circle" style="color:gray;"></i>
+                            </div> -->
+
+                            <div *dxTemplate="let cell of 'detailTemplate'">
+                                <i class="fa fa-list-alt" style="color:#1876d3; cursor: pointer;" (click)="detail(cell.value)"></i>
+                            </div>
+                            <div *dxTemplate="let cell of 'downloadTemplate'">
+                               <a href="./ConfigReport/EXCEL/{{cell.value}}"><i class="fa fa-download" style="color:#1876d3; cursor: pointer;"></i></a> 
+                            </div>
+
+                            <div *dxTemplate="let cell of 'deleteTemplate'">
+                                <i class="fa fa-times" style="color:red; cursor: pointer;" (click)="delete(cell.value)"></i>
+                            </div>
+
+                            <div *dxTemplate="let cell of 'copyTemplate'">
+                                <i class="far fa-copy" style="color:#1876d3; cursor: pointer;" (click)="copy(cell.value)"></i>
+                            </div>
+
+                            <div *dxTemplate="let cell of 'reportFilterTemplate'">
+                                <i class="fa fa-cog" style="color:#1876d3; cursor: pointer;" (click)="setFilter(cell.value)"></i>
+                            </div>
+                            
+                            <dxo-paging [pageSize]="20" [pageIndex]="1"></dxo-paging>
+                            <dxo-pager visible="true" infoText="Trang {0} trên {1} ({2} dòng)" [allowedPageSizes]="[20, 50, 100]" [showPageSizeSelector]="true"
+                                [showInfo]="true"></dxo-pager>
+                        </dx-data-grid>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

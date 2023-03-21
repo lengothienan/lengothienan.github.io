@@ -1,0 +1,68 @@
+<div bsModal #createOrEditModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createOrEditModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #workAssignForm="ngForm" novalidate (ngSubmit)="save()" autocomplete="off">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span *ngIf="workAssign.id">{{l("EditWorkAssign")}}</span>
+                        <span *ngIf="!workAssign.id">{{l("CreateNewWorkAssign")}}</span>
+                    </h4>
+                    <button type="button" class="close" (click)="close()" aria-label="Close" [disabled]="saving">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                 
+
+
+								<div class="form-group">
+									<label for="WorkAssign_Name">{{l("Name")}}</label>
+									<input type="text" id="WorkAssign_Name" class="form-control" [(ngModel)]="workAssign.name" name="Name"    />
+								</div>
+					
+								<div class="form-group">
+									<label for="WorkAssign_StartDate">{{l("StartDate")}}</label>
+									 <input required class="form-control m-input" type="datetime" bsDatepicker [(ngModel)]="workAssign.startDate._d" id="WorkAssign_StartDate" name="WorkAssign_StartDate">
+								</div>
+					
+								<div class="form-group">
+									<label for="WorkAssign_EndDate">{{l("EndDate")}}</label>
+									 <input required class="form-control m-input" type="datetime" bsDatepicker [(ngModel)]="workAssign.endDate._d" id="WorkAssign_EndDate" name="WorkAssign_EndDate">
+								</div>
+					
+								<div class="form-group">
+									<label for="WorkAssign_Assignee">{{l("Assignee")}}</label>
+									<input type="text" id="WorkAssign_Assignee" class="form-control" [(ngModel)]="workAssign.assignee" name="Assignee"    />
+								</div>
+					
+								<div class="form-group">
+									<label for="WorkAssign_Progress">{{l("Progress")}}</label>
+									<input type="number" id="WorkAssign_Progress" class="form-control" [(ngModel)]="workAssign.progress" name="Progress"  min="0"  max="100"/>
+								</div>
+					
+								<div class="form-group">
+									<label for="WorkAssign_Status">{{l("Status")}}</label>
+									<input type="text" id="WorkAssign_Status" class="form-control" [(ngModel)]="workAssign.status" name="Status"    />
+								</div>
+					
+								<div class="form-group">
+									<label for="WorkAssign_Description">{{l("Description")}}</label>
+									<input type="text" id="WorkAssign_Description" class="form-control" [(ngModel)]="workAssign.description" name="Description"    />
+								</div>
+					
+								<div class="form-group">
+									<label for="WorkAssign_Action">{{l("Action")}}</label>
+									<input type="text" id="WorkAssign_Action" class="form-control" [(ngModel)]="workAssign.action" name="Action"    />
+								</div>
+					
+
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-default" (click)="close()">{{l("Cancel")}}</button>
+                    <button type="submit" class="btn btn-primary blue" [disabled]="!workAssignForm.form.valid" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>

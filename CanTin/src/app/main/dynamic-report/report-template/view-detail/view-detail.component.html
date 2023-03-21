@@ -1,0 +1,459 @@
+<style>
+    .nav-link {
+        font-size: 16px;
+        font-weight: 300;
+    }
+
+    .nav-link:hover,
+    .nav-link:focus {
+        border-bottom: 2px solid #2196F3 !important;
+    }
+
+    .nav-link.active {
+        border-bottom: 2px solid #2196F3 !important;
+    }
+
+    .ui-draggable-handle, .dx-datagrid {
+        cursor: default !important;
+    }
+</style>
+<div class="row">
+    <div class="col-md-12 col-lg-12">
+        <div class="card card-outline-info">
+            <ul id=rowtab class="nav nav-tabs customtab" role="tablist">
+                <li style="cursor: pointer;">
+                    <a id='keytab1' class="nav-link" data-toggle="tab" [class.active]="currentTab == 1"
+                        (click)="onSelectTab(1)">
+                        <span class="hidden-sm-up"></span>
+                        <span class="hidden-xs-down">Biểu mẫu</span>
+                    </a>
+                </li>
+                <li style="cursor: pointer;">
+                    <a id='keytab2' class="nav-link" data-toggle="tab" [class.active]="currentTab == 2"
+                        (click)="onSelectTab(2)">
+                        <span class="hidden-sm-up"></span>
+                        <span class="hidden-xs-down">Tiêu chí</span>
+                    </a>
+                </li>
+                <li style="cursor: pointer;">
+                    <a id='keytab3' class="nav-link" data-toggle="tab" [class.active]="currentTab == 3"
+                        (click)="onSelectTab(3)">
+                        <span class="hidden-sm-up"></span>
+                        <span class="hidden-xs-down">Cột</span>
+                    </a>
+                </li>
+                <li style="cursor: pointer;">
+                    <a id='keytab4' class="nav-link" data-toggle="tab" [class.active]="currentTab == 4"
+                        (click)="onSelectTab(4)">
+                        <span class="hidden-sm-up"></span>
+                        <span class="hidden-xs-down">Đơn vị</span>
+                    </a>
+                </li>
+                <li style="cursor: pointer;">
+                    <a id='keytab5' class="nav-link" data-toggle="tab" [class.active]="currentTab == 5"
+                        (click)="onSelectTab(5)">
+                        <span class="hidden-sm-up"></span>
+                        <span class="hidden-xs-down">Custom Field</span>
+                    </a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane" role='tabpanel' id="tab1" [class.active]="currentTab == 1"
+                    *ngIf="currentTab == 1">
+                    <div>
+                        <form style="margin:20px" (submit)="save($event)">
+                            <dx-form id="form" [(formData)]="templateData" validationGroup="formValidateGroup"
+                                colCount="4">
+                                <dxi-item dataField="formName" [colSpan]="2">
+                                    <dxo-label text="Tên biểu mẫu"></dxo-label>
+                                    <dxi-validation-rule type="required" message="Tên biểu mẫu không được để trống">
+                                    </dxi-validation-rule>
+                                </dxi-item>
+                                <dxi-item dataField="parentId" editorType="dxSelectBox" [editorOptions]="parentOptions"
+                                    [colSpan]="2">
+                                    <dxo-label text="Biểu mẫu cơ sở"></dxo-label>
+                                </dxi-item>
+                                <dxi-item dataField="reportGroupId" editorType="dxSelectBox"
+                                    [editorOptions]="reportGroupOptions" [colSpan]="2">
+                                    <dxo-label text="Nhóm"></dxo-label>
+                                    <dxi-validation-rule type="required" message="Vui lòng chọn nhóm biểu mẫu">
+                                    </dxi-validation-rule>
+                                </dxi-item>
+                                <dxi-item dataField="reportTypeId" editorType="dxSelectBox"
+                                    [editorOptions]="reportTypeOptions" [colSpan]="2">
+                                    <dxo-label text="Kiểu"></dxo-label>
+                                    <dxi-validation-rule type="required" message="Kiểu biểu mẫu không được để trống">
+                                    </dxi-validation-rule>
+                                </dxi-item>
+                                <dxi-item dataField="templateName" [colSpan]="2">
+                                    <dxo-label text="Upload file"></dxo-label>
+                                    <label class="btn btn-primary">
+                                        <input type="file" style="display: none;" multiple="true"
+                                            (change)="fileChange($event)">
+                                        <span>Chọn mẫu</span>
+                                    </label>
+                                    <!-- <dx-file-uploader uploadUrl="{{uploadUrl}}" [multiple]="true"
+                                        selectButtonText="Chọn file đính kèm" accept="*" icon="upload"
+                                        [(value)]="value" uploadMode="instantly" (onUploaded)="setFullNameFile()">
+                                    </dx-file-uploader> -->
+                                    &nbsp;
+                                    <label>{{ templateData.fileName }}</label>
+                                </dxi-item>
+                                <dxi-item dataField="pathTemplate" [editorOptions]="{ disabled: true }" [colSpan]="2">
+                                    <dxo-label text="Đường dẫn"></dxo-label>
+                                </dxi-item>
+                                <dxi-item dataField="orderID" [colSpan]="2">
+                                    <dxo-label text="Thứ tự"></dxo-label>
+                                    <dxi-validation-rule type="required" message="Thứ tự không được để trống">
+                                    </dxi-validation-rule>
+                                </dxi-item>
+                                <dxi-item dataField="displayName" [colSpan]="2">
+                                    <dxo-label text="Tên hiển thị"></dxo-label>
+                                </dxi-item>
+                                <dxi-item dataField="formCode" [colSpan]="2">
+                                    <dxo-label text="Mã biểu mẫu"></dxo-label>
+                                </dxi-item>
+                                <dxi-item dataField="isSpecial" editorType="dxCheckBox" [colSpan]="1">
+                                    <dxo-label text="Đặc biệt"></dxo-label>
+                                </dxi-item>
+                                <dxi-item dataField="isColumnAutoWidth" editorType="dxCheckBox" [colSpan]="1">
+                                    <dxo-label text="Tự động giãn cột"></dxo-label>
+                                </dxi-item>
+                                <dxi-item dataField="formType" [colSpan]="2" editorType="dxSelectBox"
+                                    [editorOptions]="formTypeOptions">
+                                    <dxo-label text="Loại biểu mẫu"></dxo-label>
+                                </dxi-item>
+
+                                <dxi-item dataField="isActive" editorType="dxCheckBox" [colSpan]="1">
+                                    <dxo-label text="Hiệu lực"></dxo-label>
+                                </dxi-item>
+                                <dxi-item dataField="isAutoLock" editorType="dxCheckBox" [colSpan]="1">
+                                    <dxo-label text="Khóa tự động"></dxo-label>
+                                </dxi-item>
+
+                                <dxi-item dataField="description" editorType="dxTextArea"
+                                    [editorOptions]="{ height: 100 }" [colSpan]="4">
+                                    <dxo-label text="Mô tả"></dxo-label>
+                                </dxi-item>
+                            </dx-form>
+                            <br />
+                            <div class="row justify-content-center">
+                                <dx-button text="Lưu" icon="fa fa-save" type="success" [useSubmitBehavior]="true"
+                                    validationGroup="formValidateGroup"></dx-button>
+                                &nbsp;
+                                <dx-button *ngIf="templateData.parentId == 0" text="Tạo báo cáo" icon="fa fa-table"
+                                    type="default" (onClick)="openMakeReportPopup()"></dx-button>
+                                &nbsp;
+                                <dx-button text="Trở về" icon="fa fa-arrow-left" (onClick)="back()"></dx-button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="tab-pane" role='tabpanel' id="tab2" [class.active]="currentTab == 2"
+                    *ngIf="currentTab == 2">
+                    <div class="col-md-12" style="margin-top: 15px">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h4 class="card-title">Tìm kiếm tiêu chí</h4>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-md-12">
+                                <form (submit)="searchSection()">
+                                    <dx-form [(formData)]="sectionDataSearch">
+                                        <dxi-item dataField="formName">
+                                            <dxo-label text="Tên tiêu chí"></dxo-label>
+                                        </dxi-item>
+                                    </dx-form>
+                                    <br />
+                                    <div class="row justify-content-center">
+                                        <dx-button text="Tìm kiếm" icon="fa fa-search" type="success"
+                                            [useSubmitBehavior]="true"></dx-button>
+                                        &nbsp;
+                                        <dx-button text="Trở về" icon="fa fa-arrow-left" (onClick)="back()"></dx-button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="container-btn left-button" style="margin-bottom: 5px">
+                                    <dx-button text="Thêm mới" icon="fa fa-plus" type="success"
+                                        (onClick)="addEditSection(-1);"></dx-button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <dx-data-grid #sectionDg [dataSource]="sectionsDataSource" [showRowLines]="true"
+                                    [showBorders]="true" [rowAlternationEnabled]="true" [wordWrapEnabled]="true"
+                                    (onContentReady)="onContentReadySection($event)"
+                                    (onRowPrepared)="onRowPrepared_Section($event)">
+                                    <dxi-column dataField="orderId" caption="STT" width="60" alignment="center">
+                                    </dxi-column>
+                                    <dxi-column dataField="sectionName" caption="Tên tiêu chí"></dxi-column>
+                                    <dxi-column dataField="indexId" caption="Thứ tự" width="80"></dxi-column>
+                                    <dxi-column dataField="isActive" caption="Hiệu lực" width="60" alignment="center"
+                                        cellTemplate="activeTemplate"></dxi-column>
+                                    <dxi-column dataField="id" caption="Chỉnh sửa" width="60" alignment="center"
+                                        cellTemplate="editTemplate"></dxi-column>
+                                    <dxi-column dataField="id" caption="Xóa" width="60" alignment="center"
+                                        cellTemplate="deleteTemplate"></dxi-column>
+
+                                    <div *dxTemplate="let cell of 'activeTemplate'">
+                                        <i *ngIf="cell.value" class='fa fa-star'
+                                            style="color:#1876d3; cursor: pointer;"></i>
+                                        <i *ngIf="!cell.value" class='fa fa-star-0'
+                                            style="color:#1876d3; cursor: pointer;"></i>
+                                    </div>
+
+                                    <div *dxTemplate="let cell of 'editTemplate'">
+                                        <i class='fa fa-list-alt' style="color:#1876d3; cursor: pointer;"
+                                            (click)="addEditSection(cell.value)"></i>
+                                    </div>
+
+                                    <div *dxTemplate="let cell of 'deleteTemplate'">
+                                        <i class='fa fa-remove' style="color:rgb(241, 57, 57); cursor: pointer; font-size: 17px;"
+                                            (click)="deleteSection(cell.value)"></i>
+                                    </div>
+
+                                    <dxo-paging [pageSize]="sectionDataSearch.pageSize"
+                                        [pageIndex]="sectionDataSearch.pageIndex"></dxo-paging>
+                                    <dxo-pager visible="true" infoText="Trang {0} trên {1} ({2} dòng)"
+                                        [allowedPageSizes]="[20, 50, 100]" [showPageSizeSelector]="true"
+                                        [showInfo]="true"></dxo-pager>
+                                </dx-data-grid>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane" role='tabpanel' id="tab3" [class.active]="currentTab == 3"
+                    *ngIf="currentTab == 3">
+                    <div class="col-md-12" style="margin-top: 15px">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h4 class="card-title">Tìm kiếm cột</h4>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-md-12">
+                                <form (submit)="searchColumn()">
+                                    <dx-form [(formData)]="columnDataSearch">
+                                        <dxi-item dataField="columnName">
+                                            <dxo-label text="Tên cột"></dxo-label>
+                                        </dxi-item>
+                                    </dx-form>
+                                    <br />
+                                    <div class="row justify-content-center">
+                                        <dx-button text="Tìm kiếm" icon="fa fa-search" type="success"
+                                            [useSubmitBehavior]="true"></dx-button>
+                                        &nbsp;
+                                        <dx-button text="Trở về" icon="fa fa-arrow-left" (onClick)="back()"></dx-button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="container-btn left-button" style="margin-bottom: 5px">
+                                    <dx-button text="Thêm mới" icon="fa fa-plus" type="success"
+                                        (onClick)="addEditColumn(-1);"></dx-button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <dx-data-grid #columnDg [dataSource]="columnDataSource" [showRowLines]="true"
+                                    [showBorders]="true" [rowAlternationEnabled]="true" [wordWrapEnabled]="true"
+                                    (onContentReady)="onContentReadyColumn($event)"
+                                    (onRowPrepared)="onRowPrepared_Column($event)">
+                                    <dxi-column dataField="orderId" caption="STT" width="60" alignment="center">
+                                    </dxi-column>
+                                    <dxi-column dataField="columnName" caption="Tên cột"></dxi-column>
+                                    <dxi-column dataField="alignment" caption="Căn lề" width="80"></dxi-column>
+                                    <dxi-column dataField="dataType" caption="Kiểu dữ liệu" width="80"></dxi-column>
+                                    <dxi-column dataField="width" caption="Chiều rộng" width="80"></dxi-column>
+                                    <dxi-column dataField="isActive" caption="Hiệu lực" width="60" alignment="center"
+                                        cellTemplate="activeTemplate"></dxi-column>
+                                    <dxi-column dataField="id" caption="Chỉnh sửa" width="60" alignment="center"
+                                        cellTemplate="editTemplate"></dxi-column>
+                                    <dxi-column dataField="id" caption="Xóa" width="60" alignment="center"
+                                        cellTemplate="deleteTemplate"></dxi-column>
+
+                                    <div *dxTemplate="let cell of 'activeTemplate'">
+                                        <i *ngIf="cell.value" class='fa fa-star'
+                                            style="color:#1876d3; cursor: pointer;"></i>
+                                        <i *ngIf="!cell.value" class='fa fa-star-0'
+                                            style="color:#1876d3; cursor: pointer;"></i>
+                                    </div>
+
+                                    <div *dxTemplate="let cell of 'editTemplate'">
+                                        <i class='fa fa-list-alt' style="color:#1876d3; cursor: pointer;"
+                                            (click)="addEditColumn(cell.value)"></i>
+                                    </div>
+
+                                    <div *dxTemplate="let cell of 'deleteTemplate'">
+                                        <i class='fa fa-remove' style="color:rgb(241, 57, 57); cursor: pointer; font-size: 17px;"
+                                            (click)="deleteColumn(cell.value)"></i>
+                                    </div>
+
+                                    <dxo-paging [pageSize]="columnDataSearch.pageSize"
+                                        [pageIndex]="columnDataSearch.pageIndex"></dxo-paging>
+                                    <dxo-pager visible="true" infoText="Trang {0} trên {1} ({2} dòng)"
+                                        [allowedPageSizes]="[20, 50, 100]" [showPageSizeSelector]="true"
+                                        [showInfo]="true"></dxo-pager>
+                                </dx-data-grid>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane" role='tabpanel' id="tab4" [class.active]="currentTab == 4"
+                    *ngIf="currentTab == 4">
+                    <div class="col-md-12" style="margin-top: 15px">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="container-btn left-button" style="margin-bottom: 5px">
+                                    <dx-button text="Lưu" icon="fa fa-floppy-o " type="success"
+                                        (onClick)="saveUnitForm();"></dx-button>
+                                    &nbsp;
+                                    <dx-button text="Trở về" icon="fa fa-arrow-left" (onClick)="back()"></dx-button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <dx-data-grid #unitDg [dataSource]="unitDataSource" [showRowLines]="true"
+                                    [showBorders]="true" [rowAlternationEnabled]="true" [wordWrapEnabled]="true"
+                                    (onContentReady)="onContentReadyUnit($event)">
+                                    <dxi-column caption="STT" width="60" alignment="center" cellTemplate="sttTemplate">
+                                    </dxi-column>
+                                    <dxi-column dataField="unitName" caption="Tên đơn vị"></dxi-column>
+                                    <!-- <dxi-column dataField="groupName" caption="Nhóm đơn vị" width="200" groupIndex="0">
+                                    </dxi-column> -->
+                                    <!-- <dxi-column dataField="isCheck" dataType="boolean" editorType="dxCheckBox" caption="Chọn" width="60"></dxi-column> -->
+
+                                    <div *dxTemplate="let cell of 'sttTemplate'">
+                                        <span>{{ cell.rowIndex + 1 }}</span>
+                                    </div>
+
+                                    <dxo-search-panel 
+                                        [visible]="true" 
+                                        [width]="240" 
+                                        placeholder="Search...">
+                                    </dxo-search-panel>
+                                    <dxo-selection [selectAllMode]="allPages" showCheckBoxesMode="always"
+                                        mode="multiple"></dxo-selection>
+                                    <!-- <dxo-filter-row [visible]="true" applyFilter="auto" [showOperationChooser]="false">
+                                    </dxo-filter-row> -->
+                                    <dxo-header-filter [visible]="false"></dxo-header-filter>
+                                    <dxo-group-panel [visible]="true" emptyPanelText="Kéo vào các cột cần gom nhóm!">
+                                    </dxo-group-panel>
+                                    <!-- <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing> -->
+                                    <dxo-paging [pageSize]="unitDataSearch.pageSize"
+                                        [pageIndex]="unitDataSearch.pageIndex"></dxo-paging>
+                                    <dxo-pager visible="true" infoText="Trang {0} trên {1} ({2} dòng)"
+                                        [allowedPageSizes]="[20, 50, 100]" [showPageSizeSelector]="true"
+                                        [showInfo]="true"></dxo-pager>
+                                </dx-data-grid>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane" role='tabpanel' id="tab5" [class.active]="currentTab == 5"
+                    *ngIf="currentTab == 5">
+                    <div class="col-md-12" style="margin-top: 15px">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h4 class="card-title">Tìm kiếm</h4>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-md-12">
+                                <form (submit)="searchSectionField()">
+                                    <dx-form [(formData)]="customFieldDataSearch">
+                                        <dxi-item dataField="name">
+                                            <dxo-label text="Tên"></dxo-label>
+                                        </dxi-item>
+                                    </dx-form>
+                                    <br />
+                                    <div class="row justify-content-center">
+                                        <dx-button text="Tìm kiếm" icon="fa fa-search" type="success"
+                                            [useSubmitBehavior]="true"></dx-button>
+                                        &nbsp;
+                                        <dx-button text="Trở về" icon="fa fa-arrow-left" (onClick)="back()"></dx-button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="container-btn left-button" style="margin-bottom: 5px">
+                                    <dx-button text="Thêm mới" icon="fa fa-plus" type="success"
+                                        (onClick)="addSectionField(-1);"></dx-button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <dx-data-grid #sectionFieldDg [dataSource]="sectionFieldDataSource"
+                                    [showRowLines]="true" [showBorders]="true" [rowAlternationEnabled]="true"
+                                    [wordWrapEnabled]="true" (onContentReady)="onContentReadyCustomField($event)">
+                                    <dxi-column dataField="orderId" caption="STT" width="60" alignment="center">
+                                    </dxi-column>
+                                    <dxi-column dataField="name" caption="Tên Custom Field"></dxi-column>
+                                    <dxi-column dataField="description" caption="Mô tả" width="150"></dxi-column>
+                                    <dxi-column dataField="isActive" caption="Hiệu lực" width="60" alignment="center"
+                                        cellTemplate="activeTemplate"></dxi-column>
+                                    <dxi-column dataField="id" caption="Chỉnh sửa" width="60" alignment="center"
+                                        cellTemplate="editTemplate"></dxi-column>
+                                    <dxi-column dataField="id" caption="Cập nhật giá trị" width="60" alignment="center"
+                                        cellTemplate="updateValueTemplate"></dxi-column>
+                                    <dxi-column dataField="id" caption="Xóa" width="60" alignment="center"
+                                        cellTemplate="deleteTemplate"></dxi-column>
+
+                                    <div *dxTemplate="let cell of 'activeTemplate'">
+                                        <i *ngIf="cell.value" class='fa fa-star'
+                                            style="color:#1876d3; cursor: pointer;"></i>
+                                        <i *ngIf="!cell.value" class='fa fa-star-0'
+                                            style="color:#1876d3; cursor: pointer;"></i>
+                                    </div>
+
+                                    <div *dxTemplate="let cell of 'editTemplate'">
+                                        <i class='fa fa-list-alt' style="color:#1876d3; cursor: pointer;"
+                                            (click)="addSectionField(cell.value)"></i>
+                                    </div>
+
+                                    <div *dxTemplate="let cell of 'updateValueTemplate'">
+                                        <i class='fa fa-cogs' style="color:#1876d3; cursor: pointer;"
+                                            (click)="updateValueSectionField(cell.value)"></i>
+                                    </div>
+
+                                    <div *dxTemplate="let cell of 'deleteTemplate'">
+                                        <i class='fa fa-remove' style="color:rgb(241, 57, 57); cursor: pointer; font-size: 17px;"
+                                            (click)="deleteSectionField(cell.value)"></i>
+                                    </div>
+
+                                    <dxo-paging [pageSize]="customFieldDataSearch.pageSize"
+                                        [pageIndex]="customFieldDataSearch.pageIndex"></dxo-paging>
+                                    <dxo-pager visible="true" infoText="Trang {0} trên {1} ({2} dòng)"
+                                        [allowedPageSizes]="[20, 50, 100]" [showPageSizeSelector]="true"
+                                        [showInfo]="true">
+                                    </dxo-pager>
+                                </dx-data-grid>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<dx-popup title="Tạo báo cáo" [(visible)]="makeReportPopupVisible" [width]="800" [height]="300">
+    <div *dxTemplate="let data of 'content'">
+        <appc-make-report [formId]="currentFormID" [reportType]="currentReportType" (makeReportSuccess)="closeMakeReportPopup()"></appc-make-report>
+    </div>
+</dx-popup>

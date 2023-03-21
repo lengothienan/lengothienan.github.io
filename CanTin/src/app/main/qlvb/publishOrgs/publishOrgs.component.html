@@ -1,0 +1,102 @@
+<div [@routerTransition]>
+    <div class="kt-content  kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor">
+        <div class="kt-subheader kt-grid__item">
+            <div [class]="containerClass">
+                <div class="kt-subheader__main">
+                    <h3 class="kt-subheader__title">
+                        <span>Danh mục nơi gửi</span>
+                    </h3>
+
+                </div>
+                <div class="kt-subheader__toolbar">
+                    <div class="kt-subheader__wrapper">
+                        <!-- <button (click)="exportToExcel()" class="btn btn-outline-success"><i class="fa fa-file-excel"></i> {{l("ExportToExcel")}}</button> -->
+                        <button *ngIf="isGranted('Pages.PublishOrgs.Create')" (click)="createPublishOrg()"
+                            class="btn btn-primary blue"><i class="fa fa-plus"></i>Tạo mới nơi gửi</button>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+        <div [class]="containerClass + ' kt-grid__item kt-grid__item--fluid'">
+            <div class="kt-portlet kt-portlet--mobile">
+                <div class="kt-portlet__body">
+
+                    <div class="row align-items-center">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-outline-success" aria-haspopup="true"
+                                aria-expanded="false">
+                                <i class="far fa-file-excel"></i> Update bằng file excel
+                            </button>
+                        </div>
+                        <dx-popup  [showTitle]="true"
+                            title="Cấu hình RoleMapperGroup" [dragEnabled]="false" [closeOnOutsideClick]="false"
+                            >
+
+                            <div class="row">
+                                <dx-button text="Tìm kiếm" icon="save" type="success"
+                                    [elementAttr]="{
+                            class: 'middle'
+                        }"></dx-button>
+                            </div>
+
+                        </dx-popup>
+
+                        <!--<Primeng-Datatable-Start>-->
+                        <div class="primeng-datatable-container col-12" [busyIf]="primengTableHelper.isLoading">
+
+                            <dx-data-grid #gridContainer id="gridContainer" [dataSource]="tableResult"
+                                keyExpr="publishOrg.id" [showRowLines]="true" [allowColumnReordering]="true"
+                                [showBorders]="true">
+                                <dxo-export [enabled]="true" fileName="DynamicDatasource"
+                                    [allowExportSelectedData]="true"></dxo-export>
+                                <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[10, 25, 50, 100]"
+                                    [showInfo]="true"></dxo-pager>
+                                <dxo-search-panel [visible]="true" placeholder="Nhập nội dung..." width="350">
+                                </dxo-search-panel>
+                                <dxo-paging [enabled]="true" [pageSize]="10"></dxo-paging>
+                                <dxi-column caption='#' cellTemplate='dropdown' [width]="8+'%'" alignment="center">
+                                </dxi-column>
+                                <dxi-column dataField='publishOrg.id' caption='Id' ></dxi-column>
+                                <dxi-column dataField='publishOrg.code' caption='Mã' [width]="25+'%'"></dxi-column>
+                                <dxi-column dataField='publishOrg.name' caption='Tên' [width]="25+'%'"></dxi-column>
+                                <dxi-column dataField='orgLevelName' caption='Cấp gửi' [width]="20+'%'"></dxi-column>
+                                <dxi-column dataField='publishOrg.isActive' caption='Hoạt động' [width]="12+'%'">
+                                </dxi-column>
+                             
+                                <dxi-column dataField='publishOrg.order' caption='Thứ tự' [width]="10+'%'"></dxi-column>
+                                <dxi-column dataField='publishOrg.identifyCode' caption='Mã định danh' ></dxi-column>
+                                <div *dxTemplate="let info of 'dropdown'">
+                                    <div class="btn-group dropdown" dropdown container="body">
+                                        <button class="dropdown-toggle btn btn-sm btn-primary" dropdownToggle>
+                                            <i class="fa fa-cog"></i><span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu" *dropdownMenu>
+                                            <li>
+                                                <a href="javascript:;"
+                                                    *ngIf="permission.isGranted('Pages.PublishOrgs.Edit')"
+                                                    (click)="createOrEditPublishOrgModal.show(info.data.publishOrg.id)">{{l('Edit')}}</a>
+                                            </li>
+                                            <li>
+                                                <a href="javascript:;"
+                                                    *ngIf="permission.isGranted('Pages.PublishOrgs.Delete')"
+                                                    (click)="deletePublishOrg(info.data.publishOrg)">{{l('Delete')}}</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </dx-data-grid>
+                        </div>
+                        <!--<Primeng-Datatable-End>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <createOrEditPublishOrgModal #createOrEditPublishOrgModal (modalSave)="loadData()">
+        </createOrEditPublishOrgModal>
+
+    </div>
+</div>

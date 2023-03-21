@@ -1,0 +1,66 @@
+﻿<div bsModal #createOrEditModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createOrEditModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #comm_Book_ValueForm="ngForm" novalidate (ngSubmit)="save()" autocomplete="off">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span *ngIf="comm_Book_Value.id">{{l("EditComm_Book_Value")}}</span>
+                        <span *ngIf="!comm_Book_Value.id">{{l("CreateNewComm_Book_Value")}}</span>
+                    </h4>
+                    <button type="button" class="close" (click)="close()" aria-label="Close" [disabled]="saving">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                 
+
+
+								<div class="form-group">
+									<label for="Comm_Book_Value_Name">{{l("Name")}}</label>
+									<input type="text" id="Comm_Book_Value_Name" class="form-control" [(ngModel)]="comm_Book_Value.name" name="Name"    />
+								</div>
+					
+								<div class="form-group">
+									<label for="Comm_Book_Value_CurrValue">{{l("CurrValue")}}</label>
+									<input type="number" id="Comm_Book_Value_CurrValue" class="form-control" [(ngModel)]="comm_Book_Value.currValue" name="CurrValue"  />
+								</div>
+					
+								<div class="form-group">
+									<label for="Comm_Book_Value_FromValue">{{l("FromValue")}}</label>
+									<input type="number" id="Comm_Book_Value_FromValue" class="form-control" [(ngModel)]="comm_Book_Value.fromValue" name="FromValue"  />
+								</div>
+					
+								<div class="form-group">
+									<label for="Comm_Book_Value_ToValue">{{l("ToValue")}}</label>
+									<input type="text" id="Comm_Book_Value_ToValue" class="form-control" [(ngModel)]="comm_Book_Value.toValue" name="ToValue"    />
+								</div>
+					
+								<div class="form-group">
+									<label for="Comm_Book_Value_Version">{{l("Version")}}</label>
+									<input type="number" id="Comm_Book_Value_Version" class="form-control" [(ngModel)]="comm_Book_Value.version" name="Version"  />
+								</div>
+					
+								<div class="form-group">
+									<label for="Comm_Book_Value_OrgId">{{l("OrgId")}}</label>
+									<input type="number" id="Comm_Book_Value_OrgId" class="form-control" [(ngModel)]="comm_Book_Value.orgId" name="OrgId"  />
+								</div>
+					
+								<br/><div class="m-checkbox-list">
+									<label for="Comm_Book_Value_IsActive" class="kt-checkbox">
+										<input id="Comm_Book_Value_IsActive" type="checkbox" name="IsActive" [(ngModel)]="comm_Book_Value.isActive"> 
+										{{l("IsActive")}}
+										<span></span>
+									</label>
+								</div>
+					
+
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-default" (click)="close()">{{l("Cancel")}}</button>
+                    <button type="submit" class="btn btn-primary blue" [disabled]="!comm_Book_ValueForm.form.valid" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>

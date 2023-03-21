@@ -1,0 +1,101 @@
+﻿<div bsModal #createOrEditModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createOrEditModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #comm_bookForm="ngForm" novalidate (ngSubmit)="save()" autocomplete="off">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span *ngIf="comm_book.id">{{l("Chỉnh sửa sổ VB")}}</span>
+                        <span *ngIf="!comm_book.id">{{l("Thêm mới sổ VB")}}</span>
+                    </h4>
+                    <button type="button" class="close" (click)="close()" aria-label="Close" [disabled]="saving">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+					<dx-form #documentForm [formData]="comm_book" [showValidationSummary]="true"
+					[showColonAfterLabel]="false" validationGroup="formValidateGroup">
+					<dxi-item itemType="group" colCount="2">
+						<dxi-item [colSpan]="1" dataField="code">
+							<dxo-label text="Mã sổ"></dxo-label>
+							<dxi-validation-rule type="required" message="Bắt buộc nhập mã sổ"></dxi-validation-rule>
+						</dxi-item>
+						<dxi-item [colSpan]="1" dataField="name">
+							<dxo-label text="Tên Sổ"></dxo-label>
+							<dxi-validation-rule type="required" message="Bắt buộc nhập tên sổ"></dxi-validation-rule>
+						</dxi-item>
+						<dxi-item [colSpan]="1" dataField="type" editorType="dxSelectBox" [editorOptions]="{
+							dataSource: bookType,
+							displayExpr: 'name',
+							valueExpr: 'type'
+						}">
+							<dxo-label text="Loại sổ"></dxo-label>
+							<dxi-validation-rule type="required" message="Bắt buộc chọn loại sổ"></dxi-validation-rule>
+						</dxi-item>
+						<!-- Begin: Thêm mới combbobox: loại sổ thường hoặc mật -->
+						<dxi-item [colSpan]="1" dataField="bookType" editorType="dxSelectBox" [editorOptions]="{
+							dataSource: commBookType,
+							displayExpr: 'name',
+							valueExpr: 'value'
+						}">
+							<dxo-label text="Thường/mật"></dxo-label>
+							<dxi-validation-rule type="required" message="Bắt buộc chọn loại sổ"></dxi-validation-rule>
+						</dxi-item>
+						<!-- End: Thêm mới combbobox: loại sổ thường hoặc mật -->
+						<dxi-item [colSpan]="1" dataField="orgId" editorType="dxSelectBox" [(disabled)]="isDisabled" [editorOptions]="{
+							dataSource: listOrganizationUnit,
+							displayExpr: 'displayName',
+							valueExpr: 'id'
+						}">
+							<dxo-label text="Phòng ban"></dxo-label>
+						</dxi-item>
+						<dxi-item [colSpan]="1" dataField="fromDate" editorType="dxDateBox" [editorOptions]="{
+							format: 'dd/MM/yyyy',
+							displayFormat: 'dd/MM/yyyy',
+							showClearButton: true
+						}">
+							<dxo-label text="Từ ngày"></dxo-label>
+						</dxi-item>
+						<dxi-item [colSpan]="1" dataField="toDate" editorType="dxDateBox" [editorOptions]="{
+							format: 'dd/MM/yyyy',
+							displayFormat: 'dd/MM/yyyy',
+							showClearButton: true
+						}">
+							<dxo-label text="Đến ngày"></dxo-label>
+						</dxi-item>
+						<dxi-item [colSpan]="1" dataField="fromValue">
+							<dxo-label text="Từ số"></dxo-label>
+							<dxi-validation-rule type="required" message="Bắt buộc nhập từ số"></dxi-validation-rule>
+						</dxi-item>
+						<dxi-item [colSpan]="1" dataField="currentValue">
+							<dxo-label text="Số hiện tại"></dxo-label>
+							<dxi-validation-rule type="required" message="Bắt buộc nhập số hiện tại"></dxi-validation-rule>
+						</dxi-item>
+						
+						<dxi-item [colSpan]="1" dataField="syntaxId" editorType="dxSelectBox" [editorOptions]="{
+							dataSource: syntaxList,
+							displayExpr: 'name',
+							valueExpr: 'id'
+						}">
+							<dxo-label text="Cú pháp"></dxo-label>
+						</dxi-item>
+						
+						<dxi-item [colSpan]="1" dataField="isActive" editorType="dxCheckBox">
+							<dxo-label text="Hoạt động"></dxo-label>
+						</dxi-item>
+						<dxi-item [colSpan]="1" dataField="currentRank">
+							<dxo-label text="Số thứ tự"></dxo-label>
+							
+						</dxi-item>
+					</dxi-item>
+					</dx-form>
+
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-default" (click)="close()">{{l("Cancel")}}</button>
+                    <button type="submit" class="btn btn-primary blue" [disabled]="!comm_bookForm.form.valid" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>

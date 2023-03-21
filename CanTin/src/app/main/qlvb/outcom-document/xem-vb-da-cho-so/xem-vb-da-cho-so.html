@@ -1,0 +1,455 @@
+<div [@routerTransition]>
+    <div class="kt-content  kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor">
+        <div class="kt-subheader kt-grid__item">
+            <div [class]="containerClass">
+                <div class="kt-subheader__main">
+                    <h3 class="kt-subheader__title">
+                        <!-- <span>{{l("Thêm mới văn bản đến")}}</span> -->
+                        <span>{{header}}</span>
+                    </h3>
+                </div>
+                <div class="kt-subheader__toolbar">
+                    <div class="kt-subheader__wrapper">
+                        <!-- <button class="btn btn-outline-success"><i class="fa fa-file-excel"></i> {{l("ExportToExcel")}}</button> -->
+                        <!-- <dx-button text="Scan document" type="success" icon="upload" (onClick)="scanDocument()" ></dx-button> -->
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div [class]="containerClass + ' kt-grid__item kt-grid__item--fluid'">
+            <div class="kt-portlet kt-portlet--mobile">
+                <div class="modal-body">
+                    <!-- <div style="max-height: 80vh; overflow: auto;" class="form-control">
+                        <span *ngFor="let item of (labelDto | async)">{{item.name}} - {{item.countNum}}</span>
+                    </div> -->
+                    <div class="col-xl-12" style="padding-bottom: 17px;padding-left:0;">
+
+                        <dx-button [text]="buttonText" type="success" icon="fa fa-arrow-left" (onClick)="back()"></dx-button>
+                    </div>
+                    <dx-form #documentForm [formData]="documentData" [showValidationSummary]="true"
+                        [showColonAfterLabel]="false" validationGroup="formValidateGroup" [readOnly]="true" (onContentReady)="onContentReady($event)">
+                        <dxi-item itemType="group" colCount="12" caption="Thông tin văn bản">
+                            <!-- <dxi-item [colSpan]="4" dataField="book" editorType="dxSelectBox" [editorOptions]="bookOptions">
+                                <dxo-label text="Sổ VB"></dxo-label>
+                                <dxi-validation-rule type="required"></dxi-validation-rule>
+                            </dxi-item> -->
+                            <!-- <dxi-item [colSpan]="4" dataField="book" editorType="dxSelectBox" [editorOptions]="bookOptions"> -->
+                            <dxi-item [colSpan]="4" dataField="book" editorType="dxSelectBox" [editorOptions]="{
+                                valueExpr: 'id',
+                                displayExpr: 'name',
+                                searchEnabled: true,
+                                searchExpr: 'name',
+                                dataSource: dataBook
+                            }">
+                                <dxo-label text="Sổ VB"></dxo-label>
+                                <dxi-validation-rule type="required"></dxi-validation-rule>
+                            </dxi-item>
+                            <dxi-item [colSpan]="4" dataField="number">
+                                <dxo-label text="Số VB đi"></dxo-label>
+                            </dxi-item>
+                            <!-- <dxi-item [colSpan]="4" itemType="group" colCount="12">
+
+                            </dxi-item> -->
+
+                            <dxi-item [colSpan]="4" dataField="releaseDate" editorType="dxDateBox" [editorOptions]="{
+                                displayFormat:'dd/MM/yyyy', format: 'dd/MM/yyyy'
+                            }">
+                                <dxo-label text="Ngày VB"></dxo-label>
+                                <dxi-validation-rule type="required"></dxi-validation-rule>
+                            </dxi-item>
+                            <dxi-item dataField="orgEditor" [colSpan]="4" editorType="dxSelectBox" [editorOptions]="{
+                                dataSource: data_department,
+                                valueExpr: 'id',
+                                displayExpr: 'displayName',
+                                searchEnabled: true,
+                                searchExpr: ['displayName', 'shortentCode'],
+                                disabled: isNotCATP
+                            }">
+                                <dxo-label text="Phòng ban soạn"></dxo-label>
+                            </dxi-item>
+                            <!-- <dxi-item dataField="editorId" [colSpan]="4" editorType="dxSelectBox" [editorOptions]="{
+                                dataSource: editorList,
+                                valueExpr: 'userId',
+                                displayExpr: 'nameWithPosition',
+                                searchEnabled: true,
+                                searchExpr: ['nameWithPosition'],
+                                showClearButton: true,
+                                readOnly: isReadOnlyForm
+                                }">
+                                <dxo-label text="Người soạn" ></dxo-label>
+                            </dxi-item> -->
+
+                            <dxi-item [colSpan]="4" dataField="documentTypeId" editorType="dxSelectBox"
+                                [editorOptions]="documentTypeOptions">
+                                <dxo-label text="Loại VB"></dxo-label>
+                            </dxi-item>
+
+                            <dxi-item [colSpan]="4" dataField="isNoneSubmit" editorType="dxCheckBox" [editorOptions]="{
+
+                            }">
+                                <dxo-label text="Chưa nộp lưu"></dxo-label>
+                            </dxi-item>
+
+                            <!-- <dxi-item [colSpan]="4" itemType="empty"></dxi-item> -->
+
+                            <!-- <dxi-item itemType="empty" [colSpan]="4"></dxi-item> -->
+<!-- 
+                            <dxi-item [colSpan]="4">
+                                <dxo-label text="Lĩnh vực"></dxo-label>
+                                <dx-select-box [dataSource]="data_range" valueExpr="key" displayExpr="value"
+                                    [searchEnabled]="true" [searchExpr]="['value']" [showClearButton]="true"
+                                    [(value)]="rangeVal" [disabled]="true"></dx-select-box>
+                            </dxi-item> -->
+
+                            <!-- <dxi-item [colSpan]="4">
+                                <dxo-label text="Độ khẩn"></dxo-label>
+                                <dx-select-box
+                                    [dataSource]="data_priority"
+                                    valueExpr="key"
+                                    displayExpr="value"
+                                    [searchEnabled]="true"
+                                    [searchExpr]="['value']"
+                                    [showClearButton]="true"
+                                    [(value)]="priorityVal"
+                                    [disabled]="true"
+                                ></dx-select-box>
+                            <!-- </dxi-item> -->
+                            <dxi-item [colSpan]="4" dataField="quantityDocumentPublish">
+                                <dxo-label text="Số lượng VBPH"></dxo-label>
+                               
+                            </dxi-item>
+                            <dxi-item [colSpan]="4" dataField="piecesOfPaper">
+                                <dxo-label text="Số tờ"></dxo-label>
+                              
+                            </dxi-item>
+                            <dxi-item [colSpan]="4">
+                                <!-- <dxi-validation-rule type="required"></dxi-validation-rule> -->
+                            <dxo-label text="Độ mật"></dxo-label>
+                            <dx-select-box [dataSource]="data_secretLevel" valueExpr="key" displayExpr="value"
+                                [searchEnabled]="true" [searchExpr]="['value']" [showClearButton]="true"
+                                [(value)]="secretVal" [disabled]="true"></dx-select-box>
+                        </dxi-item>
+
+                 
+                        <dxi-item itemType="group" colCount="24" [colSpan]="12">
+                            <dxi-item [colSpan]="11">
+                                <dx-tag-box #orgLevelTagBox id="orgLevelTagBox" [dataSource]="orgLevelSource"
+                                    valueExpr="id" displayExpr="name" [searchEnabled]="true" [searchExpr]="['text']"
+                                    [(value)]="selectedOrgLevels" [disabled]="true"
+                                    (onValueChanged)="orgLevelValueChanged()">
+                                </dx-tag-box>
+                                <dxo-label text="Cấp nhận"></dxo-label>
+                            </dxi-item>
+
+
+                            <dxi-item [colSpan]="12">
+                                <!-- [(dataSource)]="selectedReceivers" -->
+                                <dx-tag-box #publishOrgTagBox id="publishOrgTagBox" valueExpr="id"
+                                    [(dataSource)]="publishOrgSource" displayExpr="name" [searchEnabled]="true"
+                                    [searchExpr]="['name']" [(value)]="displayReceiverList"
+                                    [showSelectionControls]="true" applyValueMode="useButtons" [disabled]="true">
+                                    <!-- (onValueChanged)="placeReceivesValueChanged($event)" -->
+                                </dx-tag-box>
+                                <dxo-label text="Nơi nhận"></dxo-label>
+                            </dxi-item>
+
+                            <!-- <dxi-item [colSpan]="3" [template]="btnTemplate">
+                                    <div *dxTemplate="let item of 'btnTemplate'">
+                                        <dx-button icon="plus" (onClick)="showPublisherPopup()"></dx-button>
+                                    </div>
+                                </dxi-item> -->
+                            <dxi-item [colSpan]="1">
+                                <dx-button icon="plus" alignment="right" (onClick)="showPublisherPopup()"
+                                    [elementAttr]="{class: 'btnAddPublisher'}"></dx-button>
+                            </dxi-item>
+                        </dxi-item>
+
+
+                        <!-- <dxi-item itemType="group" colCount="24" [colSpan]="12">
+                                <dxi-item [colSpan]="23" >
+                                    <dx-tag-box #publisherSelect
+                                        id="publisherSelect"
+                                        [dataSource]="selectedReceivers"
+                                        valueExpr="key"
+                                        displayExpr="text"
+                                        [searchEnabled]="true"
+                                        [searchExpr]="['text']"
+                                        [(value)]="displayReceiverList"
+                                        (onValueChanged)="placeReceivesValueChanged($event)">
+                                    </dx-tag-box>
+                                    <dxo-label text="Nơi nhận"></dxo-label>
+                                </dxi-item>
+
+                                <dxi-item [colSpan]="3" [template]="btnTemplate">
+                                    <div *dxTemplate="let item of 'btnTemplate'">
+                                        <dx-button icon="plus" (onClick)="showPublisherPopup()"></dx-button>
+                                    </div>
+                                </dxi-item>
+                                <dxi-item [colSpan]="1">
+                                    <dx-button icon="plus" alignment="right" (onClick)="showSearchPopUp()" [elementAttr]="{class: 'btnAddPublisher'}"
+                                    [disabled]="isReadOnlyForm"></dx-button>
+                                </dxi-item>
+                            </dxi-item> -->
+
+                        <dxi-item itemType="group" [colSpan]="12" colCount="24">
+                            <dxi-item dataField="" [colSpan]="23" editorType="dxTagBox" [editorOptions]="{
+                                    searchEnabled: false,
+                                    noDataText: '',
+                                    valueExpr: 'id',
+                                    displayExpr: 'number',
+                                    dataSource: selectedResponseDocs,
+                                    value: selectedLinkedDocuments,
+                                    onValueChanged: linkedDocValueChanged
+                                }">
+                                <dxo-label text="Trả lời VB"></dxo-label>
+                            </dxi-item>
+                            <dxi-item dataField="" [colSpan]="1">
+                                <dx-button icon="search" alignment="right" (onClick)="selectReplyDocument()"
+                                    [elementAttr]="{class: 'btnAddPublisher'}"></dx-button>
+                            </dxi-item>
+                        </dxi-item>
+
+                        <dxi-item dataField="summary" [colSpan]="12" editorType="dxTextArea"
+                            [editorOptions]="{ autoResizeEnabled: true }">
+                            <dxo-label text="Trích yếu"></dxo-label>
+                        </dxi-item>
+
+                        <dxi-item itemType="group" [colSpan]="12" colCount="12" [visible]="true">
+                            <dxi-item itemType="group" [colSpan]="6" colCount="12">
+                                <dxi-item [colSpan]="12">
+                                    <dxo-label text="Tập tin"></dxo-label>
+                                    <!-- <dxi-validation-rule type="required"></dxi-validation-rule> -->
+                                    <dx-file-uploader [multiple]="true" selectButtonText="Chọn file đính kèm" accept="*"
+                                        icon="upload" [(value)]="value" uploadMode="useForm"
+                                        (onValueChanged)="setFullNameFile($event)">
+                                    </dx-file-uploader>
+
+                                </dxi-item>
+                                <dxi-item [colSpan]="12">
+                                    <dxo-label text="Scan văn bản"></dxo-label>
+                                    <!-- <dxi-validation-rule type="required"></dxi-validation-rule> -->
+                                    <dx-button [disabled]="saving" text="Scan" type="success" icon="search"
+                                        (onClick)="scan()">
+                                    </dx-button>
+
+                                </dxi-item>
+
+                            </dxi-item>
+                            <dxi-item [colSpan]="6">
+                                <dx-data-grid id="gridContainer" [dataSource]="selectedRows"
+                                    [allowColumnReordering]="true" [allowColumnResizing]="true" [columnAutoWidth]="true"
+                                    [showBorders]="true">
+                                    <dxo-paging [pageSize]="10"></dxo-paging>
+                                    <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 20]"
+                                        [showInfo]="true">
+                                    </dxo-pager>
+                                    <dxi-column dataField="tepDinhKem" caption="Tệp đính kèm"></dxi-column>
+                                    <dxi-column caption="Xem chi tiết" cellTemplate="detailTemplate" [width]="100">
+                                    </dxi-column>
+                                    <dxi-item caption="Xóa" cellTemplate="deleteTemplate">
+                                    </dxi-item>
+
+                                    <div *dxTemplate="let d of 'detailTemplate'">
+                                        <div class="row">
+                                            <div class="col-6" style="text-align: center;" (click)="showDetail(d)">
+                                                <span><i class="fab fa-buffer"></i></span>
+                                            </div>
+                                            <!-- <div class="col-6" style="text-align: center;" (click)="deleteFile(d)">
+                                                    <span><i class="fas fa-trash-alt"></i> </span>
+                                                </div> -->
+                                        </div>
+                                    </div>
+                                    <!-- <div *dxTemplate="let d of 'deleteTemplate'">
+                                            <div class="col-2" style="text-align: center;" (click)="deleteFile(d)">
+                                                <span ><i class="fas fa-trash-alt"></i> </span>
+                                            </div>
+                                        </div> -->
+                                </dx-data-grid>
+                            </dxi-item>
+                        </dxi-item>
+
+
+                        <!-- <dxi-item dataField="leaderType" itemType="group" [colSpan]="6" >
+                            <dxo-label text="Người ký"></dxo-label>
+                            <dx-radio-group dataField="documentData.leaderType"
+                                [dataSource]="leaderType"
+                                [(value)]="leaderTypeVal"
+                                displayExpr="name"
+                                valueExpr="id"
+                                (onValueChanged)="radio_nguoi_ky()"
+                                layout="horizontal"
+                                [disabled]="isReadOnlyForm">
+                            </dx-radio-group>
+                            <dxi-validation-rule type="required"></dxi-validation-rule>
+                        </dxi-item> -->
+                        
+
+                        <dxi-item itemType="group" cssClass="signer-catp" colCount="12" [colSpan]="12">
+                            <dxi-item [colSpan]="3" [dataField]="dataFieldConpetent" [editorType]="editorTypeConpetent"  [editorOptions]="editorOptionsConpetent">
+                                <!-- <dx-select-box dataField="competentOfLeader" [dataSource]="competentOfLeaderList"
+                                    valueExpr="id" displayExpr="name" [(value)]="documentData.competentOfLeader"
+                                    (onValueChanged)="competentSelectionChange($event)" placeholder="Không có">
+                                </dx-select-box> -->
+                                <dxo-label text="Thẩm quyền ký"></dxo-label>
+                            </dxi-item>
+
+                            <dxi-item [colSpan]="3" [label]="{text: 'Người ký'}" dataField="leaderNotCompetent"
+                                editorType="dxSelectBox" [editorOptions]="{
+                                    dataSource: director_list,
+                                    valueExpr: 'userId',
+                                    displayExpr: 'nameWithPosition',
+                                    searchEnabled: true,
+                                    searchExpr: 'fullName',
+                              
+                                    dropDownOptions: {
+                                        minWidth: 400
+                                    }
+                                }">
+                            </dxi-item>
+                            <dxi-item [colSpan]="6" dataField="leaderId"
+                                >
+                                <!-- <dx-text-box dataField="leaderId" [disabled]="!isCompetent"></dx-text-box> -->
+                                <dxo-label text="Người ký được thẩm quyền"></dxo-label>
+                            </dxi-item>
+                        </dxi-item>
+
+
+                        <dxi-item itemType="group" cssClass="signer-not-catp" colCount="12" [colSpan]="12">
+                            <dxi-item [colSpan]="6" dataField="leaderId"
+                                [editorOptions]="{ autoResizeEnabled: true }">
+                                <!-- <dx-text-box dataField="leaderId" [disabled]="!isCompetent"></dx-text-box> -->
+                                <dxo-label location="left" text="Người ký"></dxo-label>
+                            </dxi-item>
+
+                            <dxi-item itemType="empty" [colSpan]="6"></dxi-item>
+                        </dxi-item>
+
+
+                        <!-- --------------------- -->
+                        <dxi-item itemType="group" cssClass="signer-catp-id" colCount="12" [colSpan]="12">
+                            <dxi-item [colSpan]="3" [dataField]="dataFieldConpetent" [editorType]="editorTypeConpetent"  [editorOptions]="editorOptionsConpetent">
+                                <!-- <dx-select-box dataField="competentOfLeader" [dataSource]="competentOfLeaderList"
+                                    valueExpr="id" displayExpr="name" [(value)]="documentData.competentOfLeader"
+                                    (onValueChanged)="competentSelectionChange($event)" placeholder="Không có">
+                                </dx-select-box> -->
+                                <dxo-label text="Thẩm quyền ký"></dxo-label>
+                            </dxi-item>
+
+                            <dxi-item [colSpan]="3" [label]="{text: 'Người ký'}" [dataField]="dataFieldSigner"
+                                [editorType]="editorTypeSigner"  [editorOptions]="{
+                                    dataSource: director_list,
+                                    valueExpr: 'userId',
+                                    displayExpr: 'nameWithPosition',
+                                    searchEnabled: true,
+                                    searchExpr: 'fullName',
+                                    dropDownOptions: {
+                                        minWidth: 400
+                                    }
+                                }">
+                            </dxi-item>
+                            <dxi-item [colSpan]="6" [dataField]="dataFieldLeaderCompetent"
+                                [editorOptions]="{value: leaderCompetentVal }">
+                                <!-- <dx-text-box dataField="leaderId" [disabled]="!isCompetent"></dx-text-box> -->
+                                <dxo-label text="Người ký được thẩm quyền"></dxo-label>
+                            </dxi-item>
+                        </dxi-item>
+
+
+                        <dxi-item itemType="group" cssClass="signer-not-catp-id" colCount="12" [colSpan]="12">
+                            <dxi-item [colSpan]="6" dataField="leaderId"
+                                [editorOptions]="{ autoResizeEnabled: true }">
+                                <!-- <dx-text-box dataField="leaderId" [disabled]="!isCompetent"></dx-text-box> -->
+                                <dxo-label location="left" text="Người ký"></dxo-label>
+                            </dxi-item>
+
+                            <dxi-item itemType="empty" [colSpan]="6"></dxi-item>
+                        </dxi-item>
+
+
+                        <dxi-item dataField="note" [colSpan]="12" editorType="dxTextArea"
+                            [editorOptions]="{ autoResizeEnabled: true }">
+                            <dxo-label text="Ghi chú"></dxo-label>
+                        </dxi-item>
+                        </dxi-item>
+                    </dx-form>
+
+                    <dx-popup [width]="500" [height]="200" [showTitle]="true" title="Thêm mới nơi phát hành"
+                        [dragEnabled]="false" [closeOnOutsideClick]="true" [(visible)]="publisherPopupVisible">
+                        <!-- <app-dwt (getFileName) ="addItem($event)" (userId)="getAndSetId($event)" *ngIf="showScanModule"></app-dwt>
+
+                <buttonUI *ngIf="show"></buttonUI> -->
+                        <dx-form #publisherForm [formData]="publisherData">
+                            <dxi-item [label]="{text: 'Nơi nhận'}" [colSpan]="2" dataField="publisherName"
+                                editorType="dxTextBox">
+                            </dxi-item>
+                        </dx-form>
+                        <br>
+                        <div class="row">
+                            <div style="display: block; margin-left: auto; margin-right: auto;">
+                                <dx-button icon="save" text="Lưu" type="success" (onClick)="savepublisher()">
+                                </dx-button>
+                            </div>
+                        </div>
+
+                    </dx-popup>
+
+                    <!-- <dx-popup [width]="800" [height]="650" [showTitle]="true" title="Nơi nhận văn bản"
+                    [dragEnabled]="false" [closeOnOutsideClick]="false" [(visible)]="receiverPopupVisible">
+
+                    <div class="col-xl-12 col-md-12 col-xs-12" style="padding-bottom: 17px;padding-left:0;">
+                        <dx-button text="Trở về" type="success" icon="fa fa-arrow-left"
+                            (onClick)="closePopUp()"></dx-button>
+                        &nbsp;
+                        <dx-button [disabled]="saving" text="Chọn" type="success" icon="save" (onClick)="saveReceiveList()"> </dx-button>
+                        &nbsp;
+                        <dx-button [disabled]="saving" text="Xóa" type="success" icon="fa fa-trash"></dx-button>
+                    </div>
+                    <div class="col-xl-12 col-md-12 col-xs-12">
+                        <div class="row">
+                            <div class="col-md-6 col-xs-12">
+                                <fieldset style="border: 1px solid; padding: 10px">
+                                    <legend style="font-weight: bold; width: 180px;">Danh sách đơn vị</legend>
+                                    <dx-tree-view #treeView
+                                        [width]="300"
+                                        [height]="300"
+                                        displayExpr="name"
+                                        valueExpr="id"
+                                        [searchEnabled]="true"
+                                        [searchExpr]="['name']"
+                                        [showCheckBoxesMode]="'selectAll'"
+                                        [selectionMode]="'multiple'"
+                                        [selectNodesRecursive]="true"
+                                        [selectByClick]="true"
+                                        (onSelectionChanged)="onSelectionChanged($event)"
+                                    >
+                                    </dx-tree-view>
+
+                                </fieldset>
+                            </div>
+                            <div class="col-md-6 col-xs-12">
+                                <fieldset style="padding: 10px">
+                                    <legend style="font-weight: bold; width: 100px;">Đã chọn</legend>
+                                    <dx-tree-view #treeViewDisplay
+                                        [(dataSource)]="selectedReceivers"
+                                        [width]="300"
+                                        [height]="300"
+                                        displayExpr="text"
+                                        valueExpr="itemData.id"
+                                    >
+
+                                    </dx-tree-view>
+                                </fieldset>
+                            </div>
+                        </div>
+                    </div>
+                </dx-popup> -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <createReceiver #createReceiver (saveSuccess)="getPublishOrg()"></createReceiver>
+    <searchResponseDocumentModal #searchResponseDocumentModal (modalSave)="getResponseDocuments($event)">
+    </searchResponseDocumentModal>
+</div>

@@ -1,0 +1,43 @@
+<div bsModal #createOrEditModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createOrEditModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #dynamicCategoryRowIndexForm="ngForm" novalidate (ngSubmit)="save()" autocomplete="off">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span *ngIf="dynamicCategoryRowIndex.id">{{l("EditDynamicCategoryRowIndex")}}</span>
+                        <span *ngIf="!dynamicCategoryRowIndex.id">{{l("CreateNewDynamicCategoryRowIndex")}}</span>
+                    </h4>
+                    <button type="button" class="close" (click)="close()" aria-label="Close" [disabled]="saving">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                 
+
+
+								<div class="form-group">
+									<label for="DynamicCategoryRowIndex_LabelId">{{l("LabelId")}}</label>
+									<input type="number" id="DynamicCategoryRowIndex_LabelId" class="form-control" [(ngModel)]="dynamicCategoryRowIndex.labelId" name="LabelId"  />
+								</div>
+					
+								<div class="form-group">
+									<label for="DynamicCategoryRowIndex_LabelName">{{l("LabelName")}}</label>
+									<input type="text" id="DynamicCategoryRowIndex_LabelName" class="form-control" [(ngModel)]="dynamicCategoryRowIndex.labelName" name="LabelName"    />
+								</div>
+					
+								<div class="form-group">
+									<label for="DynamicCategoryRowIndex_RowIndex">{{l("RowIndex")}}</label>
+									<input type="number" id="DynamicCategoryRowIndex_RowIndex" class="form-control" [(ngModel)]="dynamicCategoryRowIndex.rowIndex" name="RowIndex"  />
+								</div>
+					
+
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-default" (click)="close()">{{l("Cancel")}}</button>
+                    <button type="submit" class="btn btn-primary blue" [disabled]="!dynamicCategoryRowIndexForm.form.valid" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>

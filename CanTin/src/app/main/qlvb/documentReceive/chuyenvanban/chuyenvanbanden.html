@@ -1,0 +1,104 @@
+<div [@routerTransition]>
+    <div class="kt-content  kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor">
+        <div class="kt-subheader kt-grid__item">
+          <div [class]="containerClass">
+            <div class="kt-subheader__main">
+                <h3 class="kt-subheader__title">
+                    <span>{{l("Thông tin chi tiết văn bản đến")}}</span>
+                </h3>
+                <!-- <span class="kt-subheader__separator kt-subheader__separator--v"></span> -->
+                <!-- <span class="kt-subheader__desc">
+                    {{l("SchedulesHeaderInfo")}}
+                </span> -->
+                <!-- <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Tiếp nhận văn bản</li>
+                    </ol>
+                </nav> -->
+            </div>
+            <div class="kt-subheader__toolbar">
+                <div class="kt-subheader__wrapper">
+                    <button class="btn btn-outline-success"><i class="fa fa-file-excel"></i> {{l("ExportToExcel")}}</button>
+                    <!-- <button *ngIf="isGranted('Pages.Schedules.Create')"  class="btn btn-primary blue"><i class="fa fa-plus"></i> {{l("CreateNewSchedule")}}</button> -->
+                
+                </div>
+            </div>
+          </div>
+        </div>
+        <div [class]="containerClass + ' kt-grid__item kt-grid__item--fluid'">
+            <div class="kt-portlet kt-portlet--mobile">
+                <div class="modal-body">
+                    <dx-form>
+                           
+                        <dxi-item [colSpan]="2"  editorType="dxRadioGroup" [editorOptions]="{dataSource: typeReceiveOptions,  layout: 'horizontal' }" >  </dxi-item>   
+                        <dxi-item itemType="group" caption="Thông tin xử lý" colCount="4" cssClass="item-bold">
+                               
+                                <dxi-item dataField="OutDoor" [colSpan]="4"  editorType="dxSelectBox" [editorOptions]="{ height: 90 }">
+                                       
+                                    <dxo-label text="Ý kiến xử lý "></dxo-label>
+                                </dxi-item>
+                                <dxi-item dataField="OutDoor" [colSpan]="4" editorType="dxSelectBox"  [editorOptions]="{ height: 90 }">
+                                       
+                                        <dxo-label text="Đơn vị nhận xử lý  "></dxo-label>
+                                    </dxi-item>
+                                    <dxi-item dataField="OutDoor" [colSpan]="4" editorType="dxSelectBox"  [editorOptions]="{ height: 90 }">
+                                       
+                                            <dxo-label text="Người nhận xử lý "></dxo-label>
+                                    </dxi-item>
+                                    <dxi-item  [colSpan]="1"  >
+                                       
+                                            <dxo-label text="Hạn xử lý "></dxo-label>
+                                    </dxi-item>
+                                    <dxi-item dataField="OutDoor" [colSpan]="1" >
+                                       
+                                            <dxo-label text="Nhập số ngày "></dxo-label>
+                                    </dxi-item>
+                                   
+                                    <dxi-item dataField="startTime" [colSpan]="1" editorType="dxDateBox">
+                                            <dxo-label text="Hạn xử lý" ></dxo-label>
+                                         
+                                     </dxi-item>
+                        </dxi-item> 
+                        <dxi-item itemType="group" caption="Danh sách người phối hợp xử lý" colCount="4" cssClass="item-bold">
+                               
+                                <dxi-item dataField="OutDoor" [colSpan]="4" editorType="dxSelectBox" [editorOptions]="{ height: 90 }">
+                                       
+                                    <dxo-label text="Đơn vị phối hợp xử lý"></dxo-label>
+                                </dxi-item>
+                                <dxi-item dataField="OutDoor" [colSpan]="4" editorType="dxSelectBox"  [editorOptions]="{ height: 90 }">
+                                       
+                                        <dxo-label text="Người phối hợp xử lý "></dxo-label>
+                                    </dxi-item>
+                        </dxi-item> 
+                        <dxi-item itemType="group" caption="Danh sách người nhận để phối hợp chỉ đạo" colCount="4" cssClass="item-bold">
+                              
+                                <dxi-item dataField="OutDoor" [colSpan]="4" editorType="dxSelectBox"  [editorOptions]="{ height: 90 }">
+                                       
+                                        <dxo-label text="Người nhập"></dxo-label>
+                                </dxi-item>
+                        </dxi-item> 
+                       
+                         <dxi-item itemType="group"  colCount="4" cssClass="item-bold">
+                              
+                                <dxi-item [colSpan]="4"  editorType="dxRadioGroup" [editorOptions]="{dataSource: typeReceiveOptions1, layout: 'horizontal' }" > </dxi-item> 
+                                
+                                <dxi-item [colSpan]="2"  >
+                                        <dx-button text="Gửi văn bản" type="success" icon="save" (onClick)="save()" > </dx-button>
+                                        &nbsp;
+                                        <dx-button text="Hủy" type="success" icon="fa fa-arrow-left" onclick="window.history.go(-1); return false;"></dx-button> 
+                            
+                                    </dxi-item>
+                                
+                        </dxi-item> 
+
+                    </dx-form>
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

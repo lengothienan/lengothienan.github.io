@@ -1,0 +1,64 @@
+<div class="row">
+    <div class="col-12">
+        <div class="card card-outline-info">
+            <div class="card-body">
+                <h3 style="margin: 20px">{{Name}}</h3>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="modal-body">
+                            <dx-form #detailForm [formData]="actionData" colCount="12" [showValidationSummary]="true"  validationGroup="formValidateGroup">
+                                <dxi-item dataField="name" [colSpan]="6" editorType="dxTextBox" [editorOptions]="{ readOnly: nameReadOnly }">
+                                    <dxo-label text="Tên Action"></dxo-label>
+                                    <dxi-validation-rule type="required" message = "Nhập tên Action"></dxi-validation-rule>
+                                </dxi-item>
+                                <dxi-item dataField="code" [colSpan]="6" editorType="dxTextBox"  [editorOptions]="{ readOnly: codeReadOnly }">
+                                    <dxo-label text="Mã Action"></dxo-label>
+                                    <dxi-validation-rule type="required" message = "Nhập mã Action"></dxi-validation-rule>
+                                </dxi-item>
+                                <!-- <dxi-item dataField="icon" [colSpan]="6" editorType="dxTextBox" [editorOptions]="{ readOnly: iconReadOnly }">
+                                    <dxo-label text="Icon"></dxo-label>
+                                </dxi-item> -->
+                                
+                                <dxi-item dataField="descriptions" [colSpan]="6" editorType="dxTextBox" [editorOptions]="{ readOnly: descriptionsReadOnly }">
+                                    <dxo-label text="Mô tả"></dxo-label>
+                                </dxi-item>
+                                <dxi-item dataField="isActive" [colSpan]="6" editorType="dxCheckBox" [editorOptions]="{ readOnly: isActiveReadOnly }">
+                                    <dxo-label text="Hoạt động"></dxo-label>
+                                </dxi-item>   
+                                <dxi-item [colSpan]="6">
+                                    <dxo-label text="Icon"></dxo-label>
+                                    <div [formGroup]="myFormGroup">
+                                        <!-- <span class="input-group-addon"><i style="font-size: 25px;padding-top: 10px;" [ngClass]="iconCss.value"></i></span> -->
+                                        <input type="text" class="form-control"
+                                        formControlName="iconCss"
+                                        [(iconPicker)]="icon"
+                                        [ipIconPack] = "['fa']"
+                                        [ipPosition]="'bottom'"
+                                        [ipWidth]="'250px'"
+                                        [ipIconSize]="'16px'"
+                                        [ipFallbackIcon]="fallbackIcon"
+                                        (iconPickerSelect)="onIconPickerSelect($event)"/>
+                                    </div>
+                                            
+                                </dxi-item>
+                                <dxi-item [colSpan]="6">
+                                            <span class="input-group-addon"><i style="font-size: 25px;padding-top: 10px;" [ngClass]="iconCss.value"></i></span>
+                                        
+                                </dxi-item>
+                                
+                            </dx-form>
+                        </div>  
+                        <div class="modal-footer" style="justify-content: center">
+                            <dx-button class="dx-button dx-button-success dx-button-mode-contained dx-widget dx-button-has-icon dx-button-has-text" icon="fa fa-save" text="Lưu" (onClick)="save()" [visible]="saveBtnVisible"></dx-button>
+                            <dx-button icon="fa fa-arrow-left" text="Hủy" (onClick)="back()"></dx-button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+

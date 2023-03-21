@@ -1,0 +1,30 @@
+<!-- <div class="card-body" style="height: 100%; background-color: white; border-radius: 10px;"> -->
+<div class="card-body" style="height: 100%" [ngStyle]="sip_widget_formatcss">
+    <div class="xp-widget-box" style="height: 80%;position: relative;">
+        <div class="title_formatcss">
+            <!-- <p class="mb-0 font-20 text-muted" style="font-size: 20px; color: black">{{sip_title}}</p> -->
+            <p class="mb-0 font-20" [ngStyle]="sip_title_formatcss">{{sip_title}}</p>
+        </div>
+        <div class="float-left">
+            <!-- <h4 [ngStyle]="sip_value_formatcss">{{sip_value}}</h4> -->
+            <h4 [ngStyle]="sip_value_formatcss"><a [href]="sip_link" target="_blank">{{sip_value}}</a></h4>
+            <!-- <p class="mb-0 font-16 text-muted" style="font-size: 20px; color: black">{{sip_content}}</p> -->
+            <p [ngStyle]="sip_content_formatcss">{{sip_content}}</p>
+        </div>
+        <div class="float-right" style="margin: auto;">
+            <!-- <div class="xp-widget-icon xp-widget-icon-bg bg-primary-rgba" style="background-color: #c9d7fb; width: 70px; height: 70px; border-radius: 50%; display: flex;"> -->
+            <div class="xp-widget-icon xp-widget-icon-bg bg-primary-rgba" [ngStyle]="sip_frame_icon_formatcss" style="width: 70px; height: 70px; border-radius: 50%; display: flex;">
+                <!-- <i class="fa fa-file" style="color: #4c7cf3; font-size: 20px; margin:auto"></i> -->
+                <i [ngClass]="sip_icon" style=" font-size: 20px; margin:auto" [ngStyle]="sip_icon_formatcss"></i>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+
+        <!-- <div class="progress mt-3 mb-1" style="height: 5px;"> -->
+        <div class="progress mt-3 mb-1" [ngStyle]="sip_progress_bar_formatcss">
+            <div class="progress-bar progress-bar-striped" [ngStyle]="sip_progress_formatcss" role="progressbar" [style.width.%]="sip_progress" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+        <!-- <p class="mb-0 text-primary" style=" font-size: 20px;margin-top: 0.2rem;">{{sip_percent_content}}</p> -->
+        <p class="mb-0 " [ngStyle]="sip_percent_content_formatcss">{{sip_percent_content}}</p>
+    </div>
+</div>

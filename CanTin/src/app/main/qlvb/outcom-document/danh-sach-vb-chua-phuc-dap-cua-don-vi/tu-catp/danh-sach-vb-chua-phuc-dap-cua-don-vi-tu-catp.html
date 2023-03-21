@@ -1,0 +1,161 @@
+<!-- <div [@routerTransition] (window:resize)="onResize($event)"> -->
+<div [@routerTransition]>
+    <div class="kt-content  kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor">
+        <div class="kt-subheader kt-grid__item">
+            <div [class]="containerClass">
+                <div class="kt-subheader__main">
+                    <h3 class="kt-subheader__title">
+                        <span>Danh sách văn bản chưa phúc đáp từ CATP</span>
+                    </h3>
+                </div>
+            </div>
+        </div>
+        <div [class]="containerClass + ' kt-grid__item kt-grid__item--fluid'">
+            <div class="kt-portlet kt-portlet--mobile">
+                <div class="modal-body">
+                    <div class="row align-items-center">
+                        <!--<Primeng-TurboTable-Start>-->
+                        <div class="col primeng-datatable-container">
+                            <dx-data-grid #gridContainer id="gridContainer" [showColumnLines]="true"
+                                [showBorders]="true" [allowColumnResizing]="true" [wordWrapEnabled]="true"
+                                [columnAutoWidth]="true" [(dataSource)]="initialData" [cellHintEnabled]="true"
+                                (onExporting)="onExporting($event)" (onExported)="onExported($event)">
+                                <dxo-scrolling mode="standard" [scrollByContent]="true" [scrollByThumb]="true"
+                                    showScrollbar="always">
+                                    <!-- or "virtual" | "infinite" -->
+                                </dxo-scrolling>
+                                <dxo-selection mode="multiple"> </dxo-selection>
+                                <dxo-export [enabled]="true" fileName="Documents" [allowExportSelectedData]="true">
+                                </dxo-export>
+                                <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[50, 100]"
+                                    [showInfo]="true" [showNavigationButtons]="true"></dxo-pager>
+                                <dxo-search-panel [visible]="true" placeholder="Nhập nội dung..." width="250">
+                                </dxo-search-panel>
+                                <!-- <dxo-header-filter [visible]="true"></dxo-header-filter> -->
+                                <dxo-filter-row [visible]="false"></dxo-filter-row>
+                                <dxo-paging [enabled]="true" [pageSize]="50"></dxo-paging>
+                                <dxi-column type="selection" [width]="3+'%'"></dxi-column>
+                                <dxi-column dataField="stt" columnIndex="1" caption="STT" alignment="center"
+                                    [width]="5+'%'"></dxi-column>
+                                <dxi-column columnIndex="9" alignment="center" [width]="6+'%'" [allowExporting]="false"
+                                    cellTemplate="customTemplate" caption="Xử lý"></dxi-column>
+                                <dxi-column dataField="number_publishdate" caption="Số ký hiệu / Ngày phát hành"
+                                    [visible]="false"></dxi-column>
+                                <dxi-column dataField="number_incomingdatedv" caption="Số VB đến / Ngày VB đến"
+                                    [visible]="false"></dxi-column>
+                                <dxi-column cellTemplate="diffCellTemplate" [allowSearch]="true"
+                                    [allowExporting]="false" headerCellTemplate="titleHeaderTemplate" columnIndex="3"
+                                    [width]="11+'%'" dataType="date" format="d/M/yyyy" alignment="center"
+                                    [calculateCellValue]="numberCellValue">
+                                </dxi-column>
+
+
+                                <dxi-column [allowSearch]="true" columnIndex="4" cellTemplate="diffCellTemplate1"
+                                    [allowExporting]="false" headerCellTemplate="titleHeaderTemplate1"
+                                    alignment="center" [width]="9+'%'" [calculateCellValue]="numberDVCellValue">
+                                </dxi-column>
+                                <dxi-column dataField="PublisherName" columnIndex="7" caption="Nơi phát hành"
+                                    headerCellTemplate="titleHeaderTemplate2" [width]="10+'%'">
+
+                                </dxi-column>
+                                <dxi-column columnIndex="5" dataField="Deadline" caption="Hạn giải quyết"
+                                    alignment="center" [width]="9+'%'" dataType="date" format="d/M/yyyy">
+
+                                </dxi-column>
+                                <dxi-column dataField="IncommingNumber" [visible]="false">
+                                </dxi-column>
+                                <dxi-column dataField="Number" [visible]="false">
+                                </dxi-column>
+
+
+
+                                <dxi-column dataField="Summary" columnIndex="8" [width]="19+'%'" caption="Trích yếu">
+                                </dxi-column>
+                                <dxi-column dataField="ProcessingRecommended" headerCellTemplate="titleHeaderTemplate4"
+                                    columnIndex="6" [width]="16+'%'" caption="Ý kiến đề xuất PV01">
+                                </dxi-column>
+                                <dxi-column columnIndex="6" [width]="10+'%'" headerCellTemplate="titleHeaderTemplate5"
+                                    cellTemplate="diffCellTemplate5" [allowExporting]="false">
+                                </dxi-column>
+                                <!-- for export -->
+                                <dxi-column dataField="bgd" caption="Chỉ đạo BGĐ" columnIndex="6" [width]="200"
+                                    [visible]="false"></dxi-column>
+                           
+                                <div *dxTemplate="let info of 'titleHeaderTemplate4'">
+                                    <div class="current-value" style="text-align: center;">Ý kiến đề</div>
+                                    <div class="diff" style="text-align: center;">xuất PV01</div>
+                                </div>
+                                <div *dxTemplate="let info of 'titleHeaderTemplate'">
+                                    <div class="current-value">Số VB đến</div>
+                                    <div class="diff">Ngày VB đến</div>
+                                </div>
+                                <div *dxTemplate="let info of 'titleHeaderTemplate3'">
+                                    <div class="current-value">Hạn </div>
+                                    <div class="diff"> giải quyết</div>
+                                </div>
+                                <div *dxTemplate="let info of 'titleHeaderTemplate2'"
+                                    style="text-align: center !important">
+                                    <div class="current-value">Nơi phát</div>
+                                    <div class="diff">hành</div>
+                                </div>
+                                <div *dxTemplate="let info of 'titleHeaderTemplate1'">
+                                    <div class="current-value">Số đến</div>
+                                    <div class="diff">Ngày đến</div>
+                                </div>
+                                <div *dxTemplate="let info of 'titleHeaderTemplate4'">
+                                    <div class="current-value">Ý kiến đề xuất</div>
+                                    <div class="diff">PV01</div>
+                                </div>
+                                <div *dxTemplate="let info of 'titleHeaderTemplate5'">
+                                    <div class="current-value">Chỉ đạo</div>
+                                    <div class="diff">BGĐ</div>
+                                </div>
+
+                                <div *dxTemplate="let d of 'customTemplate'">
+                                    <div class="btn-group dropdown btn-smaller-padding" dropdown container="body">
+                                        <button class="dropdown-toggle btn btn-sm btn-primary" dropdownToggle>
+                                            <i class="fa fa-cog"></i>
+                                        </button>
+                                        <ul class="dropdown-menu" *dropdownMenu>
+                                            <li>
+                                                <a href="javascript:;" (click)="reply(d.data)"><i class="fas fa-edit"
+                                                        style="color: rgb(7, 88, 44);"></i>Phúc đáp</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div *dxTemplate="let d of 'diffCellTemplate'">
+                                    <div class="current-value" style="font-weight: bold;">{{d.data.Number}}</div>
+                                    <div class="diff">{{d.data.PublishDate | date: "dd/MM/yyyy " }}</div>
+                                </div>
+                                <div *dxTemplate="let d of 'diffCellTemplate1'">
+                                    <div class="current-value" style="font-weight: bold;">{{d.data.IncommingNumber}}
+                                    </div>
+                                    <div class="diff">{{d.data.IncommingDate | date: "dd/MM/yyyy "}}</div>
+                                </div>
+                                <div *dxTemplate="let d of 'diffCellTemplate3'">
+                                    <div class="current-value" style="font-weight: bold;font-style: italic;">
+                                        {{d.data.Deadline | date: "dd/MM/yyyy " }}</div>
+                                </div>
+                                <div *dxTemplate="let d of 'diffCellTemplate5'">
+                                    <div class="font-b">{{d.data.DirectorName}}</div>
+                                    <div *ngIf="d.data.ProcessingRecommended" class="font-i">PV01 đx:
+                                        {{d.data.ProcessingRecommended}}</div>
+                                    <div class="font-b font-i diff">{{d.data.ApprovingRecommended}}</div>
+                                </div>
+                            </dx-data-grid>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<style>
+    ::ng-deep .dx-row {
+        font-size: 15px;
+        white-space: normal;
+    }
+</style>

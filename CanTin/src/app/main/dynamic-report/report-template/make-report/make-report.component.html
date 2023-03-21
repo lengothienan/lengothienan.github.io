@@ -1,0 +1,31 @@
+<div class="row" style="background-color: white;">
+    <div class="col-12">
+        <div class="card card-outline-info">
+            <div class="card-body">
+                <form (submit)="handleSubmitForm($event)">
+                    <dx-form id="form" [(formData)]="searchData" validationGroup="searchGroup" [colCount]="3" labelLocation="top"
+                        (onFieldDataChanged)="handleFieldDataChanged($event)">
+                        <dxi-item dataField="kyBaoCao" editorType="dxSelectBox" [editorOptions]="reportPeriodOptions">
+                            <dxo-label text="Kỳ báo cáo"></dxo-label>
+                        </dxi-item>
+                        <dxi-item dataField="year" editorType="dxSelectBox" [editorOptions]="yearOptions">
+                            <dxo-label text="Năm"></dxo-label>
+                        </dxi-item>
+                        <dxi-item dataField="quarter" editorType="dxSelectBox" [editorOptions]="quarterOptions"
+                            [visible]="quarterVisible">
+                            <dxo-label text="Quí"></dxo-label>
+                        </dxi-item>
+                        <dxi-item dataField="month" editorType="dxSelectBox" [editorOptions]="monthOptions" [visible]="monthVisible">
+                            <dxo-label text="Tháng"></dxo-label>
+                        </dxi-item>
+                    </dx-form>
+                    <br />
+                    <div class="d-flex justify-content-center">
+                        <dx-button text="Tạo báo cáo" icon="fa fa-table" type="default" [useSubmitBehavior]="true"
+                            validationGroup="searchGroup"></dx-button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
